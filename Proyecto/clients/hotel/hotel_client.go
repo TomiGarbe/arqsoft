@@ -1,0 +1,39 @@
+package clients
+
+import (
+	"Proyecto/model"
+
+	"github.com/jinzhu/gorm"
+	log "github.com/sirupsen/logrus"
+)
+
+var Db *gorm.DB
+
+func GetHotelById(id int) model.Hotel {
+	var hotel model.Hotel
+
+	Db.Where("id = ?", id).First(&hotel)
+	log.Debug("Hotel: ", hotel)
+
+	return hotel
+}
+
+func GetHoteles() model.Hoteles {
+	var hoteles model.Hoteles
+
+	log.Debug("Hoteles: ", hoteles)
+
+	return hoteles
+}
+  
+
+func InsertHotel(hotel model.Hotel) model.Hotel {
+	result := Db.Create(&hotel)
+
+	if result.Error != nil {
+		//TODO Manage Errors
+		log.Error("")
+	}
+	log.Debug("hotel Creado: ", hotel.ID)
+	return hotel
+}
