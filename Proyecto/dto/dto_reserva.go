@@ -8,8 +8,8 @@ type ReservaDto struct {
 	Name     	   string `json:"name"`
 	LastName 	   string `json:"last_name"`
 
-	FechaInicio    string `json:"fecha_inicio"`
-	FechaFinal     string `json:"fecha_final"`
+	FechaInicio    int 	  `json:"fecha_inicio"`
+	FechaFinal     int 	  `json:"fecha_final"`
 	Dias           int    `json:"dias"`
 	Disponibilidad int    `json:"disponibilidad"`
 }

@@ -114,7 +114,7 @@ func (s *clienteService) InsertReserva(reservaDto dto.ReservaDto) (dto.ReservaDt
 	reserva.Hotel = hotel
 	reserva.Cliente = cliente
 
-	reserva = clienteClient.InsertCliente(reserva)
+	reserva = reservaClient.InsertReserva(reserva)
 
 	reservaDto.ID = reserva.ID
 
@@ -129,21 +129,9 @@ func (s *clienteService) GetReservas() (dto.ReservasDto, e.ApiError) {
 	for _, reserva := range reservas {
 		var reservaDto dto.ReservaDto
 		reservaDto.ID = reserva.ID
-		for _, hotel := range reserva.Hotel {
-			var dtoHotel dto.HotelDto
-	
-			dtoHotel.Nombre = hotel.Nombre
-	
-			reservaDto.HotelDto = append(reservaDto.HotelDto, dtoHotel)
-		}
-		for _, cliente := range reserva.Cliente {
-			var dtoCliente dto.ClienteDto
-	
-			dtoCliente.Name = cliente.Name
-			dtoCliente.LastName = cliente.LastName
-	
-			reservaDto.ClienteDto = append(reservaDto.ClienteDto, dtoCliente)
-		}
+		reservaDto.Nombre = reserva.Hotel.Nombre
+		reservaDto.Name = reserva.Cliente.Name
+		reservaDto.LastName = reserva.Cliente.LastName
 		reservaDto.FechaInicio = reserva.FechaInicio
 		reservaDto.FechaFinal = reserva.FechaFinal
 		reservaDto.Dias = reserva.Dias
@@ -164,21 +152,9 @@ func (s *clienteService) GetReservaById(id int) (dto.ReservaDto, e.ApiError) {
 		return reservaDto, e.NewBadRequestApiError("reserva not found")
 	}
 
-	for _, hotel := range reserva.Hotel {
-		var dtoHotel dto.HotelDto
-
-		dtoHotel.Nombre = hotel.Nombre
-
-		reservaDto.HotelDto = append(reservaDto.HotelDto, dtoHotel)
-	}
-	for _, cliente := range reserva.Cliente {
-		var dtoCliente dto.ClienteDto
-
-		dtoCliente.Name = cliente.Name
-		dtoCliente.LastName = cliente.LastName
-
-		reservaDto.ClienteDto = append(reservaDto.ClienteDto, dtoCliente)
-	}
+	reservaDto.Nombre = reserva.Hotel.Nombre
+	reservaDto.Name = reserva.Cliente.Name
+	reservaDto.LastName = reserva.Cliente.LastName
 	reservaDto.FechaInicio = reserva.FechaInicio
 	reservaDto.FechaFinal = reserva.FechaFinal
 	reservaDto.Dias = reserva.Dias

@@ -23,8 +23,8 @@ type adminServiceInterface interface {
 	GetHotelById(id int) (dto.HotelDto, e.ApiError)
 	GetHoteles() (dto.HotelesDto, e.ApiError)
 	InsertHotel(hotelDto dto.HotelDto) (dto.HotelDto, e.ApiError)
-	GetReservas() (dto.ReservasDto, e.ApiError)
 	AddTelefono(telefonoDto dto.TelefonoDto) (dto.HotelDto, e.ApiError)
+	GetReservas() (dto.ReservasDto, e.ApiError)
 }
 
 var (
@@ -142,13 +142,13 @@ func (s *adminService) GetHotelById(id int) (dto.HotelDto, e.ApiError) {
 	hotelDto.Image = hotel.Image
 	hotelDto.Cant_Hab = hotel.Cant_Hab
 
-	for _, telefono := range hotel.Telefono {
+	for _, telefono := range hotel.Telefonos {
 		var dtoTelefono dto.TelefonoDto
 
-		dtoTelefono.Code = telefono.Code
-		dtoTelefono.Number = telefono.Number
+		dtoTelefono.Codigo = telefono.Codigo
+		dtoTelefono.Numero = telefono.Numero
 
-		hotelDto.TelefonoDto = append(hotelDto.TelefonoDto, dtoTelefono)
+		hotelDto.TelefonosDto = append(hotelDto.TelefonosDto, dtoTelefono)
 	}
 
 	return hotelDto, nil
@@ -167,13 +167,13 @@ func (s *adminService) GetHoteles() (dto.HotelesDto, e.ApiError) {
 		hotelDto.Image = hotel.Image
 		hotelDto.Cant_Hab = hotel.Cant_Hab
 
-		for _, telefono := range hotel.Telefono {
+		for _, telefono := range hotel.Telefonos {
 			var dtoTelefono dto.TelefonoDto
 	
-			dtoTelefono.Code = telefono.Code
-			dtoTelefono.Number = telefono.Number
+			dtoTelefono.Codigo = telefono.Codigo
+			dtoTelefono.Numero = telefono.Numero
 	
-			hotelDto.TelefonoDto = append(hotelDto.TelefonoDto, dtoTelefono)
+			hotelDto.TelefonosDto = append(hotelDto.TelefonosDto, dtoTelefono)
 		}
 
 		hotelesDto = append(hotelesDto, hotelDto)
@@ -198,32 +198,55 @@ func (s *adminService) InsertHotel(hotelDto dto.HotelDto) (dto.HotelDto, e.ApiEr
 	return hotelDto, nil
 }
 
-func (s *userService) AddUserTelephone(telephoneDto dto.TelephoneDto) (dto.UserDetailDto, e.ApiError) {
+func (s *adminService) AddTelefono(telefonoDto dto.TelefonoDto) (dto.HotelDto, e.ApiError) {
 
-	var telephone model.Telephone
+	var telefono model.Telefono
 
-	telephone.Code = telephoneDto.Code
-	telephone.Number = telephoneDto.Number
-	telephone.UserId = telephoneDto.UserId
+	telefono.Codigo = telefonoDto.Codigo
+	telefono.Numero = telefonoDto.Numero
+	telefono.HotelID = telefonoDto.HotelID
 	//Adding
-	telephone = telephoneCliente.AddTelephone(telephone)
+	telefono = telefonoClient.AddTelefono(telefono)
 
-	// Find User
-	var user model.User = userCliente.GetUserById(telephoneDto.UserId)
-	var userDetailDto dto.UserDetailDto
+	
+	var hotel model.Hotel = hotelClient.GetHotelById(telefonoDto.HotelID)
+	var hotelDto dto.HotelDto
 
-	userDetailDto.Name = user.Name
-	userDetailDto.LastName = user.LastName
-	userDetailDto.Street = user.Address.Street
-	userDetailDto.Number = user.Address.Number
-	for _, telephone := range user.Telephones {
-		var dtoTelephone dto.TelephoneDto
+	hotelDto.Nombre = hotel.Nombre
+	hotelDto.Email = hotel.Email
+	hotelDto.Image = hotel.Image
+	hotelDto.Cant_Hab = hotel.Cant_Hab
 
-		dtoTelephone.Code = telephone.Code
-		dtoTelephone.Number = telephone.Number
+	for _, telefono := range hotel.Telefonos {
+		var dtoTelefono dto.TelefonoDto
 
-		userDetailDto.TelephonesDto = append(userDetailDto.TelephonesDto, dtoTelephone)
+		dtoTelefono.Codigo = telefono.Codigo
+		dtoTelefono.Numero = telefono.Numero
+
+		hotelDto.TelefonosDto = append(hotelDto.TelefonosDto, dtoTelefono)
 	}
 
-	return userDetailDto, nil
+	return hotelDto, nil
+}
+
+func (s *adminService) GetReservas() (dto.ReservasDto, e.ApiError) {
+
+	var reservas model.Reservas = reservaClient.GetReservas()
+	var reservasDto dto.ReservasDto
+
+	for _, reserva := range reservas {
+		var reservaDto dto.ReservaDto
+		reservaDto.ID = reserva.ID
+		reservaDto.Nombre = reserva.Hotel.Nombre
+		reservaDto.Name = reserva.Cliente.Name
+		reservaDto.LastName = reserva.Cliente.LastName
+		reservaDto.FechaInicio = reserva.FechaInicio
+		reservaDto.FechaFinal = reserva.FechaFinal
+		reservaDto.Dias = reserva.Dias
+		reservaDto.Disponibilidad = reserva.Disponibilidad
+
+		reservasDto = append(reservasDto, reservaDto)
+	}
+
+	return reservasDto, nil
 }

@@ -25,7 +25,7 @@ func GetClientes() model.Clientes {
 	return clientes
 }
 
-func Insert(cliente model.Cliente) model.Cliente {
+func InsertCliente(cliente model.Cliente) model.Cliente {
 	result := Db.Create(&cliente)
 
 	if result.Error != nil {
