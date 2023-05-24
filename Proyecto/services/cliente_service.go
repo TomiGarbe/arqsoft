@@ -16,116 +16,141 @@ type clienteService struct{}
 
 type clienteServiceInterface interface {
 	GetClienteById(id int) (dto.ClienteDto, e.ApiError)
-	InsertCliente(ClienteDto dto.ClienteDto) (dto.ClienteDto, e.ApiError)
+	InsertCliente(clienteDto dto.ClienteDto) (dto.ClienteDto, e.ApiError)
 	GetHoteles() (dto.HotelesDto, e.ApiError)
-	InsertReserva(ReservaDto dto.ReservaDto) (dto.ReservaDto, e.ApiError)
-	GetReservas(dto.ReservasDto, e.ApiError)
+	InsertReserva(reservaDto dto.ReservaDto) (dto.ReservaDto, e.ApiError)
+	GetReservas() (dto.ReservasDto, e.ApiError)
 	GetReservaById(id int) (dto.ReservaDto, e.ApiError)
 }
 
 var (
-	clienteService userServiceInterface
+	ClienteService clienteServiceInterface
 )
 
 func init() {
-	UserService = &userService{}
+	ClienteService = &clienteService{}
 }
 
-func (s *userService) GetUserById(id int) (dto.UserDetailDto, e.ApiError) {
+func (s *clienteService) GetClienteById(id int) (dto.ClienteDto, e.ApiError) {
 
-	var user model.User = userCliente.GetUserById(id)
-	var userDetailDto dto.UserDetailDto
+	var cliente model.Cliente = clienteClient.GetClienteById(id)
+	var clienteDto dto.ClienteDto
 
-	if user.Id == 0 {
-		return userDetailDto, e.NewBadRequestApiError("user not found")
+	if cliente.ID == 0 {
+		return clienteDto, e.NewBadRequestApiError("user not found")
 	}
 
-	userDetailDto.Name = user.Name
-	userDetailDto.LastName = user.LastName
-	userDetailDto.Street = user.Address.Street
-	userDetailDto.Number = user.Address.Number
-	for _, telephone := range user.Telephones {
-		var dtoTelephone dto.TelephoneDto
+	clienteDto.Name = cliente.Name
+	clienteDto.LastName = cliente.LastName
+	clienteDto.UserName = cliente.UserName
+	clienteDto.Password = cliente.Password
+	clienteDto.Email = cliente.Email
 
-		dtoTelephone.Code = telephone.Code
-		dtoTelephone.Number = telephone.Number
-
-		userDetailDto.TelephonesDto = append(userDetailDto.TelephonesDto, dtoTelephone)
-	}
-
-	return userDetailDto, nil
+	return clienteDto, nil
 }
 
-func (s *userService) GetUsers() (dto.UsersDto, e.ApiError) {
+func (s *clienteService) InsertCliente(clienteDto dto.ClienteDto) (dto.ClienteDto, e.ApiError) {
 
-	var users model.Users = userCliente.GetUsers()
-	var usersDto dto.UsersDto
+	var cliente model.Cliente
 
-	for _, user := range users {
-		var userDto dto.UserDto
-		userDto.Name = user.Name
-		userDto.LastName = user.LastName
-		userDto.UserName = user.Name
-		userDto.Id = user.Id
+	cliente.Name = clienteDto.Name
+	cliente.LastName = clienteDto.LastName
+	cliente.UserName = clienteDto.UserName
+	cliente.Password = clienteDto.Password
+	cliente.Email = clienteDto.Email
 
-		userDto.Street = user.Address.Street
-		userDto.Number = user.Address.Number
+	cliente = clienteClient.InsertCliente(cliente)
 
-		usersDto = append(usersDto, userDto)
-	}
+	clienteDto.ID = cliente.ID
 
-	return usersDto, nil
+	return clienteDto, nil
 }
 
-func (s *userService) InsertUser(userDto dto.UserDto) (dto.UserDto, e.ApiError) {
+func (s *clienteService) GetHoteles() (dto.HotelesDto, e.ApiError) {
 
-	var user model.User
+	var hoteles model.Hoteles = hotelClient.GetHoteles()
+	var hotelesDto dto.HotelesDto
 
-	var address model.Address
+	for _, hotel := range hoteles {
+		var hotelDto dto.HotelDto
+		hotelDto.ID = hotel.ID
+		hotelDto.Nombre = hotel.Nombre
+		hotelDto.Email = hotel.Email
+		hotelDto.Image = hotel.Image
+		hotelDto.Cant_Hab = hotel.Cant_Hab
 
-	user.Name = userDto.Name
-	user.LastName = userDto.LastName
-	user.UserName = userDto.UserName
-	user.Password = userDto.Password
+		for _, telefono := range hotel.Telefono {
+			var dtoTelefono dto.TelefonoDto
+	
+			dtoTelefono.Code = telefono.Code
+			dtoTelefono.Number = telefono.Number
+	
+			hotelDto.TelefonoDto = append(hotelDto.TelefonoDto, dtoTelefono)
+		}
 
-	address.Number = userDto.Number
-	address.Street = userDto.Street
-	address = addressCliente.InsertAddress(address)
-
-	user.Address = address
-	user = userCliente.InsertUser(user)
-
-	userDto.Id = user.Id
-
-	return userDto, nil
-}
-
-func (s *userService) AddUserTelephone(telephoneDto dto.TelephoneDto) (dto.UserDetailDto, e.ApiError) {
-
-	var telephone model.Telephone
-
-	telephone.Code = telephoneDto.Code
-	telephone.Number = telephoneDto.Number
-	telephone.UserId = telephoneDto.UserId
-	//Adding
-	telephone = telephoneCliente.AddTelephone(telephone)
-
-	// Find User
-	var user model.User = userCliente.GetUserById(telephoneDto.UserId)
-	var userDetailDto dto.UserDetailDto
-
-	userDetailDto.Name = user.Name
-	userDetailDto.LastName = user.LastName
-	userDetailDto.Street = user.Address.Street
-	userDetailDto.Number = user.Address.Number
-	for _, telephone := range user.Telephones {
-		var dtoTelephone dto.TelephoneDto
-
-		dtoTelephone.Code = telephone.Code
-		dtoTelephone.Number = telephone.Number
-
-		userDetailDto.TelephonesDto = append(userDetailDto.TelephonesDto, dtoTelephone)
+		hotelesDto = append(hotelesDto, hotelDto)
 	}
 
-	return userDetailDto, nil
+	return hotelesDto, nil
+}
+
+func (s *clienteService) InsertReserva(reservaDto dto.ReservaDto) (dto.ReservaDto, e.ApiError) {
+
+	var reserva model.Reserva
+	var hotel model.Hotel
+	var cliente model.Cliente
+
+	reserva.FechaInicio = reservaDto.FechaInicio
+	reserva.FechaFinal = reservaDto.FechaFinal
+	reserva.Dias = reservaDto.Dias
+	reserva.Disponibilidad = reservaDto.Disponibilidad
+
+	hotel.Nombre = reservaDto.Nombre
+	cliente.Name = reservaDto.Name
+	cliente.LastName = reservaDto.LastName
+	hotel = hotelClient.InsertHotel(hotel)
+	cliente = clienteClient.InsertCliente(cliente)
+
+	reserva.Hotel = hotel
+	reserva.Cliente = cliente
+
+	reserva = clienteClient.InsertCliente(reserva)
+
+	reservaDto.ID = reserva.ID
+
+	return reservaDto, nil
+}
+
+func (s *clienteService) GetReservas() (dto.ReservasDto, e.ApiError) {
+
+	var reservas model.Reservas = reservaClient.GetReservas()
+	var reservasDto dto.ReservasDto
+
+	for _, reserva := range reservas {
+		var reservaDto dto.ReservaDto
+		reservaDto.ID = reserva.ID
+		for _, hotel := range reserva.Hotel {
+			var dtoHotel dto.HotelDto
+	
+			dtoHotel.Nombre = hotel.Nombre
+	
+			reservaDto.HotelDto = append(reservaDto.HotelDto, dtoHotel)
+		}
+		for _, cliente := range reserva.Cliente {
+			var dtoCliente dto.ClienteDto
+	
+			dtoCliente.Name = cliente.Name
+			dtoCliente.LastName = cliente.LastName
+	
+			reservaDto.ClienteDto = append(reservaDto.ClienteDto, dtoCliente)
+		}
+		reservaDto.FechaInicio = reserva.FechaInicio
+		reservaDto.FechaFinal = reserva.FechaFinal
+		reservaDto.Dias = reserva.Dias
+		reservaDto.Disponibilidad = reserva.Disponibilidad
+
+		reservasDto = append(reservasDto, reservaDto)
+	}
+
+	return reservasDto, nil
 }
