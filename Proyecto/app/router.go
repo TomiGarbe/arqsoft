@@ -16,7 +16,8 @@ func init() {
 }
 
 func StartRoute() {
-	mapUrls()
+	mapUrlsCliente()
+	mapUrlsAdmin()
 
 	log.Info("Starting server")
 	router.Run(":8090")

@@ -1,18 +1,18 @@
 package app
 
 import (
-	userController "Proyecto/controllers/user"
+	//clienteController "Proyecto/controllers"
 
 	log "github.com/sirupsen/logrus"
 )
 
-func mapUrls() {
+func mapUrlsCliente() {
 
 	// Users Mapping
-	router.GET("/user/:id", userController.GetUserById)
+	/*router.GET("/user/:id", userController.GetUserById)
 	router.GET("/user", userController.GetUsers)
 	router.POST("/user", userController.UserInsert)
-	router.POST("/user/:id/telephone", userController.AddUserTelephone)
+	router.POST("/user/:id/telephone", userController.AddUserTelephone)*/
 
 	log.Info("Finishing mappings configurations")
 }
