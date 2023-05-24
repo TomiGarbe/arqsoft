@@ -1,8 +1,6 @@
 package services
 
 import (
-	adminClient "Proyecto/clients/admin"
-	telefonoClient "Proyecto/clients/telefono"
 	clienteClient "Proyecto/clients/cliente"
 	hotelClient "Proyecto/clients/hotel"
 	reservaClient "Proyecto/clients/reserva"
@@ -79,13 +77,13 @@ func (s *clienteService) GetHoteles() (dto.HotelesDto, e.ApiError) {
 		hotelDto.Image = hotel.Image
 		hotelDto.Cant_Hab = hotel.Cant_Hab
 
-		for _, telefono := range hotel.Telefono {
+		for _, telefono := range hotel.Telefonos {
 			var dtoTelefono dto.TelefonoDto
 	
-			dtoTelefono.Code = telefono.Code
-			dtoTelefono.Number = telefono.Number
+			dtoTelefono.Codigo = telefono.Codigo
+			dtoTelefono.Numero = telefono.Numero
 	
-			hotelDto.TelefonoDto = append(hotelDto.TelefonoDto, dtoTelefono)
+			hotelDto.TelefonosDto = append(hotelDto.TelefonosDto, dtoTelefono)
 		}
 
 		hotelesDto = append(hotelesDto, hotelDto)
