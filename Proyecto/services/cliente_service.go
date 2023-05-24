@@ -37,7 +37,7 @@ func (s *clienteService) GetClienteById(id int) (dto.ClienteDto, e.ApiError) {
 	var clienteDto dto.ClienteDto
 
 	if cliente.ID == 0 {
-		return clienteDto, e.NewBadRequestApiError("user not found")
+		return clienteDto, e.NewBadRequestApiError("cliente not found")
 	}
 
 	clienteDto.Name = cliente.Name
@@ -153,4 +153,36 @@ func (s *clienteService) GetReservas() (dto.ReservasDto, e.ApiError) {
 	}
 
 	return reservasDto, nil
+}
+
+func (s *clienteService) GetReservaById(id int) (dto.ReservaDto, e.ApiError) {
+
+	var reserva model.Reserva = reservaClient.GetReservaById(id)
+	var reservaDto dto.ReservaDto
+
+	if reserva.ID == 0 {
+		return reservaDto, e.NewBadRequestApiError("reserva not found")
+	}
+
+	for _, hotel := range reserva.Hotel {
+		var dtoHotel dto.HotelDto
+
+		dtoHotel.Nombre = hotel.Nombre
+
+		reservaDto.HotelDto = append(reservaDto.HotelDto, dtoHotel)
+	}
+	for _, cliente := range reserva.Cliente {
+		var dtoCliente dto.ClienteDto
+
+		dtoCliente.Name = cliente.Name
+		dtoCliente.LastName = cliente.LastName
+
+		reservaDto.ClienteDto = append(reservaDto.ClienteDto, dtoCliente)
+	}
+	reservaDto.FechaInicio = reserva.FechaInicio
+	reservaDto.FechaFinal = reserva.FechaFinal
+	reservaDto.Dias = reserva.Dias
+	reservaDto.Disponibilidad = reserva.Disponibilidad
+
+	return reservaDto, nil
 }
