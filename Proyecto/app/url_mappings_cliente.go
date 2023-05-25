@@ -1,7 +1,7 @@
 package app
 
 import (
-	//clienteController "Proyecto/controllers"
+	clienteController "Proyecto/controllers/cliente"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -9,10 +9,12 @@ import (
 func mapUrlsCliente() {
 
 	// Users Mapping
-	/*router.GET("/user/:id", userController.GetUserById)
-	router.GET("/user", userController.GetUsers)
-	router.POST("/user", userController.UserInsert)
-	router.POST("/user/:id/telephone", userController.AddUserTelephone)*/
+	router.GET("/cliente/:id", clienteController.GetClienteById)
+	router.POST("/cliente", clienteController.InsertCliente)
+	router.GET("/cliente/hoteles", clienteController.GetHoteles)
+	router.POST("/cliente/reserva", clienteController.InsertReserva)
+	router.GET("/cliente/reservas", clienteController.GetReservas)
+	router.GET("/cliente/reserva/:id", clienteController.GetReservaById)
 
 	log.Info("Finishing mappings configurations")
 }
