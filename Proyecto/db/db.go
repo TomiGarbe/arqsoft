@@ -21,10 +21,10 @@ var (
 
 func init() {
 	// DB Connections Paramters
-	DBName := "proyecto_arq"
-	DBUser := "proyecto_arq"
-	DBPass := "proyecto_arq"
-	DBHost := "db4free.net"
+	DBName := "arqsoft"
+	DBUser := "root"
+	DBPass := ""
+	DBHost := "localhost"
 	// ------------------------
 
 	db, err = gorm.Open("mysql", DBUser+":"+DBPass+"@tcp("+DBHost+":3306)/"+DBName+"?charset=utf8&parseTime=True")

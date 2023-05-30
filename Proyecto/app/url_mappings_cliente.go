@@ -9,12 +9,12 @@ import (
 func mapUrlsCliente() {
 
 	// Users Mapping
-	router.GET("/cliente/:id", clienteController.GetClienteById)
+	router.GET("/cliente/:ID", clienteController.GetClienteById)
 	router.POST("/cliente", clienteController.InsertCliente)
 	router.GET("/cliente/hoteles", clienteController.GetHoteles)
 	router.POST("/cliente/reserva", clienteController.InsertReserva)
 	router.GET("/cliente/reservas", clienteController.GetReservas)
-	router.GET("/cliente/reserva/:id", clienteController.GetReservaById)
+	router.GET("/cliente/reserva/:ID", clienteController.GetReservaById)
 
 	log.Info("Finishing mappings configurations")
 }

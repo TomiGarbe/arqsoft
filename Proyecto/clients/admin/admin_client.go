@@ -19,6 +19,7 @@ func GetAdminById(id int) model.Admin {
 
 func GetAdmins() model.Admins {
 	var admins model.Admins
+	Db.Find(&admins)
 
 	log.Debug("Administradores: ", admins)
 

@@ -10,5 +10,5 @@ func init() {
 	log.SetOutput(os.Stdout)
 	//log.SetFormatter(&log.JSONFormatter{})
 	log.SetLevel(log.DebugLevel)
-	log.Info("Starting logger system")
+	log.Info("Iniciando el sistema de registro")
 }
