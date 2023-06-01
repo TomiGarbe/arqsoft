@@ -1,7 +1,7 @@
 package clients
 
 import (
-	"Proyecto/model"
+	"backend/model"
 
 	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"

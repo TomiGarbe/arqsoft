@@ -1,8 +1,8 @@
 package adminController
 
 import (
-	"Proyecto/dto"
-	service "Proyecto/services"
+	"backend/dto"
+	service "backend/services"
 	"net/http"
 	"strconv"
 

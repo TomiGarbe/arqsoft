@@ -110,3 +110,46 @@ const Login = () => {
 }
 
 export default Login
+
+
+
+import React, { createContext, useState } from "react";
+
+export const AuthContext = createContext({});
+
+const AuthContextProvider = ({ children }) => {
+  const [isLogged, setIsLogged] = useState(false);
+
+  const handleLogin = async (username, password) => {
+    try {
+      const response = await fetch("https://api.example.com/login", {
+        method: "POST",
+        body: JSON.stringify({ username, password }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        setIsLogged(true);
+      } else {
+        console.log("Error en el inicio de sesión");
+      }
+    } catch (error) {
+      console.log("Error de conexión a la base de datos");
+    }
+  };
+
+  const propiedades = {
+    isLogged,
+    handleLogin,
+  };
+
+  return (
+    <AuthContext.Provider value={propiedades}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export default AuthContextProvider;

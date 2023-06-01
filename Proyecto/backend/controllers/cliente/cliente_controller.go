@@ -1,8 +1,8 @@
 package clienteController
 
 import (
-	"Proyecto/dto"
-	service "Proyecto/services"
+	"backend/dto"
+	service "backend/services"
 	"net/http"
 	"strconv"
 
@@ -17,6 +17,22 @@ func GetClienteById(c *gin.Context) {
 	var clienteDto dto.ClienteDto
 
 	clienteDto, err := service.ClienteService.GetClienteById(id)
+
+	if err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
+	c.JSON(http.StatusOK, clienteDto)
+}
+
+func GetClienteByUserPass(c *gin.Context) {
+	log.Debug("Cliente  to load: " + c.Param("username") + c.Param("password"))
+
+	username := c.Param("username")
+	password := c.Param("password")
+	var clienteDto dto.ClienteDto
+
+	clienteDto, err := service.ClienteService.GetClienteByUserPass(username, password)
 
 	if err != nil {
 		c.JSON(err.Status(), err)

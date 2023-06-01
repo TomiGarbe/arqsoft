@@ -1,7 +1,7 @@
 package clients
 
 import (
-	"Proyecto/model"
+	"backend/model"
 
 	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
@@ -13,6 +13,15 @@ func GetClienteById(id int) model.Cliente {
 	var cliente model.Cliente
 
 	Db.Where("id = ?", id).First(&cliente)
+	log.Debug("Cliente: ", cliente)
+
+	return cliente
+}
+
+func GetClienteByUserPass(username string, password string) model.Cliente {
+	var cliente model.Cliente
+
+	Db.Where("username = ?", username, "password = ?", password).First(&cliente)
 	log.Debug("Cliente: ", cliente)
 
 	return cliente

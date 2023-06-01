@@ -1,7 +1,7 @@
 	package app
 
 	import (
-		adminController "Proyecto/controllers/admin"
+		adminController "backend/controllers/admin"
 
 		log "github.com/sirupsen/logrus"
 	)

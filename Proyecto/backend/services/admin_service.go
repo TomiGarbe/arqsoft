@@ -1,15 +1,15 @@
 package services
 
 import (
-	adminClient "Proyecto/clients/admin"
-	telefonoClient "Proyecto/clients/telefono"
-	clienteClient "Proyecto/clients/cliente"
-	hotelClient "Proyecto/clients/hotel"
-	reservaClient "Proyecto/clients/reserva"
+	adminClient "backend/clients/admin"
+	telefonoClient "backend/clients/telefono"
+	clienteClient "backend/clients/cliente"
+	hotelClient "backend/clients/hotel"
+	reservaClient "backend/clients/reserva"
 
-	"Proyecto/dto"
-	"Proyecto/model"
-	e "Proyecto/utils/errors"
+	"backend/dto"
+	"backend/model"
+	e "backend/utils/errors"
 )
 
 type adminService struct{}
