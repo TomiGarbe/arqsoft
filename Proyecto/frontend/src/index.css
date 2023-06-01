@@ -1,0 +1,291 @@
+/* ROOT*/ 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root {
+
+  --first-color: #C9DFF2;
+  --second-color: #038C65;
+  --third-color: #038C4C; 
+  --fourth-color: #1E593E;; 
+  --fifth-color:  #F2BF5E;; 
+
+  font-family: 'Lato', sans-serif;
+  line-height: 1.5;
+  font-weight: 500;
+
+  color-scheme: light dark;
+  color: var(--first-color);
+  background-color: var(--fourth-color);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* general */
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1{
+  text-align: center;
+}
+
+h3{
+  background-color: var(--fifth-color);
+  padding: 10px;
+  border: 2px solid rgb(247, 248, 250);
+  text-align: center;
+}
+
+nav{
+  background-color: var(--second-color);
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+}
+
+a{
+  color: var(--first-color);
+  text-decoration: none;
+  margin: 5px;
+  cursor: pointer;
+}
+a:hover{
+  color: var(--fourth-color);
+} 
+
+footer {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  height: 100px;
+  margin-top: 2rem;
+}
+
+footer > img{
+  width: 200px;
+  margin: 0;
+}
+footer > p{
+  margin: 0;
+  padding-top: 0.7rem;
+}
+
+form{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 300px;
+  height: 100px;
+  margin: 0 auto;
+  color: var(--fourth-color);
+}
+
+table {
+ border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    display: table;
+    border: 1px solid #ccc;
+
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+
+
+/* ---- GRID HOME CARDS ----*/
+div.card-grid{
+  gap: 15px 15px 15px 15px;
+}
+div.dentCard{
+display: flex;
+align-items: center;
+flex-wrap: wrap;
+margin:5px 5px 55px 105px;
+gap: 25px;
+}
+.eachCard{
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 2px 2px 4px 2px ;
+  border: 0.1px solid --third-color;
+  border-radius: 20px;
+  padding: 0.5rem 0.5rem 0 0.5rem;
+  position: relative;
+  width: 270px;
+  background-color: var(--first-color);
+  color: #038C65;
+  font-weight: 800;
+}
+
+.eachCard:hover{
+  border: 0.5px solid rgb(206, 217, 142);
+}
+
+div.eachCard img{
+  border-radius: 20%;
+  width:100%;
+}
+
+
+/* --- GRID CARD SELECTED--*/
+div.detailEach{
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 3px 3px 5px 3px ;
+  background-color: var(--first-color);
+  color: var(--second-color);
+  border: 0.5px solid --first-color;
+  border-radius: 20px;
+  margin: 0px 150px 0px 150px;
+  width: 250px;
+  height: auto;
+}
+
+div.detailsDent{
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+}
+
+div.detailsDent img{
+  width:100%;
+  background-size: cover;
+  border: 0.5px solid --fourth-color;
+  border-radius: 20px;
+}
+
+
+/* --- GRID FAVORITES--*/
+
+div.card-grid{
+  display: flex;
+  flex-wrap: wrap;
+  margin:5px 5px 55px 105px;
+  gap: 15px;
+}
+div.eachCard{
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 2px 2px 4px 2px ;
+  border: 0.1px solid --third-color;
+  border-radius: 20px;
+  padding: 0.5rem 0.5rem 0 0.5rem;
+  position: relative;
+  width: 250px;
+}
+div.card-grid img{
+  border-radius: 20%;
+  width:100%;
+}
+
+/* Organization*/
+
+div h3{
+text-align: center;
+}
+
+/* --- BOTONES --- */
+.favButton{
+  background-color: var(--fifth-color);
+  border: 0.5px solid --first-color;
+  padding: 10px;
+  width: 50%;
+  cursor: pointer;
+  color: var(--second-color);
+}
+
+button {
+  background-color: var(--fifth-color);
+  padding: 10px;
+  border: none;
+  border: 2px solid rgb(247, 248, 250);
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/* ----CHANGE THEME----- */
+
+.dark{
+  background-color: #12121296;
+  color: var(--first-color);
+}
+.dark > a {
+  color: var(--fifth-color);
+}
+
+.dark h3{
+  background-color: var(--fourth-color);
+  padding: 10px;
+  border: 2px solid rgb(247, 248, 250);
+  text-align: center;
+}
+
+.dark nav{
+  background-color: var(--fourth-color);
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+}
+.dark a:hover{
+  color: var(--fifth-color);
+} 
+
+.dark .eachCard{
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 2px 2px 4px 2px ;
+  border: 0.1px solid --third-color;
+  border-radius: 20px;
+  padding: 0.5rem 0.5rem 0 0.5rem;
+  position: relative;
+  width: 250px;
+  background-color: var(--second-color);
+  color: var(--first-color);
+  font-weight: 800;
+}
+.dark div.detailEach{
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--second-color);
+  color: var(--fifth-color);
+}
+
+.buttonContact {
+  margin-top: 20px;
+}
+.dark div.contact{
+  background-color: var(--second-color);
+  color: white;
+}
