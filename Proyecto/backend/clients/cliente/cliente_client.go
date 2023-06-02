@@ -18,10 +18,28 @@ func GetClienteById(id int) model.Cliente {
 	return cliente
 }
 
-func GetClienteByUserPass(username, password string) model.Cliente {
+func GetClienteByUsename(username string) model.Cliente {
 	var cliente model.Cliente
 
-	Db.Where("username = ? AND password = ?", username, password).First(&cliente)
+	Db.Where("username = ?", username).First(&cliente)
+	log.Debug("Cliente: ", cliente)
+
+	return cliente
+}
+
+func GetClienteByPassword(password string) model.Cliente {
+	var cliente model.Cliente
+
+	Db.Where("password = ?", password).First(&cliente)
+	log.Debug("Cliente: ", cliente)
+
+	return cliente
+}
+
+func GetClienteByEmail(email string) model.Cliente {
+	var cliente model.Cliente
+
+	Db.Where("email = ?", email).First(&cliente)
 	log.Debug("Cliente: ", cliente)
 
 	return cliente

@@ -1,7 +1,7 @@
 package model
 
 type Admin struct {
-	ID       int    `gorm:"primaryKey"`
+	ID       int    `gorm:"primaryKey;autoIncrement"`
 	Name     string `gorm:"type:varchar(350);not null"`
 	LastName string `gorm:"type:varchar(250);not null"`
 	UserName string `gorm:"type:varchar(150);not null;unique"`

@@ -14,7 +14,9 @@ type clienteService struct{}
 
 type clienteServiceInterface interface {
 	GetClienteById(id int) (dto.ClienteDto, e.ApiError)
-	GetClienteByUserPass(username string, password string) (dto.ClienteDto, e.ApiError)
+	GetClienteByUsername(username string) (dto.ClienteDto, e.ApiError)
+	GetClienteByPassword(username string) (dto.ClienteDto, e.ApiError)
+	GetClienteByEmail(email string) (dto.ClienteDto, e.ApiError)
 	InsertCliente(clienteDto dto.ClienteDto) (dto.ClienteDto, e.ApiError)
 	GetHoteles() (dto.HotelesDto, e.ApiError)
 	InsertReserva(reservaDto dto.ReservaDto) (dto.ReservaDto, e.ApiError)
@@ -48,19 +50,53 @@ func (s *clienteService) GetClienteById(id int) (dto.ClienteDto, e.ApiError) {
 	return clienteDto, nil
 }
 
-func (s *clienteService) GetClienteByUserPass(username, password string) (dto.ClienteDto, e.ApiError) {
-	var cliente model.Cliente = clienteClient.GetClienteByUserPass(username, password)
+func (s *clienteService) GetClienteByUsename(username string) (dto.ClienteDto, e.ApiError) {
+	var cliente model.Cliente = clienteClient.GetClienteByUsename(username)
 	var clienteDto dto.ClienteDto
 
-	if cliente.ID == 0 {
+	if cliente.UserName == "" {
 		return clienteDto, e.NewBadRequestApiError("cliente not found")
 	}
 
+	clienteDto.ID = cliente.ID
+	clienteDto.Name = cliente.Name
+	clienteDto.LastName = cliente.LastName
+	clienteDto.Password = cliente.Password
+	clienteDto.Email = cliente.Email
+
+	return clienteDto, nil
+}
+
+func (s *clienteService) GetClienteByPassword(password string) (dto.ClienteDto, e.ApiError) {
+	var cliente model.Cliente = clienteClient.GetClienteByPassword(password)
+	var clienteDto dto.ClienteDto
+
+	if cliente.Password == "" {
+		return clienteDto, e.NewBadRequestApiError("cliente not found")
+	}
+
+	clienteDto.ID = cliente.ID
+	clienteDto.Name = cliente.Name
+	clienteDto.LastName = cliente.LastName
+	clienteDto.UserName = cliente.UserName
+	clienteDto.Email = cliente.Email
+
+	return clienteDto, nil
+}
+
+func (s *clienteService) GetClienteByEmail(email string) (dto.ClienteDto, e.ApiError) {
+	var cliente model.Cliente = clienteClient.GetClienteByPassword(password)
+	var clienteDto dto.ClienteDto
+
+	if cliente.Email == "" {
+		return clienteDto, e.NewBadRequestApiError("cliente not found")
+	}
+
+	clienteDto.ID = cliente.ID
 	clienteDto.Name = cliente.Name
 	clienteDto.LastName = cliente.LastName
 	clienteDto.UserName = cliente.UserName
 	clienteDto.Password = cliente.Password
-	clienteDto.Email = cliente.Email
 
 	return clienteDto, nil
 }

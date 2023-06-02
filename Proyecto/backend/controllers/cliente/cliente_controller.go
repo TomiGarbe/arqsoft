@@ -25,14 +25,43 @@ func GetClienteById(c *gin.Context) {
 	c.JSON(http.StatusOK, clienteDto)
 }
 
-func GetClienteByUserPass(c *gin.Context) {
-	log.Debug("Cliente  to load: " + c.Param("username") + c.Param("password"))
+func GetClienteByUsename(c *gin.Context) {
+	log.Debug("Cliente  to load: " + c.Param("username"))
 
 	username := c.Param("username")
+	var clienteDto dto.ClienteDto
+
+	clienteDto, err := service.ClienteService.GetClienteByUsename(username)
+
+	if err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
+	c.JSON(http.StatusOK, clienteDto)
+}
+
+func GetClienteByPassword(c *gin.Context) {
+	log.Debug("Cliente  to load: " + c.Param("password"))
+
 	password := c.Param("password")
 	var clienteDto dto.ClienteDto
 
-	clienteDto, err := service.ClienteService.GetClienteByUserPass(username, password)
+	clienteDto, err := service.ClienteService.GetClienteByPassword(password)
+
+	if err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
+	c.JSON(http.StatusOK, clienteDto)
+}
+
+func GetClienteByEmail(c *gin.Context) {
+	log.Debug("Cliente  to load: " + c.Param("email"))
+
+	email := c.Param("email")
+	var clienteDto dto.ClienteDto
+
+	clienteDto, err := service.ClienteService.GetClienteByEmail(email)
 
 	if err != nil {
 		c.JSON(err.Status(), err)
