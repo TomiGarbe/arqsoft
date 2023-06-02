@@ -41,6 +41,23 @@ func GetClienteByUserPass(c *gin.Context) {
 	c.JSON(http.StatusOK, clienteDto)
 }
 
+/*func GetClienteByUserPass(c *gin.Context) {
+	var clienteDto dto.ClienteDto
+
+	if err := c.ShouldBindJSON(&clienteDto); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	result, err := service.ClienteService.GetClienteByUserPass(clienteDto.UserName, clienteDto.Password)
+	if err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}*/
+
 func InsertCliente(c *gin.Context) {
 	var clienteDto dto.ClienteDto
 	err := c.BindJSON(&clienteDto)

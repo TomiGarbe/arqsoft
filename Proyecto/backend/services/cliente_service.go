@@ -48,17 +48,18 @@ func (s *clienteService) GetClienteById(id int) (dto.ClienteDto, e.ApiError) {
 	return clienteDto, nil
 }
 
-func (s *clienteService) GetClienteByUserPass(username string, password string) (dto.ClienteDto, e.ApiError) {
-
+func (s *clienteService) GetClienteByUserPass(username, password string) (dto.ClienteDto, e.ApiError) {
 	var cliente model.Cliente = clienteClient.GetClienteByUserPass(username, password)
 	var clienteDto dto.ClienteDto
 
-	if cliente.UserName == "" || cliente.Password == "" {
+	if cliente.ID == 0 {
 		return clienteDto, e.NewBadRequestApiError("cliente not found")
 	}
 
 	clienteDto.Name = cliente.Name
 	clienteDto.LastName = cliente.LastName
+	clienteDto.UserName = cliente.UserName
+	clienteDto.Password = cliente.Password
 	clienteDto.Email = cliente.Email
 
 	return clienteDto, nil
