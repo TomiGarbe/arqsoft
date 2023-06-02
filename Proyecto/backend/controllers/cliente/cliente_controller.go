@@ -25,13 +25,13 @@ func GetClienteById(c *gin.Context) {
 	c.JSON(http.StatusOK, clienteDto)
 }
 
-func GetClienteByUsename(c *gin.Context) {
+func GetClienteByUsername(c *gin.Context) {
 	log.Debug("Cliente  to load: " + c.Param("username"))
 
 	username := c.Param("username")
 	var clienteDto dto.ClienteDto
 
-	clienteDto, err := service.ClienteService.GetClienteByUsename(username)
+	clienteDto, err := service.ClienteService.GetClienteByUsername(username)
 
 	if err != nil {
 		c.JSON(err.Status(), err)

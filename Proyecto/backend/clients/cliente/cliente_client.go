@@ -18,7 +18,7 @@ func GetClienteById(id int) model.Cliente {
 	return cliente
 }
 
-func GetClienteByUsename(username string) model.Cliente {
+func GetClienteByUsername(username string) model.Cliente {
 	var cliente model.Cliente
 
 	Db.Where("username = ?", username).First(&cliente)

@@ -50,8 +50,8 @@ func (s *clienteService) GetClienteById(id int) (dto.ClienteDto, e.ApiError) {
 	return clienteDto, nil
 }
 
-func (s *clienteService) GetClienteByUsename(username string) (dto.ClienteDto, e.ApiError) {
-	var cliente model.Cliente = clienteClient.GetClienteByUsename(username)
+func (s *clienteService) GetClienteByUsername(username string) (dto.ClienteDto, e.ApiError) {
+	var cliente model.Cliente = clienteClient.GetClienteByUsername(username)
 	var clienteDto dto.ClienteDto
 
 	if cliente.UserName == "" {
@@ -85,7 +85,7 @@ func (s *clienteService) GetClienteByPassword(password string) (dto.ClienteDto, 
 }
 
 func (s *clienteService) GetClienteByEmail(email string) (dto.ClienteDto, e.ApiError) {
-	var cliente model.Cliente = clienteClient.GetClienteByPassword(password)
+	var cliente model.Cliente = clienteClient.GetClienteByPassword(email)
 	var clienteDto dto.ClienteDto
 
 	if cliente.Email == "" {

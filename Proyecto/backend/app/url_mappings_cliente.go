@@ -9,9 +9,9 @@ import (
 func mapUrlsCliente() {
 
 	router.GET("/cliente/:id", clienteController.GetClienteById)
-	router.GET("/cliente/:username", clienteController.GetClienteByUsername)
-	router.GET("/cliente/:password", clienteController.GetClienteByPassword)
-	router.GET("/cliente/:email", clienteController.GetClienteByEmail)
+	router.GET("/cliente/username/:username", clienteController.GetClienteByUsername)
+	router.GET("/cliente/password/:password", clienteController.GetClienteByPassword)
+	router.GET("/cliente/email/:email", clienteController.GetClienteByEmail)
 	router.POST("/cliente", clienteController.InsertCliente)
 	router.GET("/cliente/hoteles", clienteController.GetHoteles)
 	router.POST("/cliente/reserva", clienteController.InsertReserva)

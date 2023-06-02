@@ -1,8 +1,8 @@
 package main
 
 import (
-	"Proyecto/app"
-	"Proyecto/db"
+	"backend/app"
+	"backend/db"
 )
 
 func main() {
