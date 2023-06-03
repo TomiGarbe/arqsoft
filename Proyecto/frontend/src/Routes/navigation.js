@@ -1,18 +1,18 @@
 import { lazy } from "react";
-import Login from "../Pages/login/Login.jsx"
+import Login from "../Pages/login/login_cliente.jsx"
 
-const Home = lazy(() => import("../Pages/Home"));
-const DentistDetails = lazy(() => import("../Pages/DentistDetails"));
-const Favs = lazy(() => import("../Pages/Favs"));
-const Contact = lazy(() => import("../Pages/Contact"));
-const Error = lazy(() => import("../Pages/Error"));
+const Home = lazy(() => import("../Pages/Inicio"));
+//const DentistDetails = lazy(() => import("../Pages/DentistDetails"));
+//const Favs = lazy(() => import("../Pages/Favs"));
+//const Contact = lazy(() => import("../Pages/Contact"));
+//const Error = lazy(() => import("../Pages/Error"));
 
 export const navigation = [
     {
         id: 1,
         path: "/home",
         Element: Home,
-    },
+    }/*,
     {
         id: 2,
         path: "/home/dentist/:id",
@@ -32,7 +32,7 @@ export const navigation = [
         id: 5,
         path: "*",
         Element: Error,
-    }
+    }*/
 ];
 
 export {Login};

@@ -3,8 +3,8 @@ import AuthContextProvider from './Components/utils/AuthContext/AuthContext';
 import { BrowserRouter, Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import { ProtectedRoutes } from './Routes/ProtectedRoutes';
 import AuthLayout from './Components/utils/AuthContext/AuthLayout';
-import Login from "./Pages/login/Login";
-import Register from './Pages/Register';
+import Login from "./Pages/login/login_cliente";
+import Register from './Pages/login/Register_cliente';
 import { navigation } from "./Routes/navigation";
 import Navbar from "./Components/Navbar"
 import Footer from "./Components/Footer"
@@ -30,8 +30,8 @@ function App() {
           <div className={ darkMode? "dark" : "light"}>
           <Routes>
               <Route path="/auth" element={<AuthLayout />}>
-              <Route path="/auth/login" element={<Login />} />
-              <Route path="/auth/register" element={<Register />} />
+              <Route path="/auth/login_cliente" element={<Login />} />
+              <Route path="/auth/login/register_cliente" element={<Register />} />
             </Route>
             <Route element={<ProtectedRoutes />}>
               {
@@ -46,7 +46,7 @@ function App() {
                 ))
               }
             </Route>
-            <Route path="/" element={<Navigate to="/auth/login" />} />
+            <Route path="/" element={<Navigate to="/auth/login_cliente" />} />
           </Routes>
           </div>
         </BrowserRouter>
