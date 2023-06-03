@@ -1,7 +1,7 @@
 package model
 
 type Reserva struct {
-	ID        		int			`gorm:"primaryKey;autoIncrement"`
+	ID        		int			`gorm:"primaryKey"`
 
 	Hotel     		Hotel 		`gorm:"foreignkey:HotelId"`
 	HotelID   		int

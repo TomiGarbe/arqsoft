@@ -1,7 +1,7 @@
 package model
 
 type Hotel struct {
-	ID        int    	`gorm:"primaryKey;autoIncrement"`
+	ID        int    	`gorm:"primaryKey"`
 	Nombre    string 	`gorm:"type:varchar(350);not null"`
 
 	Telefonos Telefonos `gorm:"foreignkey:HotelID"`
