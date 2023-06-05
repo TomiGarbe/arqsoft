@@ -5,44 +5,24 @@ export const AuthContext = createContext({});
 const AuthContextProvider = ({ children }) => {
   const [isLogged, setIsLogged] = useState(false);
   const [user, setUser] = useState(null);
+  
+  const Base_Url = "http:localhost:8090"
 
-  const handleLoginEmail = async (email) => {
+  const handleLogin = async (email, password) => {
     try {
-      const response = await fetch("http://localhost:8090/cliente/email/:email", {
-        method: "GET",
-        body: JSON.stringify({ email }),
-      });
+      const response = await fetch(`${Base_Url}/cliente/email/${email}`);
+      const data = await response.json();
 
-      if (response.ok) {
-        const data = await response.json();
+      if (data.email === email && data.password === password) {
+        setUser(data);
         setIsLogged(true);
-        setUser(data.user);
-      } else {
+      }
+      else
+      {
         setIsLogged(false);
         setUser(null);
       }
-    } catch (error) {
-      setIsLogged(false);
-      setUser(null);
-      console.error("Error al iniciar sesión:", error);
-    }
-  };
-
-  const handleLoginPassword = async (password) => {
-    try {
-      const response = await fetch("http://localhost:8090/cliente/password/:password", {
-        method: "GET",
-        body: JSON.stringify({ password }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setIsLogged(true);
-        setUser(data.user);
-      } else {
-        setIsLogged(false);
-        setUser(null);
-      }
+      
     } catch (error) {
       setIsLogged(false);
       setUser(null);
@@ -58,8 +38,7 @@ const AuthContextProvider = ({ children }) => {
   const propiedades = {
     isLogged,
     user,
-    handleLoginEmail,
-    handleLoginPassword,
+    handleLogin,
     handleLogout,
   };
 
