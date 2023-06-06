@@ -58,9 +58,9 @@ func (s *clienteService) GetClienteByUsername(username string) (dto.ClienteDto, 
 		return clienteDto, e.NewBadRequestApiError("cliente not found")
 	}
 
-	clienteDto.ID = cliente.ID
 	clienteDto.Name = cliente.Name
 	clienteDto.LastName = cliente.LastName
+	clienteDto.UserName = cliente.UserName
 	clienteDto.Password = cliente.Password
 	clienteDto.Email = cliente.Email
 
@@ -75,10 +75,10 @@ func (s *clienteService) GetClienteByPassword(password string) (dto.ClienteDto, 
 		return clienteDto, e.NewBadRequestApiError("cliente not found")
 	}
 
-	clienteDto.ID = cliente.ID
 	clienteDto.Name = cliente.Name
 	clienteDto.LastName = cliente.LastName
 	clienteDto.UserName = cliente.UserName
+	clienteDto.Password = cliente.Password
 	clienteDto.Email = cliente.Email
 
 	return clienteDto, nil
@@ -92,11 +92,11 @@ func (s *clienteService) GetClienteByEmail(email string) (dto.ClienteDto, e.ApiE
 		return clienteDto, e.NewBadRequestApiError("cliente not found")
 	}
 
-	clienteDto.ID = cliente.ID
 	clienteDto.Name = cliente.Name
 	clienteDto.LastName = cliente.LastName
 	clienteDto.UserName = cliente.UserName
 	clienteDto.Password = cliente.Password
+	clienteDto.Email = cliente.Email
 
 	return clienteDto, nil
 }
