@@ -45,16 +45,6 @@ func GetClienteByEmail(email string) model.Cliente {
 	return cliente
 }
 
-/*func GetClienteByUserPass(usuario, contraseña string) model.Cliente {
-	var cliente model.Cliente
-
-	Db.Where("username = ? AND password = ?", usuario, contraseña).First(&cliente)
-	log.Debug("Cliente: ", cliente)
-
-	return cliente
-}*/
-
-
 func GetClientes() model.Clientes {
 	var clientes model.Clientes
 

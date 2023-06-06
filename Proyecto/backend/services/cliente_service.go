@@ -15,7 +15,7 @@ type clienteService struct{}
 type clienteServiceInterface interface {
 	GetClienteById(id int) (dto.ClienteDto, e.ApiError)
 	GetClienteByUsername(username string) (dto.ClienteDto, e.ApiError)
-	GetClienteByPassword(username string) (dto.ClienteDto, e.ApiError)
+	GetClienteByPassword(password string) (dto.ClienteDto, e.ApiError)
 	GetClienteByEmail(email string) (dto.ClienteDto, e.ApiError)
 	InsertCliente(clienteDto dto.ClienteDto) (dto.ClienteDto, e.ApiError)
 	GetHoteles() (dto.HotelesDto, e.ApiError)
@@ -41,6 +41,7 @@ func (s *clienteService) GetClienteById(id int) (dto.ClienteDto, e.ApiError) {
 		return clienteDto, e.NewBadRequestApiError("cliente not found")
 	}
 
+	clienteDto.ID = cliente.ID
 	clienteDto.Name = cliente.Name
 	clienteDto.LastName = cliente.LastName
 	clienteDto.UserName = cliente.UserName
@@ -61,6 +62,7 @@ func (s *clienteService) GetClienteByUsername(username string) (dto.ClienteDto, 
 	clienteDto.ID = cliente.ID
 	clienteDto.Name = cliente.Name
 	clienteDto.LastName = cliente.LastName
+	clienteDto.UserName = cliente.UserName
 	clienteDto.Password = cliente.Password
 	clienteDto.Email = cliente.Email
 
@@ -79,13 +81,14 @@ func (s *clienteService) GetClienteByPassword(password string) (dto.ClienteDto, 
 	clienteDto.Name = cliente.Name
 	clienteDto.LastName = cliente.LastName
 	clienteDto.UserName = cliente.UserName
+	clienteDto.Password = cliente.Password
 	clienteDto.Email = cliente.Email
 
 	return clienteDto, nil
 }
 
 func (s *clienteService) GetClienteByEmail(email string) (dto.ClienteDto, e.ApiError) {
-	var cliente model.Cliente = clienteClient.GetClienteByPassword(email)
+	var cliente model.Cliente = clienteClient.GetClienteByEmail(email)
 	var clienteDto dto.ClienteDto
 
 	if cliente.Email == "" {
@@ -97,6 +100,7 @@ func (s *clienteService) GetClienteByEmail(email string) (dto.ClienteDto, e.ApiE
 	clienteDto.LastName = cliente.LastName
 	clienteDto.UserName = cliente.UserName
 	clienteDto.Password = cliente.Password
+	clienteDto.Email = cliente.Email
 
 	return clienteDto, nil
 }
@@ -204,6 +208,7 @@ func (s *clienteService) GetReservaById(id int) (dto.ReservaDto, e.ApiError) {
 		return reservaDto, e.NewBadRequestApiError("reserva not found")
 	}
 
+	reservaDto.ID = reserva.ID
 	reservaDto.Nombre = reserva.Hotel.Nombre
 	reservaDto.Name = reserva.Cliente.Name
 	reservaDto.LastName = reserva.Cliente.LastName
