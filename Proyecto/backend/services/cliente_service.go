@@ -15,7 +15,7 @@ type clienteService struct{}
 type clienteServiceInterface interface {
 	GetClienteById(id int) (dto.ClienteDto, e.ApiError)
 	GetClienteByUsername(username string) (dto.ClienteDto, e.ApiError)
-	GetClienteByPassword(username string) (dto.ClienteDto, e.ApiError)
+	GetClienteByPassword(password string) (dto.ClienteDto, e.ApiError)
 	GetClienteByEmail(email string) (dto.ClienteDto, e.ApiError)
 	InsertCliente(clienteDto dto.ClienteDto) (dto.ClienteDto, e.ApiError)
 	GetHoteles() (dto.HotelesDto, e.ApiError)
@@ -85,7 +85,7 @@ func (s *clienteService) GetClienteByPassword(password string) (dto.ClienteDto, 
 }
 
 func (s *clienteService) GetClienteByEmail(email string) (dto.ClienteDto, e.ApiError) {
-	var cliente model.Cliente = clienteClient.GetClienteByPassword(email)
+	var cliente model.Cliente = clienteClient.GetClienteByEmail(email)
 	var clienteDto dto.ClienteDto
 
 	if cliente.Email == "" {
