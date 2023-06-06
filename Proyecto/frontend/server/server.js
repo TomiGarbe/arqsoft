@@ -5,11 +5,11 @@ const app = express();
 const fetch = (...args) => 
     import('node-fetch').then(({default: fetch}) => fetch(...args));
 
-const baseURL = "http://localhost:8080/items";
+const baseURL = "http://localhost:8090";
 
-app.get("/api/items/:id", async function(req, res) {
+app.get("/api/clients/:id", async function(req, res) {
     res.set("Access-Control-Allow-Origin", "*");
-    const url = `${baseURL}/${req.params.id}`;
+    const url = `${baseURL}/cliente/${req.params.id}`;
     const options = {method: 'GET'};
     try {
         let response = await fetch(url, options);
