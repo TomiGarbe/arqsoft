@@ -11,7 +11,7 @@ import (
 )
 
 func GetClienteById(c *gin.Context) {
-	log.Debug("Cliente id to load: " + c.Param("id"))
+	log.Debug("ID de cliente para cargar: " + c.Param("id"))
 
 	id, _ := strconv.Atoi(c.Param("id"))
 	var clienteDto dto.ClienteDto
@@ -26,7 +26,7 @@ func GetClienteById(c *gin.Context) {
 }
 
 func GetClienteByUsername(c *gin.Context) {
-	log.Debug("Cliente  to load: " + c.Param("username"))
+	log.Debug("Cliente a cargar: " + c.Param("username"))
 
 	username := c.Param("username")
 	var clienteDto dto.ClienteDto
@@ -41,7 +41,7 @@ func GetClienteByUsername(c *gin.Context) {
 }
 
 func GetClienteByPassword(c *gin.Context) {
-	log.Debug("Cliente  to load: " + c.Param("password"))
+	log.Debug("Cliente a cargar: " + c.Param("password"))
 
 	password := c.Param("password")
 	var clienteDto dto.ClienteDto
@@ -56,7 +56,7 @@ func GetClienteByPassword(c *gin.Context) {
 }
 
 func GetClienteByEmail(c *gin.Context) {
-	log.Debug("Cliente  to load: " + c.Param("email"))
+	log.Debug("Cliente a cargar: " + c.Param("email"))
 
 	email := c.Param("email")
 	var clienteDto dto.ClienteDto
@@ -92,7 +92,7 @@ func InsertCliente(c *gin.Context) {
 }
 
 func GetReservaById(c *gin.Context) {
-	log.Debug("Reserva id to load: " + c.Param("id"))
+	log.Debug("ID de reserva para cargar: " + c.Param("id"))
 
 	id, _ := strconv.Atoi(c.Param("id"))
 	var reservaDto dto.ReservaDto

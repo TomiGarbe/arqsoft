@@ -18,5 +18,5 @@ func mapUrlsCliente() {
 	router.GET("/cliente/reservas", clienteController.GetReservas)
 	router.GET("/cliente/reserva/:id", clienteController.GetReservaById)
 
-	log.Info("Finishing mappings configurations")
+	log.Info("Terminando configuraciones de mapeos")
 }

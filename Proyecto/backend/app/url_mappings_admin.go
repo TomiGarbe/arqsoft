@@ -19,5 +19,5 @@
 		router.POST("/admin/hotel/:id/telefono", adminController.AddTelefono)
 		router.GET("/admin/reservas", adminController.GetReservas)
 
-		log.Info("Finishing mappings configurations")
+		log.Info("Terminando configuraciones de mapeos")
 	}

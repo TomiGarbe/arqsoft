@@ -38,7 +38,7 @@ func (s *clienteService) GetClienteById(id int) (dto.ClienteDto, e.ApiError) {
 	var clienteDto dto.ClienteDto
 
 	if cliente.ID == 0 {
-		return clienteDto, e.NewBadRequestApiError("cliente not found")
+		return clienteDto, e.NewBadRequestApiError("Cliente No Encontrado")
 	}
 
 	clienteDto.ID = cliente.ID
@@ -56,7 +56,7 @@ func (s *clienteService) GetClienteByUsername(username string) (dto.ClienteDto, 
 	var clienteDto dto.ClienteDto
 
 	if cliente.UserName == "" {
-		return clienteDto, e.NewBadRequestApiError("cliente not found")
+		return clienteDto, e.NewBadRequestApiError("Cliente No Encontrado")
 	}
 
 	clienteDto.ID = cliente.ID
@@ -74,7 +74,7 @@ func (s *clienteService) GetClienteByPassword(password string) (dto.ClienteDto, 
 	var clienteDto dto.ClienteDto
 
 	if cliente.Password == "" {
-		return clienteDto, e.NewBadRequestApiError("cliente not found")
+		return clienteDto, e.NewBadRequestApiError("Cliente No Encontrado")
 	}
 
 	clienteDto.ID = cliente.ID
@@ -92,7 +92,7 @@ func (s *clienteService) GetClienteByEmail(email string) (dto.ClienteDto, e.ApiE
 	var clienteDto dto.ClienteDto
 
 	if cliente.Email == "" {
-		return clienteDto, e.NewBadRequestApiError("cliente not found")
+		return clienteDto, e.NewBadRequestApiError("Cliente No Encontrado")
 	}
 
 	clienteDto.ID = cliente.ID
@@ -205,7 +205,7 @@ func (s *clienteService) GetReservaById(id int) (dto.ReservaDto, e.ApiError) {
 	var reservaDto dto.ReservaDto
 
 	if reserva.ID == 0 {
-		return reservaDto, e.NewBadRequestApiError("reserva not found")
+		return reservaDto, e.NewBadRequestApiError("Reserva No Encontrado")
 	}
 
 	reservaDto.ID = reserva.ID

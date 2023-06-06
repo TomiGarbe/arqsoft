@@ -11,7 +11,7 @@ import (
 )
 
 func GetAdminById(c *gin.Context) {
-	log.Debug("Admin id to load: " + c.Param("id"))
+	log.Debug("ID de administrador para cargar: " + c.Param("id"))
 
 	id, _ := strconv.Atoi(c.Param("id"))
 	var adminDto dto.AdminDto
@@ -59,7 +59,7 @@ func InsertAdmin(c *gin.Context) {
 }
 
 func GetClienteById(c *gin.Context) {
-	log.Debug("Cliente id to load: " + c.Param("id"))
+	log.Debug("ID de Cliente para cargar: " + c.Param("id"))
 
 	id, _ := strconv.Atoi(c.Param("id"))
 	var clienteDto dto.ClienteDto
@@ -98,7 +98,7 @@ func GetReservas(c *gin.Context) {
 }
 
 func GetHotelById(c *gin.Context) {
-	log.Debug("Hotel id to load: " + c.Param("id"))
+	log.Debug("ID de Hotel para cargar: " + c.Param("id"))
 
 	id, _ := strconv.Atoi(c.Param("id"))
 	var hotelDto dto.HotelDto
@@ -147,7 +147,7 @@ func InsertHotel(c *gin.Context) {
 
 func AddTelefono(c *gin.Context) {
 
-	log.Debug("Adding Telephone to hotel: " + c.Param("id"))
+	log.Debug("Agregar Teléfono al hotel: " + c.Param("id"))
 	id, _ := strconv.Atoi(c.Param("id"))
 
 	var telefonoDto dto.TelefonoDto

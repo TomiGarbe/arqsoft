@@ -38,7 +38,7 @@ function Item() {
                 <p>The H2 chip powers a more personalized audio experience with the 2nd generation AirPods Pro with Wireless MagSafe Charging Case from Apple.
                         The chip works with a custom-built low-distortion driver, amplifier, and inward-facing mic in each ear to deliver clear highs,
                         powerful bass, and audio tuned to your ear shape as you hear it. They also usher in a new dimension of sound with immersive 
-                        Spatial Audio, making you feel like you’re on stage with the band. Other aspects of the AirPods Pro have been upgraded, 
+                        Spatial Audio, making you feel like youre on stage with the band. Other aspects of the AirPods Pro have been upgraded, 
                         including ANC with double the cancellation, a transparency mode that adapts to high decibel sounds, and more. 
                         With all the reengineered features in the AirPods Pro 2nd gen, Apple takes your mobile audio experience to a new, more personal level.</p>
             </div>

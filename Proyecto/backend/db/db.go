@@ -30,10 +30,10 @@ func init() {
 	db, err = gorm.Open("mysql", DBUser+":"+DBPass+"@tcp("+DBHost+":3306)/"+DBName+"?charset=utf8&parseTime=True")
 
 	if err != nil {
-		log.Info("Connection Failed to Open")
+		log.Info("La conexión no se pudo abrir")
 		log.Fatal(err)
 	} else {
-		log.Info("Connection Established")
+		log.Info("Conexión establecida")
 	}
 
 	
@@ -52,5 +52,5 @@ func StartDbEngine() {
 	db.AutoMigrate(&model.Reserva{})
 	db.AutoMigrate(&model.Telefono{})
 
-	log.Info("Finishing Migration Database Tables")
+	log.Info("Finalización de las tablas de la base de datos de migración")
 }

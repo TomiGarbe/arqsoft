@@ -41,7 +41,7 @@ func (s *adminService) GetAdminById(id int) (dto.AdminDto, e.ApiError) {
 	var adminDto dto.AdminDto
 
 	if admin.ID == 0 {
-		return adminDto, e.NewBadRequestApiError("admin not found")
+		return adminDto, e.NewBadRequestApiError("Administrador No Encontrado")
 	}
 
 	adminDto.ID = admin.ID
@@ -97,7 +97,7 @@ func (s *adminService) GetClienteById(id int) (dto.ClienteDto, e.ApiError) {
 	var clienteDto dto.ClienteDto
 
 	if cliente.ID == 0 {
-		return clienteDto, e.NewBadRequestApiError("cliente not found")
+		return clienteDto, e.NewBadRequestApiError("Cliente No Encontrado")
 	}
 
 	clienteDto.ID = cliente.ID
@@ -136,7 +136,7 @@ func (s *adminService) GetHotelById(id int) (dto.HotelDto, e.ApiError) {
 	var hotelDto dto.HotelDto
 
 	if hotel.ID == 0 {
-		return hotelDto, e.NewBadRequestApiError("hotel not found")
+		return hotelDto, e.NewBadRequestApiError("Hotel No Encontrado")
 	}
 
 	hotelDto.ID = hotel.ID
