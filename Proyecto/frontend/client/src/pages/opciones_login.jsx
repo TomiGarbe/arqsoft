@@ -1,27 +1,18 @@
 import React from 'react';
-import { Box, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import './opciones_login.css';
 
 const RoleSelection = () => {
-
-  const handleRoleSelection = (role) => {
-    if (role === 'cliente') {
-      // Redireccionar a la página del cliente
-    } else if (role === 'administrador') {
-      // Redireccionar a la página del administrador
-    }
-  };
-
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "15px" }}>
-      <Button onClick={() => handleRoleSelection("cliente")} variant="contained" size="large">
-        Cliente
-      </Button>
-      <Button onClick={() => handleRoleSelection("administrador")} variant="contained" size="large">
-        Administrador
-      </Button>
-      <Link to="/auth/register">¿No tienes cuenta aún?</Link>
-    </Box>
+    <div className="selection">
+      <div className="buttons-container">
+        <button className="button" variant="contained" size="large">
+          <a className="link" href="http://localhost:3000/login_cliente">Cliente</a>
+        </button>
+        <button className="button" variant="contained" size="large">
+          <a className="link" href="http://localhost:3000/login_admin">Administrador</a>
+        </button>
+      </div>
+    </div>
   );
 };
 

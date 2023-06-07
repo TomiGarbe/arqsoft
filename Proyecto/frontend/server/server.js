@@ -7,9 +7,9 @@ const fetch = (...args) =>
 
 const baseURL = "http://localhost:8090";
 
-app.get("/api/clients/:id", async function(req, res) {
+app.get("/api/cliente/email/:email", async function(req, res) {
     res.set("Access-Control-Allow-Origin", "*");
-    const url = `${baseURL}/cliente/${req.params.id}`;
+    const url = `${baseURL}/cliente/email/${req.params.email}`;
     const options = {method: 'GET'};
     try {
         let response = await fetch(url, options);
