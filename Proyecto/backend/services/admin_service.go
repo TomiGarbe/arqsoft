@@ -208,7 +208,7 @@ func (s *adminService) AddTelefono(telefonoDto dto.TelefonoDto) (dto.HotelDto, e
 	telefono.Codigo = telefonoDto.Codigo
 	telefono.Numero = telefonoDto.Numero
 	telefono.HotelID = telefonoDto.HotelID
-	//Adding
+	
 	telefono = telefonoClient.AddTelefono(telefono)
 
 	

@@ -41,7 +41,6 @@ func InsertAdmin(c *gin.Context) {
 	var adminDto dto.AdminDto
 	err := c.BindJSON(&adminDto)
 
-	// Error Parsing json param
 	if err != nil {
 		log.Error(err.Error())
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -49,7 +48,7 @@ func InsertAdmin(c *gin.Context) {
 	}
 
 	adminDto, er := service.AdminService.InsertAdmin(adminDto)
-	// Error del Insert
+	
 	if er != nil {
 		c.JSON(er.Status(), er)
 		return
@@ -128,7 +127,6 @@ func InsertHotel(c *gin.Context) {
 	var hotelDto dto.HotelDto
 	err := c.BindJSON(&hotelDto)
 
-	// Error Parsing json param
 	if err != nil {
 		log.Error(err.Error())
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -136,7 +134,7 @@ func InsertHotel(c *gin.Context) {
 	}
 
 	hotelDto, er := service.AdminService.InsertHotel(hotelDto)
-	// Error del Insert
+	
 	if er != nil {
 		c.JSON(er.Status(), er)
 		return
@@ -153,7 +151,6 @@ func AddTelefono(c *gin.Context) {
 	var telefonoDto dto.TelefonoDto
 	err := c.BindJSON(&telefonoDto)
 
-	// Error Parsing json param
 	if err != nil {
 		log.Error(err.Error())
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -164,7 +161,7 @@ func AddTelefono(c *gin.Context) {
 	var hotelDto dto.HotelDto
 
 	hotelDto, er := service.AdminService.AddTelefono(telefonoDto)
-	//Error del Insert
+	
 	if er != nil {
 		c.JSON(er.Status(), er)
 		return
