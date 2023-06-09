@@ -5,7 +5,6 @@ import Register from './pages/login/Register_cliente'
 import Inicio from './pages/inicio'
 import './App.css';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-//import { useEffect, useState } from 'react';
 
 function App() {
     return (

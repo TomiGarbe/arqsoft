@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import './Register_cliente.css'
+import '../estilo/Register_cliente.css';
 
 function RegistrationPage() {
   const [formData, setFormData] = useState({
-    name: '',
-    last_name: '',
-    user_name: '',
-    password: '',
-    email: ''
+    id: 1,
+    name: "Tomi",
+    last_name: "Garbe",
+    username: "rdfghtbcjndxst",
+    password: "q2qre2",
+    email: "sdgf@123"
   });
 
   const handleChange = (e) => {
@@ -15,7 +16,8 @@ function RegistrationPage() {
   };
 
   const Register = () => {
-    fetch('http://localhost:5001/api/cliente', {
+    alert(JSON.stringify(formData));
+    fetch(`http://localhost:5001/api/cliente`, {
       method: 'POST',
       body: JSON.stringify(formData)
     })
@@ -29,33 +31,6 @@ function RegistrationPage() {
         // alert('Credenciales incorrectas');
       });
   };
-
-  /*casi funciona
-  const Register = () => {
-    fetch(`http://localhost:5001/api/cliente/${formData}`, {method: 'POST'})
-    .then(response => response.json())
-    .then(data => {
-      console.log('Registro exitoso:', data);
-      // window.location.href = 'http://localhost:3000/home';
-    })
-    .catch(error => {
-      console.error('Error en el registro:', error);
-      // alert('Credenciales incorrectas');
-    });
-  };*/
-
-  /*const Register = () => {
-    fetch(`http://localhost:5001/api/cliente/${formData}`)
-    .then(response => response.json())
-    .then(data => {
-      console.log('Registro exitoso:', data);
-      // window.location.href = 'http://localhost:3000/home';
-    })
-    .catch(error => {
-      console.error('Error en el registro:', error);
-      // alert('Credenciales incorrectas');
-    });
-  };*/
 
   return (
     <div className="registration-container">
@@ -88,7 +63,7 @@ function RegistrationPage() {
           <input
             type="text"
             name="user_name"
-            value={formData.user_name}
+            value={formData.username}
             onChange={handleChange}
             required
           />
@@ -116,7 +91,7 @@ function RegistrationPage() {
           />
         </label>
         <br />
-        <button type="submit" onClick={Register}>Registrarse</button>
+        <button type="submit">Registrarse</button>
       </form>
     </div>
   );

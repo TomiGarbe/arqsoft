@@ -1,5 +1,5 @@
 import React from 'react';
-import './login_admin.css';
+import '../estilo/login_admin.css';
 
 const AdminLogin = () => {
   return (

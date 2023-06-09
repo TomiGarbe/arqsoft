@@ -1,0 +1,263 @@
+/*Diseño General*/
+
+
+
+/*Diseño Inicio de Hoteles*/
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  h1 {
+    text-align: center;
+  }
+  
+  .hotels-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .hotel-card {
+    width: 200px;
+    margin: 10px;
+    text-align: center;
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  
+  .hotel-card img {
+    max-width: 100%;
+  }
+  
+  .hotel-card p {
+    margin: 5px 0;
+  }
+  
+  .button-container {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .button-container a {
+    text-decoration: none;
+  }
+  
+  .button-container button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .button-container button:hover {
+    background-color: #45a049;
+  }
+
+  
+
+/*Opciones Login*/
+.selection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .link {
+    text-decoration: none;
+    color: white;
+  }
+  
+  .buttons-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #337ab7;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #23527c;
+  }
+
+
+/*Register Cliente*/
+.registration-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+  }
+  
+  .registration-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .registration-form label {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+  
+  .registration-form input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  
+  .registration-form button {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .registration-form button:hover {
+    background-color: #45a049;
+  }
+  
+
+  /*Login CLiente*/
+  .container {
+    height:1000px;
+    width: 1000px;
+     background-color: #ccc;
+     border-radius: 3%;
+   }
+   
+   .container2 {
+ background-color: #557b9c;
+ border-radius: 7%;
+ height:350px ;
+ width:400px;
+ box-shadow: 0 0 17px rgba(0, 0, 0, 1);
+ 
+ 
+   }
+   
+ .title {
+   font-size: 24px;
+   text-align: center;
+   margin-bottom: 20px;
+   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+   
+ }
+ 
+ .form-container {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+ }
+ 
+ .input {
+   margin-bottom: 10px;
+   padding: 10px;
+   width: 50px;
+   font-size: 20px;
+   border: 1px solid #ccc;
+   border-radius: 5px;
+   text-align: center;
+ 
+ }
+ 
+ .button-container {
+   margin-top: 20px;
+ }
+ 
+ .button {
+   margin: 0 10px;
+   padding: 10px 20px;
+   font-size: 16px;
+   border: none;
+   border-radius: 5px;
+   background-color: #18456d;
+   color: #fff;
+   cursor: pointer;
+ }
+ 
+ .button:hover {
+   background-color: #23527c;
+ }
+ 
+ .link {
+   text-decoration: none;
+   color: white;
+ }
+
+
+ /*Login Admin*/
+ .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .title {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .input {
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 300px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .button-container {
+    margin-top: 20px;
+  }
+  
+  .button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #337ab7;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #23527c;
+  }
+  
