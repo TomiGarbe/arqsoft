@@ -2,28 +2,25 @@ import React, { useEffect, useState } from 'react';
 import './login_cliente.css';
 
 const ClienteLogin = () => {
-  const [email, setEmail] = useState([{}]);
-  const [password, setPassword] = useState([{}]);
-  const [clientData, setClientData] = useState([{}]);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [clientData, setClientData] = useState({});
 
   const handleLogin = () => {
-    if (email === clientData?.email && password === clientData?.password) {
-      alert('Inicio de sesión exitoso');
+    if (email === clientData.email && password === clientData.password) {
+      window.location.href = 'http://localhost:3000/home';
     } else {
       alert('Credenciales incorrectas');
     }
   };
 
-  /*const handleLogin = () => {
-    if (email === clientData["email"] && password === clientData["password"]) {
-      alert('Inicio de sesión exitoso');
-    } else {
-      alert('Credenciales incorrectas');
-    }
-  };*/
+  const handleRegister = () => {
+    window.location.href = 'http://localhost:3000/register';
+  };
 
   useEffect(() => {
-    setClientData(undefined);
+    setClientData('');
+  
     if (email) {
       fetch(`http://localhost:5001/api/cliente/email/${email}`)
         .then(response => response.json())
@@ -36,19 +33,9 @@ const ClienteLogin = () => {
     }
   }, [email]);
 
-  /*useEffect(() => {
-    setClientData(undefined);
-    fetch(`http://localhost:5001/api/cliente/email/${email}`).then(
-      response => response.json()
-    ).then(
-      data => {
-        setClientData(data)
-      }
-    )
-  }, [])*/
-
   return (
     <div className="container">
+      <div className="container2">
       <h1 className="title">Bienvenido Cliente</h1>
       <div className="form-container">
         <input
@@ -69,7 +56,10 @@ const ClienteLogin = () => {
           <button className="button" onClick={handleLogin}>
             Iniciar Sesión
           </button>
-          <button className="button">Registrarse</button>
+          <button className="button" onClick={handleRegister}>
+            Registrarse
+          </button>
+          </div>
         </div>
       </div>
     </div>

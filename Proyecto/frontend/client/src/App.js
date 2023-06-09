@@ -2,6 +2,7 @@ import OpLogin from './pages/opciones_login'
 import LogCliente from './pages/login/login_cliente'
 import LogAdmin from './pages/login/login_admin'
 import Register from './pages/login/Register_cliente'
+import Inicio from './pages/inicio'
 import './App.css';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 //import { useEffect, useState } from 'react';
@@ -16,6 +17,7 @@ function App() {
                     <Route path='/login_cliente/' element={<LogCliente />}></Route>
                     <Route path='/login_admin/' element={<LogAdmin />}></Route>
                     <Route path='/register/' element={<Register />}></Route>
+                    <Route path='/home/' element={<Inicio />}></Route>
                 </Routes>
             </Router>
         </div>
@@ -24,16 +26,6 @@ function App() {
 
 export default App;
 
-/*
-<Router>
-                <Routes>
-                    <Route path='/' element={<OpLogin />}></Route>
-                    <Route path='/login_cliente/' element={<LogCliente />}></Route>
-                    <Route path='/login_admin/' element={<LogAdmin />}></Route>
-                    <Route path='/register/' element={<Register />}></Route>
-                </Routes>
-            </Router>
-*/
 
 /*
 <h1>Cliente</h1>
@@ -47,16 +39,3 @@ export default App;
                     </>
                 ) }</p>
 */
-
-/*const [clientData, setClientData] = useState([{}]);
-
-    useEffect(() => {
-        setClientData(undefined);
-        fetch('http://localhost:5001/api/clients/1').then(
-            response => response.json()
-        ).then(
-            data => {
-                setClientData(data)
-            }
-        )
-    }, [])*/
