@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-//import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './estilo/inicio.css';
 
 const HomePage = () => {
@@ -20,19 +20,27 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div>
-      {hotels.length ? (
-        hotels.map((hotel) => (
-          <div className='hotel' key={hotel.id}>
-            <img src={hotel.image} alt={hotel.nombre}></img>
-            <h3>{hotel.nombre}</h3>
-          </div>
-        ))
-      ) : (
-        <p>No hay hoteles</p>
-      )}
+    <div className="container">
+      <div className="hotels-container">
+        {hotels.length ? (
+          hotels.map((hotel) => (
+            <div className='hotel-card' key={hotel.id}>
+              <img src={hotel.image} alt={hotel.nombre}></img>
+              <h4>{hotel.nombre}</h4>
+              <p>{hotel.email}</p>
+              <Link to={`/reservar/${hotel.id}`}>
+                <button>Reservar</button>
+              </Link>
+            </div>
+          ))
+        ) : (
+          <p>No hay hoteles</p>
+        )}
+      </div>
     </div>
   );
+};
+
 
   /*return (
     <div>
@@ -86,6 +94,5 @@ const HomePage = () => {
       </div>
     </div>
   );*/
-};
 
 export default HomePage;

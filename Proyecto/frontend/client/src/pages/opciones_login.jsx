@@ -12,16 +12,22 @@ const RoleSelection = () => {
 
   return (
     <div className="selection">
-      <div className="buttons-container">
-        <button className="button" variant="contained" size="large" onClick={handleLoginCliente}>
-          Cliente
-        </button>
-        <button className="button" variant="contained" size="large" onClick={handleLoginAdmin}>
-          Administrador
-        </button>
+      <div className="container">
+      <div className="container2">
+        <h2 className="welcome-text">Bienvenido! Elija una opción</h2>
+        <div className="buttons-container">
+          <button className="button" variant="contained" size="large" onClick={handleLoginCliente}>
+            Cliente
+          </button>
+          <button className="button" variant="contained" size="large" onClick={handleLoginAdmin}>
+            Administrador
+          </button>
+        </div>
+      </div>
       </div>
     </div>
   );
 };
 
 export default RoleSelection;
+
