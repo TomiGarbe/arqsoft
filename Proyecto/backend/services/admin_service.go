@@ -16,6 +16,8 @@ type adminService struct{}
 
 type adminServiceInterface interface {
 	GetAdminById(id int) (dto.AdminDto, e.ApiError)
+	GetAdminByUsername(username string) (dto.AdminDto, e.ApiError)
+	GetAdminByEmail(email string) (dto.AdminDto, e.ApiError)
 	GetAdmins() (dto.AdminsDto, e.ApiError)
 	InsertAdmin(adminDto dto.AdminDto) (dto.AdminDto, e.ApiError)
 	GetClienteById(id int) (dto.ClienteDto, e.ApiError)
@@ -41,6 +43,44 @@ func (s *adminService) GetAdminById(id int) (dto.AdminDto, e.ApiError) {
 	var adminDto dto.AdminDto
 
 	if admin.ID == 0 {
+		return adminDto, e.NewBadRequestApiError("Administrador No Encontrado")
+	}
+
+	adminDto.ID = admin.ID
+	adminDto.Name = admin.Name
+	adminDto.LastName = admin.LastName
+	adminDto.UserName = admin.UserName
+	adminDto.Password = admin.Password
+	adminDto.Email = admin.Email
+
+	return adminDto, nil
+}
+
+func (s *adminService) GetAdminByUsername(username string) (dto.AdminDto, e.ApiError) {
+
+	var admin model.Admin = adminClient.GetAdminByUsername(username)
+	var adminDto dto.AdminDto
+
+	if admin.UserName == "" {
+		return adminDto, e.NewBadRequestApiError("Administrador No Encontrado")
+	}
+
+	adminDto.ID = admin.ID
+	adminDto.Name = admin.Name
+	adminDto.LastName = admin.LastName
+	adminDto.UserName = admin.UserName
+	adminDto.Password = admin.Password
+	adminDto.Email = admin.Email
+
+	return adminDto, nil
+}
+
+func (s *adminService) GetAdminByEmail(email string) (dto.AdminDto, e.ApiError) {
+
+	var admin model.Admin = adminClient.GetAdminByEmail(email)
+	var adminDto dto.AdminDto
+
+	if admin.Email == "" {
 		return adminDto, e.NewBadRequestApiError("Administrador No Encontrado")
 	}
 

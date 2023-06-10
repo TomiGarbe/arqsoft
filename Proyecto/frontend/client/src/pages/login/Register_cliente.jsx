@@ -1,35 +1,78 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../estilo/Register_cliente.css';
 
 function RegistrationPage() {
+  const [clienteEmail, setEmail] = useState({});
+  const [clienteUsername, setUsername] = useState({});
+
   const [formData, setFormData] = useState({
-    id: 1,
-    name: "Tomi",
-    last_name: "Garbe",
-    username: "rdfghtbcjndxst",
-    password: "q2qre2",
-    email: "sdgf@123"
+    name: "",
+    last_name: "",
+    username: "",
+    password: "",
+    email: ""
   });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  useEffect(() => {
+    setEmail('');
+  
+    if (formData.email) {
+      fetch(`http://localhost:8090/cliente/email/${formData.email}`)
+        .then(response => response.json())
+        .then(data => {
+          setEmail(data);
+        })
+        .catch(error => {
+          console.error('Error al obtener los datos del cliente:', error);
+        });
+    }
+  }, [formData.email]);
+
+  useEffect(() => {
+    setUsername('');
+  
+    if (formData.username) {
+      fetch(`http://localhost:8090/cliente/username/${formData.username}`)
+        .then(response => response.json())
+        .then(data => {
+          setUsername(data);
+        })
+        .catch(error => {
+          console.error('Error al obtener los datos del cliente:', error);
+        });
+    }
+  }, [formData.username]);
+
   const Register = () => {
-    alert(JSON.stringify(formData));
-    fetch(`http://localhost:5001/api/cliente`, {
+    if (formData.email === clienteEmail.email) {
+      alert('El email ya pertenece a una cuanta');
+    }
+    else if (formData.username === clienteUsername.username) {
+      alert('El username no esta disponible');
+    }
+    else
+    {
+      fetch('http://localhost:8090/cliente', {
       method: 'POST',
+      headers: {
+      'Content-Type': 'application/json'
+      },
       body: JSON.stringify(formData)
-    })
+      })
       .then(response => response.json())
       .then(data => {
         console.log('Registro exitoso:', data);
-        // window.location.href = 'http://localhost:3000/home';
+        window.location.href = 'http://localhost:3000/home';
       })
       .catch(error => {
         console.error('Error en el registro:', error);
-        // alert('Credenciales incorrectas');
+        alert('Credenciales incorrectas');
       });
+    }
   };
 
   return (
@@ -62,7 +105,7 @@ function RegistrationPage() {
           Nombre de usuario:
           <input
             type="text"
-            name="user_name"
+            name="username"
             value={formData.username}
             onChange={handleChange}
             required

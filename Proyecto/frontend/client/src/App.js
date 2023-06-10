@@ -3,6 +3,7 @@ import LogCliente from './pages/login/login_cliente'
 import LogAdmin from './pages/login/login_admin'
 import Register from './pages/login/Register_cliente'
 import Inicio from './pages/inicio'
+import InicioAdmin from './pages/opciones_admin'
 import './App.css';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 
@@ -17,6 +18,7 @@ function App() {
                     <Route path='/login_admin/' element={<LogAdmin />}></Route>
                     <Route path='/register/' element={<Register />}></Route>
                     <Route path='/home/' element={<Inicio />}></Route>
+                    <Route path='/home/admin' element={<InicioAdmin />}></Route>
                 </Routes>
             </Router>
         </div>

@@ -25,6 +25,36 @@ func GetAdminById(c *gin.Context) {
 	c.JSON(http.StatusOK, adminDto)
 }
 
+func GetAdminByUsername(c *gin.Context) {
+	log.Debug("Admin a cargar: " + c.Param("username"))
+
+	username := c.Param("username")
+	var adminDto dto.AdminDto
+
+	adminDto, err := service.AdminService.GetAdminByUsername(username)
+
+	if err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
+	c.JSON(http.StatusOK, adminDto)
+}
+
+func GetAdminByEmail(c *gin.Context) {
+	log.Debug("Admin a cargar: " + c.Param("email"))
+
+	email := c.Param("email")
+	var adminDto dto.AdminDto
+
+	adminDto, err := service.AdminService.GetAdminByEmail(email)
+
+	if err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
+	c.JSON(http.StatusOK, adminDto)
+}
+
 func GetAdmins(c *gin.Context) {
 	var adminsDto dto.AdminsDto
 	adminsDto, err := service.AdminService.GetAdmins()

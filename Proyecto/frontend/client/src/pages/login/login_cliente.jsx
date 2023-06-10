@@ -6,7 +6,7 @@ const ClienteLogin = () => {
   const [password, setPassword] = useState('');
   const [clientData, setClientData] = useState({});
 
-  const handleLogin = () => {
+  const handleLoginCliente = () => {
     if (email === clientData.email && password === clientData.password) {
       window.location.href = 'http://localhost:3000/home';
     } else {
@@ -22,7 +22,7 @@ const ClienteLogin = () => {
     setClientData('');
   
     if (email) {
-      fetch(`http://localhost:5001/api/cliente/email/${email}`)
+      fetch(`http://localhost:8090/cliente/email/${email}`)
         .then(response => response.json())
         .then(data => {
           setClientData(data);
@@ -53,7 +53,7 @@ const ClienteLogin = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <div className="button-container">
-          <button className="button" onClick={handleLogin}>
+          <button className="button" onClick={handleLoginCliente}>
             Iniciar Sesión
           </button>
           <button className="button" onClick={handleRegister}>

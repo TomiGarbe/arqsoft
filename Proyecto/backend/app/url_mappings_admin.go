@@ -9,6 +9,8 @@
 	func mapUrlsAdmin() {
 
 		router.GET("/admin/:id", adminController.GetAdminById)
+		router.GET("/admin/username/:username", adminController.GetAdminByUsername)
+		router.GET("/admin/email/:email", adminController.GetAdminByEmail)
 		router.GET("/admins", adminController.GetAdmins)
 		router.POST("/admin", adminController.InsertAdmin)
 		router.GET("/admin/cliente/:id", adminController.GetClienteById)

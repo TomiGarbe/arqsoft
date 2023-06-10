@@ -40,21 +40,6 @@ func GetClienteByUsername(c *gin.Context) {
 	c.JSON(http.StatusOK, clienteDto)
 }
 
-func GetClienteByPassword(c *gin.Context) {
-	log.Debug("Cliente a cargar: " + c.Param("password"))
-
-	password := c.Param("password")
-	var clienteDto dto.ClienteDto
-
-	clienteDto, err := service.ClienteService.GetClienteByPassword(password)
-
-	if err != nil {
-		c.JSON(err.Status(), err)
-		return
-	}
-	c.JSON(http.StatusOK, clienteDto)
-}
-
 func GetClienteByEmail(c *gin.Context) {
 	log.Debug("Cliente a cargar: " + c.Param("email"))
 

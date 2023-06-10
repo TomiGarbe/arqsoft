@@ -15,7 +15,6 @@ type clienteService struct{}
 type clienteServiceInterface interface {
 	GetClienteById(id int) (dto.ClienteDto, e.ApiError)
 	GetClienteByUsername(username string) (dto.ClienteDto, e.ApiError)
-	GetClienteByPassword(password string) (dto.ClienteDto, e.ApiError)
 	GetClienteByEmail(email string) (dto.ClienteDto, e.ApiError)
 	InsertCliente(clienteDto dto.ClienteDto) (dto.ClienteDto, e.ApiError)
 	GetHoteles() (dto.HotelesDto, e.ApiError)
@@ -56,24 +55,6 @@ func (s *clienteService) GetClienteByUsername(username string) (dto.ClienteDto, 
 	var clienteDto dto.ClienteDto
 
 	if cliente.UserName == "" {
-		return clienteDto, e.NewBadRequestApiError("Cliente No Encontrado")
-	}
-
-	clienteDto.ID = cliente.ID
-	clienteDto.Name = cliente.Name
-	clienteDto.LastName = cliente.LastName
-	clienteDto.UserName = cliente.UserName
-	clienteDto.Password = cliente.Password
-	clienteDto.Email = cliente.Email
-
-	return clienteDto, nil
-}
-
-func (s *clienteService) GetClienteByPassword(password string) (dto.ClienteDto, e.ApiError) {
-	var cliente model.Cliente = clienteClient.GetClienteByPassword(password)
-	var clienteDto dto.ClienteDto
-
-	if cliente.Password == "" {
 		return clienteDto, e.NewBadRequestApiError("Cliente No Encontrado")
 	}
 

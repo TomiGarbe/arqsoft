@@ -18,6 +18,24 @@ func GetAdminById(id int) model.Admin {
 	return admin
 }
 
+func GetAdminByUsername(username string) model.Admin {
+	var admin model.Admin
+
+	Db.Where("user_name = ?", username).First(&admin)
+	log.Debug("Admin: ", admin)
+
+	return admin
+}
+
+func GetAdminByEmail(email string) model.Admin {
+	var admin model.Admin
+
+	Db.Where("email = ?", email).First(&admin)
+	log.Debug("Admin: ", admin)
+
+	return admin
+}
+
 func GetAdmins() model.Admins {
 	var admins model.Admins
 	

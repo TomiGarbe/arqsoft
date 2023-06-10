@@ -1,9 +1,40 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+//import { Link } from 'react-router-dom';
 import './estilo/inicio.css';
 
 const HomePage = () => {
+  const [hotels, setHotels] = useState([]);
+
+  const getHotels = async () => {
+    try {
+      const request = await fetch("http://localhost:8090/admin/hoteles");
+      const response = await request.json();
+      setHotels(response);
+    } catch (error) {
+      console.log("No se pudieron obtener los hoteles:", error);
+    }
+  };
+
+  useEffect(() => {
+    getHotels();
+  }, []);
+
   return (
+    <div>
+      {hotels.length ? (
+        hotels.map((hotel) => (
+          <div className='hotel' key={hotel.id}>
+            <img src={hotel.image} alt={hotel.nombre}></img>
+            <h3>{hotel.nombre}</h3>
+          </div>
+        ))
+      ) : (
+        <p>No hay hoteles</p>
+      )}
+    </div>
+  );
+
+  /*return (
     <div>
       <h1 style={{ textAlign: 'center' }}>¡Hace tu Reserva!</h1>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -54,7 +85,7 @@ const HomePage = () => {
         </div>
       </div>
     </div>
-  );
+  );*/
 };
 
 export default HomePage;
