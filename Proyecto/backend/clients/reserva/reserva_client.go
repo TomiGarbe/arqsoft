@@ -38,10 +38,10 @@ func InsertReserva(reserva model.Reserva) model.Reserva {
 	return reserva
 }
 
-func GetDisponibilidad(FechaInicio, FechaFinal int) model.Reservas {
+func GetDisponibilidad(id, FechaInicio, FechaFinal int) model.Reservas {
 	var reservas model.Reservas
 
-	Db.Where("FechaInicio >= ? OR FechaFinal <= ?", FechaInicio, FechaFinal).Preload("Hotel").Preload("Cliente").Find(&reservas)
+	Db.Preload("Hotel").Preload("Cliente").Where("hotel_id = ? AND fecha_inicio >= ? OR fecha_final <= ?", id, FechaInicio, FechaFinal).Find(&reservas)
 	log.Debug("Reservas: ", reservas)
 
 	return reservas

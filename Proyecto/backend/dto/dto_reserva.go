@@ -11,7 +11,6 @@ type ReservaDto struct {
 	FechaInicio    int 	  `json:"fecha_inicio"`
 	FechaFinal     int 	  `json:"fecha_final"`
 	Dias           int    `json:"dias"`
-	Disponibilidad int    `json:"disponibilidad"`
 }
 
 type ReservasDto []ReservaDto

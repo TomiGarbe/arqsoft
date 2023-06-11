@@ -286,8 +286,7 @@ func (s *adminService) GetReservas() (dto.ReservasDto, e.ApiError) {
 		reservaDto.FechaInicio = reserva.FechaInicio
 		reservaDto.FechaFinal = reserva.FechaFinal
 		reservaDto.Dias = reserva.Dias
-		reservaDto.Disponibilidad = reserva.Disponibilidad
-
+		
 		reservasDto = append(reservasDto, reservaDto)
 	}
 

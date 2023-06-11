@@ -3,11 +3,11 @@ import './estilo/opciones_login.css';
 
 const RoleSelection = () => {
   const handleLoginAdmin = () => {
-    window.location.href = 'http://localhost:3000/login_admin';
+    window.location.href = 'http://localhost:3000/login-admin';
   };
 
   const handleLoginCliente = () => {
-    window.location.href = 'http://localhost:3000/login_cliente';
+    window.location.href = 'http://localhost:3000/login-cliente';
   };
 
   return (

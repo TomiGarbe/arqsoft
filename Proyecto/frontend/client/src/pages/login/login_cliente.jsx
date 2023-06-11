@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import '../estilo/login_cliente.css';
 
 const ClienteLogin = () => {
@@ -12,10 +13,6 @@ const ClienteLogin = () => {
     } else {
       alert('Credenciales incorrectas');
     }
-  };
-
-  const handleRegister = () => {
-    window.location.href = 'http://localhost:3000/register';
   };
 
   useEffect(() => {
@@ -57,14 +54,14 @@ const ClienteLogin = () => {
           <button className="buttonClient" onClick={handleLoginCliente}>
             Iniciar Sesión
           </button>
-          <button className="buttonClient" onClick={handleRegister}>
-            Registrarse
-          </button>
-          </div>
+          <Link to="/register" className="buttonClient">
+          Registrarse
+          </Link>
         </div>
       </div>
-      </div>
-    </body>
+    </div>
+    </div>
+  </body>
   );
 };
 

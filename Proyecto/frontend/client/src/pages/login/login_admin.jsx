@@ -8,7 +8,7 @@ const AdminLogin = () => {
 
   const handleLoginAdmin = () => {
     if (email === adminData.email && password === adminData.password) {
-      window.location.href = 'http://localhost:3000/home/admin';
+      window.location.href = 'http://localhost:3000/home-admin';
     } else {
       alert('Credenciales incorrectas');
     }
@@ -52,8 +52,8 @@ const AdminLogin = () => {
           <button className="button" onClick={handleLoginAdmin}>
             Iniciar Sesión
           </button>
-          </div>
         </div>
+      </div>
       </div>
     </div>
   );

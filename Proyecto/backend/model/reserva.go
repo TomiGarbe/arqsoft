@@ -12,7 +12,6 @@ type Reserva struct {
 	FechaInicio     int			`gorm:"not null"`
 	FechaFinal      int			`gorm:"not null"`
 	Dias     		int			`gorm:"not null"`
-	Disponibilidad  int			`gorm:"not null"`
 }
 
 type Reservas []Reserva

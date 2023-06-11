@@ -13,10 +13,11 @@ func mapUrlsCliente() {
 	router.GET("/cliente/email/:email", clienteController.GetClienteByEmail)
 	router.POST("/cliente", clienteController.InsertCliente)
 	router.GET("/cliente/hoteles", clienteController.GetHoteles)
+	router.GET("/cliente/hotel/:id", clienteController.GetHotelById)
 	router.POST("/cliente/reserva", clienteController.InsertReserva)
 	router.GET("/cliente/reservas", clienteController.GetReservas)
 	router.GET("/cliente/reserva/:id", clienteController.GetReservaById)
-	router.GET("/cliente/disponibilidad", clienteController.GetDisponibilidad)
+	router.GET("/cliente/disponibilidad/:id/:FechaInicio/:FechaFinal", clienteController.GetDisponibilidad)
 
 	log.Info("Terminando configuraciones de mapeos")
 }

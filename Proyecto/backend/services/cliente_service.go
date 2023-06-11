@@ -18,10 +18,11 @@ type clienteServiceInterface interface {
 	GetClienteByEmail(email string) (dto.ClienteDto, e.ApiError)
 	InsertCliente(clienteDto dto.ClienteDto) (dto.ClienteDto, e.ApiError)
 	GetHoteles() (dto.HotelesDto, e.ApiError)
+	GetHotelById(id int) (dto.HotelDto, e.ApiError)
 	InsertReserva(reservaDto dto.ReservaDto) (dto.ReservaDto, e.ApiError)
 	GetReservas() (dto.ReservasDto, e.ApiError)
 	GetReservaById(id int) (dto.ReservaDto, e.ApiError)
-	GetDisponibilidad(FechaInicio, FechaFinal int) (cantReservas int)
+	GetDisponibilidad(id, FechaInicio, FechaFinal int) (disponibilidad int)
 }
 
 var (
@@ -132,6 +133,33 @@ func (s *clienteService) GetHoteles() (dto.HotelesDto, e.ApiError) {
 	return hotelesDto, nil
 }
 
+func (s *clienteService) GetHotelById(id int) (dto.HotelDto, e.ApiError) {
+
+	var hotel model.Hotel = hotelClient.GetHotelById(id)
+	var hotelDto dto.HotelDto
+
+	if hotel.ID == 0 {
+		return hotelDto, e.NewBadRequestApiError("Hotel No Encontrado")
+	}
+
+	hotelDto.ID = hotel.ID
+	hotelDto.Nombre = hotel.Nombre
+	hotelDto.Email = hotel.Email
+	hotelDto.Image = hotel.Image
+	hotelDto.Cant_Hab = hotel.Cant_Hab
+
+	for _, telefono := range hotel.Telefonos {
+		var dtoTelefono dto.TelefonoDto
+
+		dtoTelefono.Codigo = telefono.Codigo
+		dtoTelefono.Numero = telefono.Numero
+
+		hotelDto.TelefonosDto = append(hotelDto.TelefonosDto, dtoTelefono)
+	}
+
+	return hotelDto, nil
+}
+
 func (s *clienteService) InsertReserva(reservaDto dto.ReservaDto) (dto.ReservaDto, e.ApiError) {
 
 	var reserva model.Reserva
@@ -141,7 +169,6 @@ func (s *clienteService) InsertReserva(reservaDto dto.ReservaDto) (dto.ReservaDt
 	reserva.FechaInicio = reservaDto.FechaInicio
 	reserva.FechaFinal = reservaDto.FechaFinal
 	reserva.Dias = reservaDto.Dias
-	reserva.Disponibilidad = reservaDto.Disponibilidad
 
 	hotel.Nombre = reservaDto.Nombre
 	cliente.Name = reservaDto.Name
@@ -173,7 +200,6 @@ func (s *clienteService) GetReservas() (dto.ReservasDto, e.ApiError) {
 		reservaDto.FechaInicio = reserva.FechaInicio
 		reservaDto.FechaFinal = reserva.FechaFinal
 		reservaDto.Dias = reserva.Dias
-		reservaDto.Disponibilidad = reserva.Disponibilidad
 
 		reservasDto = append(reservasDto, reservaDto)
 	}
@@ -197,22 +223,22 @@ func (s *clienteService) GetReservaById(id int) (dto.ReservaDto, e.ApiError) {
 	reservaDto.FechaInicio = reserva.FechaInicio
 	reservaDto.FechaFinal = reserva.FechaFinal
 	reservaDto.Dias = reserva.Dias
-	reservaDto.Disponibilidad = reserva.Disponibilidad
 
 	return reservaDto, nil
 }
 
-func (s *clienteService) GetDisponibilidad(FechaInicio, FechaFinal int) (cantReservas int) {
+func (s *clienteService) GetDisponibilidad(id, FechaInicio, FechaFinal int) (disponibilidad int) {
 	
-	var reservas model.Reservas = reservaClient.GetDisponibilidad(FechaInicio, FechaFinal)
+	var reservas model.Reservas = reservaClient.GetDisponibilidad(id, FechaInicio, FechaFinal)
+	var hotel model.Hotel = hotelClient.GetHotelById(id)
 	
-	cantReservas = 0
+	disponibilidad = hotel.Cant_Hab
 
 	for _, reserva := range reservas {
-		if reserva.FechaInicio >= FechaInicio || reserva.FechaFinal <= FechaFinal {
-			cantReservas += 1
+		if reserva.HotelID == id && (reserva.FechaInicio >= FechaInicio || reserva.FechaFinal <= FechaFinal) {
+			disponibilidad --
 		}
 	}
 
-	return cantReservas
+	return disponibilidad
 }
