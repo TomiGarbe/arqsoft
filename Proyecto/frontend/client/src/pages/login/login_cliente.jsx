@@ -34,35 +34,37 @@ const ClienteLogin = () => {
   }, [email]);
 
   return (
-    <div className="container">
-      <div className="container2">
+ <body className="bodylogclient">
+    <div className="contLogClie1">
+    <div className="contLogClien2">
       <h1 className="title">Bienvenido Cliente</h1>
-      <div className="form-container">
+       <div className="form-container">
         <input
           type="text"
           placeholder="Correo electrónico"
-          className="input"
+          className="inputLcli"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
           type="password"
           placeholder="Contraseña"
-          className="input"
+          className="inputLcli"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <div className="button-container">
-          <button className="button" onClick={handleLoginCliente}>
+          <button className="buttonClient" onClick={handleLoginCliente}>
             Iniciar Sesión
           </button>
-          <button className="button" onClick={handleRegister}>
+          <button className="buttonClient" onClick={handleRegister}>
             Registrarse
           </button>
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </body>
   );
 };
 

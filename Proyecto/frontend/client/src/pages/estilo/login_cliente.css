@@ -1,16 +1,44 @@
-.container {
-   height:1000px;
-   width: 1000px;
-    background-color: #ccc;
-    border-radius: 3%;
+body.bodylogclient {
+ 
+  background-image: url(./imagenes/fondLogClien.jpg);
+  background-size: cover;
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
   }
+  /*body.bodyopciones {
+  background-image: url(./imagenes/fondo1.avif);
+  background-size: cover;
+    background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
   
-.container2 {
-background-color: #557b9c;
+}*/
+
+
+
+.contLogClien1{
+    background-size: cover;
+    
+  }
+
+
+  .contLogClien2 {
+  margin-right: 350px;
+  margin-bottom: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
 border-radius: 7%;
 height:350px ;
 width:400px;
-box-shadow: 0 0 17px rgba(0, 0, 0, 1);
+background: rgba(260, 260, 280, .4);
+box-shadow: 0 0 30px rgb(94, 76, 76);
 
 
   }
@@ -29,7 +57,7 @@ box-shadow: 0 0 17px rgba(0, 0, 0, 1);
   align-items: center;
 }
 
-.input {
+.inputLcli {
   margin-bottom: 10px;
   padding: 10px;
   width: 50px;
@@ -37,6 +65,7 @@ box-shadow: 0 0 17px rgba(0, 0, 0, 1);
   border: 1px solid #ccc;
   border-radius: 5px;
   text-align: center;
+  
 
 }
 
@@ -44,19 +73,19 @@ box-shadow: 0 0 17px rgba(0, 0, 0, 1);
   margin-top: 20px;
 }
 
-.button {
+.buttonClient {
   margin: 0 10px;
   padding: 10px 20px;
   font-size: 16px;
   border: none;
   border-radius: 5px;
-  background-color: #18456d;
+  background-color: #29537a;
   color: #fff;
   cursor: pointer;
 }
 
-.button:hover {
-  background-color: #23527c;
+.buttonClient:hover {
+  background-color: #112f49;
 }
 
 .link {
