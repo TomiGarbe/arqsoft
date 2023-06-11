@@ -37,3 +37,12 @@ func InsertReserva(reserva model.Reserva) model.Reserva {
 	log.Debug("Reserva Creada: ", reserva.ID)
 	return reserva
 }
+
+func GetDisponibilidad(FechaInicio, FechaFinal int) model.Reservas {
+	var reservas model.Reservas
+
+	Db.Where("FechaInicio >= ? OR FechaFinal <= ?", FechaInicio, FechaFinal).Preload("Hotel").Preload("Cliente").Find(&reservas)
+	log.Debug("Reservas: ", reservas)
+
+	return reservas
+}

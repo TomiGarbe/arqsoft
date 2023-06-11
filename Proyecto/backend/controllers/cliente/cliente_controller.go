@@ -135,3 +135,14 @@ func GetHoteles(c *gin.Context) {
 
 	c.JSON(http.StatusOK, hotelesDto)
 }
+
+func GetDisponibilidad(c *gin.Context) {
+	log.Debug("Disponibilidad de reservas para cargar: " + c.Param("FechaInicio") + c.Param("FechaFinal"))
+
+	FechaInicio, _ := strconv.Atoi(c.Param("FechaInicio"))
+	FechaFinal, _ := strconv.Atoi(c.Param("FechaFinal"))
+
+	cantReservas := service.ClienteService.GetDisponibilidad(FechaInicio, FechaFinal)
+
+	c.JSON(http.StatusOK, cantReservas)
+}

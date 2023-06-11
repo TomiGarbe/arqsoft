@@ -21,6 +21,7 @@ type clienteServiceInterface interface {
 	InsertReserva(reservaDto dto.ReservaDto) (dto.ReservaDto, e.ApiError)
 	GetReservas() (dto.ReservasDto, e.ApiError)
 	GetReservaById(id int) (dto.ReservaDto, e.ApiError)
+	GetDisponibilidad(FechaInicio, FechaFinal int) (cantReservas int)
 }
 
 var (
@@ -199,4 +200,19 @@ func (s *clienteService) GetReservaById(id int) (dto.ReservaDto, e.ApiError) {
 	reservaDto.Disponibilidad = reserva.Disponibilidad
 
 	return reservaDto, nil
+}
+
+func (s *clienteService) GetDisponibilidad(FechaInicio, FechaFinal int) (cantReservas int) {
+	
+	var reservas model.Reservas = reservaClient.GetDisponibilidad(FechaInicio, FechaFinal)
+	
+	cantReservas = 0
+
+	for _, reserva := range reservas {
+		if reserva.FechaInicio >= FechaInicio || reserva.FechaFinal <= FechaFinal {
+			cantReservas += 1
+		}
+	}
+
+	return cantReservas
 }
