@@ -1,4 +1,3 @@
-import OpLogin from './pages/opciones_login'
 import LogCliente from './pages/login/login_cliente'
 import LogAdmin from './pages/login/login_admin'
 import Register from './pages/login/Register_cliente'
@@ -16,12 +15,11 @@ function App() {
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
             <Router>
                 <Routes>
-                    <Route path='/' element={<OpLogin />}></Route>
+                    <Route path='/' element={<Inicio />}></Route>
+                    <Route path='/admin' element={<InicioAdmin />}></Route>
                     <Route path='/login-cliente/' element={<LogCliente />}></Route>
                     <Route path='/login-admin/' element={<LogAdmin />}></Route>
                     <Route path='/register/' element={<Register />}></Route>
-                    <Route path='/home/' element={<Inicio />}></Route>
-                    <Route path='/home-admin' element={<InicioAdmin />}></Route>
                     <Route path='/administrar-hoteles' element={<AdminHoteles />}></Route>
                     <Route path='/administrar-clientes' element={<AdminClientes />}></Route>
                     <Route path='/reservar/:hotelId' element={<Reservar />}></Route>

@@ -15,12 +15,23 @@ const HomePage = () => {
     }
   };
 
+  const verificacion = () => {
+    
+  };
+
+  //to={`/reservar/${hotel.id}`}
+
   useEffect(() => {
     getHotels();
   }, []);
 
   return (
     <div className="container">
+      <div className="admin-button-container">
+        <Link to="/admin" className="admin-button">
+          Admin
+        </Link>
+      </div>
       <div className="hotels-container">
         {hotels.length ? (
           hotels.map((hotel) => (
@@ -28,9 +39,7 @@ const HomePage = () => {
               <img src={hotel.image} alt={hotel.nombre}></img>
               <h4>{hotel.nombre}</h4>
               <p>{hotel.email}</p>
-              <Link to={`/reservar/${hotel.id}`}>
-                <button>Reservar</button>
-              </Link>
+                <button onClick={verificacion}>Reservar</button>
             </div>
           ))
         ) : (
@@ -40,6 +49,9 @@ const HomePage = () => {
     </div>
   );
 };
+
+export default HomePage;
+
 
 
   /*return (
@@ -94,5 +106,3 @@ const HomePage = () => {
       </div>
     </div>
   );*/
-
-export default HomePage;

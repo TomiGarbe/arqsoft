@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react'
+import { isLoggedIn } from './auth';
 import { Link } from 'react-router-dom';
 import '../estilo/login_cliente.css';
 
@@ -9,7 +10,7 @@ const ClienteLogin = () => {
 
   const handleLoginCliente = () => {
     if (email === clientData.email && password === clientData.password) {
-      window.location.href = 'http://localhost:3000/home';
+      localStorage.setItem('Token', 'YOUR_TOKEN');
     } else {
       alert('Credenciales incorrectas');
     }
@@ -29,6 +30,10 @@ const ClienteLogin = () => {
         });
     }
   }, [email]);
+
+  if (isLoggedIn()) {
+    return <Link to="/home" />;
+  }
 
   return (
  <body className="bodylogclient">

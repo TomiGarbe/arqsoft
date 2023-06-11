@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import '../estilo/Register_cliente.css';
 
 function RegistrationPage() {
@@ -66,7 +67,7 @@ function RegistrationPage() {
       .then(response => response.json())
       .then(data => {
         console.log('Registro exitoso:', data);
-        window.location.href = 'http://localhost:3000/home';
+        return <Link to="/home" />;
       })
       .catch(error => {
         console.error('Error en el registro:', error);

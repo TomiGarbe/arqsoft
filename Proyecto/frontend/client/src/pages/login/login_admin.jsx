@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { isLoggedIn } from './auth';
+import { Link } from 'react-router-dom';
 import '../estilo/login_admin.css';
 
 const AdminLogin = () => {
@@ -8,7 +10,7 @@ const AdminLogin = () => {
 
   const handleLoginAdmin = () => {
     if (email === adminData.email && password === adminData.password) {
-      window.location.href = 'http://localhost:3000/home-admin';
+      localStorage.setItem('Token', 'YOUR_TOKEN');
     } else {
       alert('Credenciales incorrectas');
     }
@@ -28,6 +30,10 @@ const AdminLogin = () => {
         });
     }
   }, [email]);
+
+  if (isLoggedIn()) {
+    return <Link to="/home" />;
+  }
 
   return (
     <div className="container">
