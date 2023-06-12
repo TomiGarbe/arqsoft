@@ -1,3 +1,53 @@
+
+
+
+.header-content {
+  display: flex;
+  
+  justify-content: center;
+  align-items: center;
+  background-color: #293b6e;
+  height: 10vh;
+  padding: 10px;
+}
+
+.contdeFechas {
+   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 80vh;
+  margin-left: 25%;
+
+
+}
+
+.date-pickerINI1 {
+  display: flex;
+  margin-top: 4%;
+align-items: center;
+  height: 10%;
+  width: 30vh;
+  border-radius: 2;
+  background-color: rgb(252, 251, 251);
+  border-style:inset;
+}
+
+
+
+.botbusquedaFec {
+  background-color: #15941a;
+  color: white;
+  border: none;
+  margin-top: 4%;
+  font-size: 16px;
+  cursor: pointer;
+  
+}
+
+
+
+
 body.bodyinicio {
   position: fixed;
   top: 0;
@@ -15,10 +65,10 @@ body.bodyinicio {
 }
 
 .containerIni {
-  max-width: 1300vh;
-  margin: 27vh auto;
-  padding: 20px;
-  max-height: calc(100vh - 27vh); /* aca modificar la resta segun el largo*/
+  max-width: 90%;
+  margin: 2vh auto;
+  padding: 10px;
+  max-height: calc(100vh - 6vh); /* aca modificar la resta segun el largo*/
   overflow: auto;
   overflow-x: hidden;
   scrollbar-width: none;
@@ -49,7 +99,7 @@ body.bodyinicio {
   grid-template-columns: repeat(1, 1fr);
   grid-gap: 30px;
   justify-items: left;
-  margin-left: 25vh;
+  margin-left: 10%;
 }
 
 .hotel-card {

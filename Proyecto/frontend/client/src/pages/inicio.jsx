@@ -32,7 +32,22 @@ const HomePage = () => {
   };
 
   return (
+    
+     
     <body className= "bodyinicio">
+    <div className="header-content"> </div>
+     <div  className="contdeFechas">
+        <div className="date-pickerINI1">
+            <label htmlFor="start-date">Fecha de inicio:</label>
+            <input type="date" id="start-date" />
+          </div>
+          <div className="date-pickerINI1">
+            <label htmlFor="end-date">Fecha de fin:</label>
+            <input type="date" id="end-date" />
+          </div>
+          <button className="botbusquedaFec">Buscar</button>
+          </div>
+          
     <div className="containerIni">
       <div className="admin-button-container">
         <Link to="/admin" className="admin-button">
@@ -57,6 +72,7 @@ const HomePage = () => {
       </div>
     </div>
     </body>
+    
   );
 };
 
