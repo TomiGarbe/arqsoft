@@ -32,7 +32,8 @@ const HomePage = () => {
   };
 
   return (
-    <div className="container">
+    <body className= "bodyinicio">
+    <div className="containerIni">
       <div className="admin-button-container">
         <Link to="/admin" className="admin-button">
           Admin
@@ -55,6 +56,7 @@ const HomePage = () => {
         )}
       </div>
     </div>
+    </body>
   );
 };
 

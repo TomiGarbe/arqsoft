@@ -1,13 +1,31 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
+body.bodyinicio {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(./imagenes/fondoop1.jpg); 
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -1;
 }
 
-.container {
-  max-width: 800px;
-  margin: 0 auto;
+:root {
+  --margendeArriba: 130px auto;
+}
+
+.containerIni {
+  max-width: 1300vh;
+  margin: 27vh auto;
   padding: 20px;
+  max-height: calc(100vh - 27vh); /* aca modificar la resta segun el largo*/
+  overflow: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+
+.containerIni::-webkit-scrollbar {
+  display: none; /* Ocultar la barra de desplazamiento en navegadores WebKit  */
 }
 
 .admin-button-container {
@@ -23,20 +41,23 @@ body {
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
+  border-radius: 20%;
 }
 
 .hotels-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-gap: 30px;
+  justify-items: left;
+  margin-left: 25vh;
 }
 
 .hotel-card {
-  width: 200px;
-  margin: 10px;
-  text-align: center;
+  width: 900px;
+  text-align: left;
   border: 1px solid #ccc;
   padding: 10px;
+  background-color: #fff;
 }
 
 .hotel-card img {
@@ -49,14 +70,16 @@ body {
 }
 
 .hotel-card button {
-  background-color: #4CAF50;
+  background-color: #293b6e;
   color: white;
   border: none;
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
+ border-style: double;
+ border-radius: 10%;
 }
 
 .hotel-card button:hover {
-  background-color: #45a049;
+  background-color: #0c1841;
 }
