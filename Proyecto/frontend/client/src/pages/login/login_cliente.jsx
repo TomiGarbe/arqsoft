@@ -1,39 +1,29 @@
-import React, { useState, useEffect } from 'react'
-import { isLoggedIn } from './auth';
+import React, { useContext, useState } from 'react'
+import { AuthContext } from './auth';
 import { Link } from 'react-router-dom';
 import '../estilo/login_cliente.css';
 
 const ClienteLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [clientData, setClientData] = useState({});
+  const { login } = useContext(AuthContext);
 
   const handleLoginCliente = () => {
-    if (email === clientData.email && password === clientData.password) {
-      localStorage.setItem('Token', 'YOUR_TOKEN');
-    } else {
-      alert('Credenciales incorrectas');
-    }
+    fetch(`http://localhost:8090/cliente/email/${email}`)
+    .then(response => response.json())
+    .then(data => {
+      if (email === data.email && password === data.password) {
+        const token = 'TOKEN_CLIENTE';
+        login(token);
+        window.location.href = '/';
+      } else {
+        alert('Credenciales incorrectas');
+      }
+    })
+    .catch(error => {
+      console.error('Error al obtener los datos del cliente:', error);
+    });
   };
-
-  useEffect(() => {
-    setClientData('');
-  
-    if (email) {
-      fetch(`http://localhost:8090/cliente/email/${email}`)
-        .then(response => response.json())
-        .then(data => {
-          setClientData(data);
-        })
-        .catch(error => {
-          console.error('Error al obtener los datos del cliente:', error);
-        });
-    }
-  }, [email]);
-
-  if (isLoggedIn()) {
-    return <Link to="/home" />;
-  }
 
   return (
  <body className="bodylogclient">
@@ -60,7 +50,7 @@ const ClienteLogin = () => {
             Iniciar Sesión
           </button>
           <Link to="/register" className="buttonClient">
-          Registrarse
+            Registrarse
           </Link>
         </div>
       </div>

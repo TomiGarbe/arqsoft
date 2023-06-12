@@ -10,7 +10,7 @@
     flex-direction: column;
     align-items: center;
     width: 300px;
-    padding: 20px;
+    padding: 40px 20px 40px 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
   }
@@ -19,6 +19,7 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;
+    width: 80%;
   }
   
   .registration-form input {
@@ -32,11 +33,12 @@
     background-color: #4caf50;
     color: #fff;
     border: none;
-    border-radius: 3px;
+    border-radius: 5px;
     cursor: pointer;
+    transition-duration: 350ms;
   }
   
   .registration-form button:hover {
     background-color: #45a049;
+    scale: 1.05;
   }
-  

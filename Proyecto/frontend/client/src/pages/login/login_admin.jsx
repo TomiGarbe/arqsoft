@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { isLoggedIn } from './auth';
-import { Link } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { AuthContext } from './auth';
 import '../estilo/login_admin.css';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [adminData, setAdminData] = useState({});
+  const { login } = useContext(AuthContext);
 
   const handleLoginAdmin = () => {
     if (email === adminData.email && password === adminData.password) {
-      localStorage.setItem('Token', 'YOUR_TOKEN');
+      const token = 'TOKEN_ADMIN';
+      login(token);
+      window.location.href = '/admin';
     } else {
       alert('Credenciales incorrectas');
     }
@@ -30,10 +32,6 @@ const AdminLogin = () => {
         });
     }
   }, [email]);
-
-  if (isLoggedIn()) {
-    return <Link to="/home" />;
-  }
 
   return (
     <div className="container">
@@ -63,19 +61,6 @@ const AdminLogin = () => {
       </div>
     </div>
   );
-
-  /*return (
-    <div className="container">
-      <h1 className="title">Bienvenido Administrador</h1>
-      <div className="form-container">
-        <input type="text" placeholder="Correo electrónico" className="input" />
-        <input type="password" placeholder="Contraseña" className="input" />
-        <div className="button-container">
-          <button className="button" onClick={handleLoginAdmin}>Iniciar Sesión</button>
-        </div>
-      </div>
-    </div>
-  );*/
 };
 
 export default AdminLogin;

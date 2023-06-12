@@ -1,22 +1,34 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { AuthContext } from './login/auth';
 import { useParams } from 'react-router-dom';
 import './estilo/reservar.css';
 
 const ReservaPage = () => {
   const { hotelId } = useParams();
   const [hotelData, setHotelData] = useState('');
-  const [fecha, setFecha] = useState('');
+  const [fechaInicio, setFechaInicio] = useState('');
+  const [fechaFin, setFechaFin] = useState('');
   const [cantidadPersonas, setCantidadPersonas] = useState('');
   const [commodities, setCommodities] = useState('');
-  
-  const handleReserva = (e) => {
-    e.preventDefault();
+  const { isLogged } = useContext(AuthContext);
+
+  const Verificacion = (hotelId) => {
+    if (!isLogged) {
+      window.location.href = '/login-cliente';
+    }
+    else
+    {
+      window.location.href = `/reservar/${hotelId}`;
+    }
+  };
+
+  const handleReserva = () => {
     
   };
 
   useEffect(() => {
     setHotelData('');
-  
+
     if (hotelId) {
       fetch(`http://localhost:8090/cliente/hotel/${hotelId}`)
         .then(response => response.json())
@@ -31,21 +43,32 @@ const ReservaPage = () => {
 
   return (
     <div>
-      {typeof hotelData === 'undefined' ? (<> CARGANDO... </>) :
-      (
-        <div className="container">
+      {typeof hotelData === 'undefined' ? (
+        <>CARGANDO...</>
+      ) : (
+        <div className="container" onLoad={Verificacion}>
           <div className="reserva-form">
             <h2>Reserva de Hotel</h2>
             <h3>{hotelData["nombre"]}</h3>
-            <img src="ruta/de/la/foto.jpg" alt="Foto del Hotel"/>
+            <img src="ruta/de/la/foto.jpg" alt="Foto del Hotel" />
             <form onSubmit={handleReserva}>
               <div className="form-group">
-                <label htmlFor="fecha">Fecha de reserva:</label>
+                <label htmlFor="fechaInicio">Fecha de inicio:</label>
                 <input
                   type="date"
-                  id="fecha"
-                  value={fecha}
-                  onChange={(e) => setFecha(e.target.value)}
+                  id="fechaInicio"
+                  value={fechaInicio}
+                  onChange={(e) => setFechaInicio(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="fechaFin">Fecha de fin:</label>
+                <input
+                  type="date"
+                  id="fechaFin"
+                  value={fechaFin}
+                  onChange={(e) => setFechaFin(e.target.value)}
                   required
                 />
               </div>
@@ -78,12 +101,3 @@ const ReservaPage = () => {
 };
 
 export default ReservaPage;
-
-/*<p>{typeof clientData === 'undefined' ? (<> ACA VA LA INFO DEL CLIENTE... CARGANDO </>) :
-                (
-                    <>
-                    <h4>Nombre: {clientData["name"]} </h4>
-                    <h4>Last Name: {clientData["last_name"]}</h4>
-                    <h4>PWD: {clientData["password"]}</h4>
-                    </>
-                ) }</p>*/
