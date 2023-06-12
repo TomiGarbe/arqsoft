@@ -20,7 +20,7 @@ type clienteServiceInterface interface {
 	GetHoteles() (dto.HotelesDto, e.ApiError)
 	GetHotelById(id int) (dto.HotelDto, e.ApiError)
 	InsertReserva(reservaDto dto.ReservaDto) (dto.ReservaDto, e.ApiError)
-	GetReservas() (dto.ReservasDto, e.ApiError)
+	GetReservas(id int) (dto.ReservasDto, e.ApiError)
 	GetReservaById(id int) (dto.ReservaDto, e.ApiError)
 	GetDisponibilidad(id, FechaInicio, FechaFinal int) (disponibilidad int)
 }
@@ -186,13 +186,18 @@ func (s *clienteService) InsertReserva(reservaDto dto.ReservaDto) (dto.ReservaDt
 	return reservaDto, nil
 }
 
-func (s *clienteService) GetReservas() (dto.ReservasDto, e.ApiError) {
+func (s *clienteService) GetReservas(id int) (dto.ReservasDto, e.ApiError) {
 
-	var reservas model.Reservas = reservaClient.GetReservas()
+	var reservas model.Reservas = reservaClient.GetReservas(id)
 	var reservasDto dto.ReservasDto
 
 	for _, reserva := range reservas {
 		var reservaDto dto.ReservaDto
+
+		if reserva.ID == 0 {
+			return reservasDto, e.NewBadRequestApiError("Reservas No Encontradas")
+		}
+
 		reservaDto.ID = reserva.ID
 		reservaDto.Nombre = reserva.Hotel.Nombre
 		reservaDto.Name = reserva.Cliente.Name
@@ -213,7 +218,7 @@ func (s *clienteService) GetReservaById(id int) (dto.ReservaDto, e.ApiError) {
 	var reservaDto dto.ReservaDto
 
 	if reserva.ID == 0 {
-		return reservaDto, e.NewBadRequestApiError("Reserva No Encontrado")
+		return reservaDto, e.NewBadRequestApiError("Reserva No Encontrada")
 	}
 
 	reservaDto.ID = reserva.ID

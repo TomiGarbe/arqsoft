@@ -6,7 +6,7 @@ import '../estilo/login_cliente.css';
 const ClienteLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login } = useContext(AuthContext);
+  const { loginCliente } = useContext(AuthContext);
 
   const handleLoginCliente = () => {
     fetch(`http://localhost:8090/cliente/email/${email}`)
@@ -14,7 +14,7 @@ const ClienteLogin = () => {
     .then(data => {
       if (email === data.email && password === data.password) {
         const token = 'TOKEN_CLIENTE';
-        login(token);
+        loginCliente(token, data.id);
         window.location.href = '/';
       } else {
         alert('Credenciales incorrectas');

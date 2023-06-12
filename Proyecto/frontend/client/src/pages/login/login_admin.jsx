@@ -1,37 +1,28 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { AuthContext } from './auth';
 import '../estilo/login_admin.css';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [adminData, setAdminData] = useState({});
-  const { login } = useContext(AuthContext);
+  const { loginAdmin } = useContext(AuthContext);
 
   const handleLoginAdmin = () => {
-    if (email === adminData.email && password === adminData.password) {
-      const token = 'TOKEN_ADMIN';
-      login(token);
-      window.location.href = '/admin';
-    } else {
-      alert('Credenciales incorrectas');
-    }
+    fetch(`http://localhost:8090/admin/email/${email}`)
+    .then(response => response.json())
+    .then(data => {
+      if (email === data.email && password === data.password) {
+        const token = 'TOKEN_Admin';
+        loginAdmin(token, data.id);
+        window.location.href = '/admin';
+      } else {
+        alert('Credenciales incorrectas');
+      }
+    })
+    .catch(error => {
+      console.error('Error al obtener los datos del cliente:', error);
+    });
   };
-
-  useEffect(() => {
-    setAdminData('');
-  
-    if (email) {
-      fetch(`http://localhost:8090/admin/email/${email}`)
-        .then(response => response.json())
-        .then(data => {
-          setAdminData(data);
-        })
-        .catch(error => {
-          console.error('Error al obtener los datos del cliente:', error);
-        });
-    }
-  }, [email]);
 
   return (
     <div className="container">

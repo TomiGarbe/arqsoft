@@ -5,7 +5,6 @@ import (
 	telefonoClient "backend/clients/telefono"
 	clienteClient "backend/clients/cliente"
 	hotelClient "backend/clients/hotel"
-	reservaClient "backend/clients/reserva"
 
 	"backend/dto"
 	"backend/model"
@@ -26,7 +25,6 @@ type adminServiceInterface interface {
 	GetHoteles() (dto.HotelesDto, e.ApiError)
 	InsertHotel(hotelDto dto.HotelDto) (dto.HotelDto, e.ApiError)
 	AddTelefono(telefonoDto dto.TelefonoDto) (dto.HotelDto, e.ApiError)
-	GetReservas() (dto.ReservasDto, e.ApiError)
 }
 
 var (
@@ -270,25 +268,4 @@ func (s *adminService) AddTelefono(telefonoDto dto.TelefonoDto) (dto.HotelDto, e
 	}
 
 	return hotelDto, nil
-}
-
-func (s *adminService) GetReservas() (dto.ReservasDto, e.ApiError) {
-
-	var reservas model.Reservas = reservaClient.GetReservas()
-	var reservasDto dto.ReservasDto
-
-	for _, reserva := range reservas {
-		var reservaDto dto.ReservaDto
-		reservaDto.ID = reserva.ID
-		reservaDto.Nombre = reserva.Hotel.Nombre
-		reservaDto.Name = reserva.Cliente.Name
-		reservaDto.LastName = reserva.Cliente.LastName
-		reservaDto.FechaInicio = reserva.FechaInicio
-		reservaDto.FechaFinal = reserva.FechaFinal
-		reservaDto.Dias = reserva.Dias
-		
-		reservasDto = append(reservasDto, reservaDto)
-	}
-
-	return reservasDto, nil
 }

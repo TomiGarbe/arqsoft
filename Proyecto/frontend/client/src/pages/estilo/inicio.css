@@ -1,9 +1,5 @@
-
-
-
 .header-content {
   display: flex;
-  
   justify-content: center;
   align-items: center;
   background-color: #293b6e;
@@ -11,42 +7,55 @@
   padding: 10px;
 }
 
+#start-date{
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  outline: none;
+  height: 3rem;
+  width: 100%;
+  font-size: 16px;
+  padding: 10px;
+}
+
+#end-date{
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  outline: none;
+  height: 3rem;
+  width: 100%;
+  font-size: 16px;
+  padding: 10px;
+}
+
 .contdeFechas {
-   display: flex;
+  display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  width: 80vh;
-  margin-left: 25%;
-
-
+  width: 100%;
 }
 
 .date-pickerINI1 {
   display: flex;
-  margin-top: 4%;
-align-items: center;
+  /* margin-top: 2.5rem; */
+  margin: 2.5rem 20px 0px 0px;
+  align-items: center;
   height: 10%;
   width: 30vh;
-  border-radius: 2;
-  background-color: rgb(252, 251, 251);
-  border-style:inset;
+  border-radius: 10px;
+  background-color: rgb(255 255 255 / 75%);
 }
-
-
 
 .botbusquedaFec {
   background-color: #15941a;
   color: white;
   border: none;
-  margin-top: 4%;
+  margin-top: 2.5rem;
   font-size: 16px;
   cursor: pointer;
-  
 }
-
-
-
 
 body.bodyinicio {
   position: fixed;
@@ -65,17 +74,22 @@ body.bodyinicio {
 }
 
 .containerIni {
-  max-width: 90%;
+  max-width: 50%;
   margin: 2vh auto;
   padding: 10px;
-  max-height: calc(100vh - 6vh); /* aca modificar la resta segun el largo*/
+  max-height: calc(100vh - 6vh); /* ajusta según tus necesidades */
   overflow: auto;
   overflow-x: hidden;
   scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
+
 .containerIni::-webkit-scrollbar {
-  display: none; /* Ocultar la barra de desplazamiento en navegadores WebKit  */
+  display: none; /* Ocultar la barra de desplazamiento*/
 }
 
 .admin-button-container {
@@ -84,14 +98,28 @@ body.bodyinicio {
   right: 10px;
 }
 
+.cuenta-button-container {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
 .admin-button {
-  background-color: #4CAF50;
+  background-color: #15941a;
   color: white;
   border: none;
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
-  border-radius: 20%;
+}
+
+.cuenta-button {
+  background-color: #15941a;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 .hotels-container {
@@ -132,4 +160,10 @@ body.bodyinicio {
 
 .hotel-card button:hover {
   background-color: #0c1841;
+}
+
+.fecha {
+  display: block;
+  margin-bottom: 0px;
+  padding: 10px;
 }

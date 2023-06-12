@@ -3,26 +3,37 @@ import React, { createContext, useState } from 'react';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [token, setToken] = useState(localStorage.getItem('token') || '');
-    const [isLogged, setIsLogged] = useState(localStorage.getItem('auth') ? true : false);
+  const [isLoggedCliente, setIsLoggedCliente] = useState(localStorage.getItem('auth') === 'true');
+  const [isLoggedAdmin, setIsLoggedAdmin] = useState(localStorage.getItem('auth') === 'true');
 
-  const login = (newToken) => {
-    setIsLogged(true);
-    setToken(newToken);
-    sessionStorage.setItem('token', token);
+  const loginAdmin = (newToken, id) => {
+    setIsLoggedAdmin(true);
+    localStorage.setItem('token', newToken);
+    localStorage.setItem('id_admin', id);
+    localStorage.setItem('auth', true);
+  };
+
+  const loginCliente = (newToken, id) => {
+    setIsLoggedCliente(true);
+    localStorage.setItem('token', newToken);
+    localStorage.setItem('id_cliente', id);
     localStorage.setItem('auth', true);
   };
 
   const logout = () => {
-    setIsLogged(false);
-    setToken('');
-    sessionStorage.removeItem('token');
+    setIsLoggedCliente(false);
+    setIsLoggedAdmin(false);
+    localStorage.removeItem('token');
+    localStorage.removeItem('id_admin');
+    localStorage.removeItem('id_cliente');
     localStorage.setItem('auth', false);
   };
 
   const propiedades = {
-    isLogged,
-    login,
+    isLoggedCliente,
+    isLoggedAdmin,
+    loginCliente,
+    loginAdmin,
     logout,
   };
 

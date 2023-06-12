@@ -18,10 +18,10 @@ func GetReservaById(id int) model.Reserva {
 	return reserva
 }
 
-func GetReservas() model.Reservas {
+func GetReservas(id int) model.Reservas {
 	var reservas model.Reservas
 
-	Db.Preload("Hotel").Preload("Cliente").Find(&reservas)
+	Db.Where("id = ?", id).Preload("Hotel").Preload("Cliente").First(&reservas)
 	log.Debug("Reservas: ", reservas)
 
 	return reservas

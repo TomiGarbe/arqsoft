@@ -6,14 +6,14 @@ import './estilo/reservar.css';
 const ReservaPage = () => {
   const { hotelId } = useParams();
   const [hotelData, setHotelData] = useState('');
-  const [fechaInicio, setFechaInicio] = useState('');
-  const [fechaFin, setFechaFin] = useState('');
   const [cantidadPersonas, setCantidadPersonas] = useState('');
   const [commodities, setCommodities] = useState('');
-  const { isLogged } = useContext(AuthContext);
+  const { isLoggedCliente } = useContext(AuthContext);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   const Verificacion = (hotelId) => {
-    if (!isLogged) {
+    if (!isLoggedCliente) {
       window.location.href = '/login-cliente';
     }
     else
@@ -28,18 +28,44 @@ const ReservaPage = () => {
 
   useEffect(() => {
     setHotelData('');
-
     if (hotelId) {
       fetch(`http://localhost:8090/cliente/hotel/${hotelId}`)
-        .then(response => response.json())
-        .then(data => {
-          setHotelData(data);
-        })
-        .catch(error => {
-          console.error('Error al obtener los datos del cliente:', error);
-        });
+      .then(response => response.json())
+      .then(data => {
+        setHotelData(data);
+      })
+      .catch(error => {
+        console.error('Error al obtener los datos del cliente:', error);
+      });
     }
   }, [hotelId]);
+
+  const handleStartDateChange = (event) => {
+    setStartDate(event.target.value);
+    if (startDate && endDate) {
+      filterHotels();
+    }
+  };
+
+  const handleEndDateChange = (event) => {
+    setEndDate(event.target.value);
+    if (startDate > endDate) {
+      setEndDate('');
+      alert("Fechas no validas");
+    }
+    else if (startDate && endDate) {
+      filterHotels();
+    }
+  };
+
+  const filterHotels = async () => {
+    const request = await fetch(`http://localhost:8090/cliente/disponibilidad/${hotelId}/${startDate}/${endDate}`);
+    const response = await request.json();
+    if (response === 0) {
+      setEndDate('');
+      alert("No hay habitaciones disponibles para esas fechas");
+    }
+  };
 
   return (
     <div>
@@ -57,8 +83,8 @@ const ReservaPage = () => {
                 <input
                   type="date"
                   id="fechaInicio"
-                  value={fechaInicio}
-                  onChange={(e) => setFechaInicio(e.target.value)}
+                  value={startDate}
+                  onChange={handleStartDateChange}
                   required
                 />
               </div>
@@ -67,8 +93,8 @@ const ReservaPage = () => {
                 <input
                   type="date"
                   id="fechaFin"
-                  value={fechaFin}
-                  onChange={(e) => setFechaFin(e.target.value)}
+                  value={endDate}
+                  onChange={handleEndDateChange}
                   required
                 />
               </div>

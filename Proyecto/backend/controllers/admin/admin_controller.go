@@ -114,18 +114,6 @@ func GetClientes(c *gin.Context) {
 	c.JSON(http.StatusOK, clientesDto)
 }
 
-func GetReservas(c *gin.Context) {
-	var reservasDto dto.ReservasDto
-	reservasDto, err := service.AdminService.GetReservas()
-
-	if err != nil {
-		c.JSON(err.Status(), err)
-		return
-	}
-
-	c.JSON(http.StatusOK, reservasDto)
-}
-
 func GetHotelById(c *gin.Context) {
 	log.Debug("ID de Hotel para cargar: " + c.Param("id"))
 

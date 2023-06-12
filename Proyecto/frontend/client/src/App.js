@@ -6,6 +6,8 @@ import InicioAdmin from './pages/inicio_admin'
 import AdminHoteles from './pages/admin_hoteles'
 import AdminClientes from './pages/admin_clientes'
 import Reservar from './pages/reservar'
+import Cuenta from './pages/cuenta'
+import ReservasCliente from './pages/reservas_cliente'
 import './App.css';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import { AuthProvider } from './pages/login/auth';
@@ -25,6 +27,8 @@ function App() {
                         <Route path='/administrar-hoteles' element={<AdminHoteles />}></Route>
                         <Route path='/administrar-clientes' element={<AdminClientes />}></Route>
                         <Route path='/reservar/:hotelId' element={<Reservar />}></Route>
+                        <Route path='/cuenta' element={<Cuenta />}></Route>
+                        <Route path='/reservas-cliente' element={<ReservasCliente />}></Route>
                     </Routes>
                 </AuthProvider>
             </Router>

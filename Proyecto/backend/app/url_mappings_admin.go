@@ -19,7 +19,6 @@
 		router.GET("/admin/hoteles", adminController.GetHoteles)
 		router.POST("/admin/hotel", adminController.InsertHotel)
 		router.POST("/admin/hotel/:id/telefono", adminController.AddTelefono)
-		router.GET("/admin/reservas", adminController.GetReservas)
 
 		log.Info("Terminando configuraciones de mapeos")
 	}
