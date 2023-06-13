@@ -32,17 +32,18 @@ const HomePage = () => {
       } catch (error) {
         console.log("No se pudieron obtener las reservas:", error);
       }
-      finally {
-        getHoteles();
-      }
     } else {
       window.location.href = '/';
     }
-  }, [isLoggedCliente, getHoteles]);
+  }, [isLoggedCliente]);
 
   useEffect(() => {
     getReservations();
-  }, [getReservations]);
+  }, []); // Se elimina la dependencia de getReservations
+
+  useEffect(() => {
+    getHoteles();
+  }, [getHoteles]); // Se agrega getHoteles como dependencia separada
 
   return (
     <div className="reservations-container1">
@@ -51,11 +52,13 @@ const HomePage = () => {
         {reservations.length ? (
           reservations.map((reservation) => {
             const hotel = hoteles.find((hotel) => hotel.id === reservation.hotel_id);
+            const fechaInicio = `${reservation.dia_inicio}/${reservation.mes_inicio}/${reservation.anio_inicio}`;
+            const fechaFin = `${reservation.dia_final}/${reservation.mes_final}/${reservation.anio_final}`;
             return (
               <div className="reservation-card" key={reservation.ID}>
                 <p>Hotel: {hotel ? hotel.nombre : 'Hotel desconocido'}</p>
-                <p>Fecha de llegada: {reservation.fecha_inicio}</p>
-                <p>Fecha de fin: {reservation.fecha_final}</p>
+                <p>Fecha de llegada: {fechaInicio}</p>
+                <p>Fecha de fin: {fechaFin}</p>
                 <p>Gracias por elegirnos!</p>
               </div>
             );

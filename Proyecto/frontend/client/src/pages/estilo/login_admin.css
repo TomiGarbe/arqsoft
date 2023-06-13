@@ -4,8 +4,8 @@ body.bodyAdmin {
   left: 0;
   width: 100%;
   height: 100%;
-  /*background-image: url(./imagenes/loginadmin.jpg); */
-  background-image: linear-gradient(to bottom, rgb(111, 111, 111), rgba(200, 192, 192, 0.5)); /* Gradiente difuminado */
+  background-image: url(./imagenes/fondLogClien.jpg); 
+  /*background-image: linear-gradient(to bottom, rgb(111, 111, 111), rgba(200, 192, 192, 0.5));  Gradiente difuminado */
   background-repeat: no-repeat;
   background-size: cover;
   z-index: -1;
@@ -21,7 +21,7 @@ body.bodyAdmin {
   }
 
   .container2A{
-   background-color: rgba(52, 122, 187, 0.3);
+   background-color: rgba(157, 167, 177, 0.3);
    border-radius: 5%;
    border: 1px solid black;
    height: 50vh;

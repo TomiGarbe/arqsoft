@@ -1,14 +1,19 @@
-.bodyinicio {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url(./imagenes/fondoop1.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    z-index: -1;
-  }
+.reservations-container1 {
+ 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url(./imagenes/fondoop1.jpg);
+  background-repeat: no-repeat;
+  background-size: cover
+}
+
+.reservations-container2 {
+  background-color: #e6f3ff;
+  padding: 20px;
+  border-radius: 5px;
+}
   
   :root {
     --margendeArriba: 130px auto;
