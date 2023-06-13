@@ -7,8 +7,12 @@ type ReservaDto struct {
 
 	ClienteID      int    `json:"cliente_id"`
 
-	FechaInicio    int    `json:"fecha_inicio"`
-	FechaFinal     int    `json:"fecha_final"`
+	AnioInicio     int    `json:"anio_inicio"`
+	AnioFinal      int    `json:"anio_final"`
+	MesInicio      int    `json:"mes_inicio"`
+	MesFinal       int    `json:"mes_final"`
+	DiaInicio  	   int    `json:"dia_inicio"`
+	DiaFinal   	   int    `json:"dia_final"`
 	Dias           int    `json:"dias"`
 }
 

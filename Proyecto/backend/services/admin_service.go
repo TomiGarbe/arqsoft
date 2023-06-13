@@ -344,8 +344,11 @@ func (s *adminService) GetReservas() (dto.ReservasDto, e.ApiError) {
 		reservaDto.ID = reserva.ID
 		reservaDto.HotelID = reserva.Hotel.ID
 		reservaDto.ClienteID = reserva.Cliente.ID
-		reservaDto.FechaInicio = reserva.FechaInicio
-		reservaDto.FechaFinal = reserva.FechaFinal
+		reservaDto.AnioFinal = reserva.AnioFinal
+		reservaDto.MesInicio = reserva.MesInicio
+		reservaDto.MesFinal = reserva.MesFinal
+		reservaDto.DiaInicio = reserva.DiaInicio
+		reservaDto.DiaFinal = reserva.DiaFinal
 		reservaDto.Dias = reserva.Dias
 
 		reservasDto = append(reservasDto, reservaDto)

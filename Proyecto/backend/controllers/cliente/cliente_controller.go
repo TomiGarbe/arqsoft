@@ -156,13 +156,17 @@ func GetHotelById(c *gin.Context) {
 }
 
 func GetDisponibilidad(c *gin.Context) {
-	log.Debug("Disponibilidad de reservas para cargar: " + c.Param("id") + c.Param("FechaInicio") + c.Param("FechaFinal"))
+	log.Debug("Disponibilidad de reservas para cargar: " + c.Param("id") + c.Param("AnioInicio") + c.Param("AnioFinal") + c.Param("MesInicio") + c.Param("MesFinal") + c.Param("DiaInicio") + c.Param("DiaFinal"))
 
 	id, _ := strconv.Atoi(c.Param("id"))
-	FechaInicio, _ := strconv.Atoi(c.Param("FechaInicio"))
-	FechaFinal, _ := strconv.Atoi(c.Param("FechaFinal"))
+	AnioInicio, _ := strconv.Atoi(c.Param("AnioInicio"))
+	AnioFinal, _ := strconv.Atoi(c.Param("AnioFinal"))
+	MesInicio, _ := strconv.Atoi(c.Param("MesInicio"))
+	MesFinal, _ := strconv.Atoi(c.Param("MesFinal"))
+	DiaInicio, _ := strconv.Atoi(c.Param("DiaInicio"))
+	DiaFinal, _ := strconv.Atoi(c.Param("DiaFinal"))
 
-	disponibilidad := service.ClienteService.GetDisponibilidad(id, FechaInicio, FechaFinal)
+	disponibilidad := service.ClienteService.GetDisponibilidad(id, AnioInicio, AnioFinal, MesInicio, MesFinal, DiaInicio, DiaFinal)
 
 	c.JSON(http.StatusOK, disponibilidad)
 }

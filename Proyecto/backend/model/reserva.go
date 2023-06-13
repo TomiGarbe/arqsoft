@@ -9,8 +9,12 @@ type Reserva struct {
 	Cliente   		Cliente 	`gorm:"foreignkey:ClienteID"`
 	ClienteID 		int
 
-	FechaInicio     int 		`gorm:"type:varchar(10)"`
-	FechaFinal      int 		`gorm:"type:varchar(10)"` 
+	AnioInicio      int 		`gorm:"type:varchar(10)"`
+	AnioFinal       int 		`gorm:"type:varchar(10)"`
+	MesInicio     	int 		`gorm:"type:varchar(10)"`
+	MesFinal      	int 		`gorm:"type:varchar(10)"`
+	DiaInicio     	int 		`gorm:"type:varchar(10)"`
+	DiaFinal      	int 		`gorm:"type:varchar(10)"` 
 	Dias     		int 		`gorm:"type:varchar(2)"`
 }
 	

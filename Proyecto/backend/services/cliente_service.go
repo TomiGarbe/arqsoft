@@ -22,7 +22,7 @@ type clienteServiceInterface interface {
 	InsertReserva(reservaDto dto.ReservaDto) (dto.ReservaDto, e.ApiError)
 	GetReservasById(id int) (dto.ReservasDto, e.ApiError)
 	GetReservaById(id int) (dto.ReservaDto, e.ApiError)
-	GetDisponibilidad(id, FechaInicio, FechaFinal int) (disponibilidad int)
+	GetDisponibilidad(id, AnioInicio, AnioFinal, MesInicio, MesFinal, DiaInicio, DiaFinal int) (disponibilidad int)
 }
 
 var (
@@ -168,8 +168,12 @@ func (s *clienteService) InsertReserva(reservaDto dto.ReservaDto) (dto.ReservaDt
 	var hotel model.Hotel
 	var cliente model.Cliente
 
-	reserva.FechaInicio = reservaDto.FechaInicio
-	reserva.FechaFinal = reservaDto.FechaFinal
+	reserva.AnioInicio = reservaDto.AnioInicio
+	reserva.AnioFinal = reservaDto.AnioFinal
+	reserva.MesInicio = reservaDto.MesInicio
+	reserva.MesFinal = reservaDto.MesFinal
+	reserva.DiaInicio = reservaDto.DiaInicio
+	reserva.DiaFinal = reservaDto.DiaFinal
 	reserva.Dias = reservaDto.Dias
 
 	hotel.ID = reservaDto.HotelID
@@ -200,8 +204,12 @@ func (s *clienteService) GetReservasById(id int) (dto.ReservasDto, e.ApiError) {
 		reservaDto.ID = reserva.ID
 		reservaDto.HotelID = reserva.Hotel.ID
 		reservaDto.ClienteID = reserva.Cliente.ID
-		reservaDto.FechaInicio = reserva.FechaInicio
-		reservaDto.FechaFinal = reserva.FechaFinal
+		reservaDto.AnioInicio = reserva.AnioInicio
+		reservaDto.AnioFinal = reserva.AnioFinal
+		reservaDto.MesInicio = reserva.MesInicio
+		reservaDto.MesFinal = reserva.MesFinal
+		reservaDto.DiaInicio = reserva.DiaInicio
+		reservaDto.DiaFinal = reserva.DiaFinal
 		reservaDto.Dias = reserva.Dias
 
 		reservasDto = append(reservasDto, reservaDto)
@@ -222,22 +230,26 @@ func (s *clienteService) GetReservaById(id int) (dto.ReservaDto, e.ApiError) {
 	reservaDto.ID = reserva.ID
 	reservaDto.HotelID = reserva.Hotel.ID
 	reservaDto.ClienteID = reserva.Cliente.ID
-	reservaDto.FechaInicio = reserva.FechaInicio
-	reservaDto.FechaFinal = reserva.FechaFinal
+	reservaDto.AnioInicio = reserva.AnioInicio
+	reservaDto.AnioFinal = reserva.AnioFinal
+	reservaDto.MesInicio = reserva.MesInicio
+	reservaDto.MesFinal = reserva.MesFinal
+	reservaDto.DiaInicio = reserva.DiaInicio
+	reservaDto.DiaFinal = reserva.DiaFinal
 	reservaDto.Dias = reserva.Dias
 
 	return reservaDto, nil
 }
 
-func (s *clienteService) GetDisponibilidad(id, FechaInicio, FechaFinal int) (disponibilidad int) {
+func (s *clienteService) GetDisponibilidad(id, AnioInicio, AnioFinal, MesInicio, MesFinal, DiaInicio, DiaFinal int) (disponibilidad int) {
 	
-	var reservas model.Reservas = reservaClient.GetDisponibilidad(id, FechaInicio, FechaFinal)
+	var reservas model.Reservas = reservaClient.GetDisponibilidad(id, AnioInicio, AnioFinal, MesInicio, MesFinal, DiaInicio, DiaFinal)
 	var hotel model.Hotel = hotelClient.GetHotelById(id)
 	
 	disponibilidad = hotel.Cant_Hab
 
 	for _, reserva := range reservas {
-		if reserva.HotelID == id && (reserva.FechaInicio >= FechaInicio || reserva.FechaFinal <= FechaFinal) {
+		if reserva.HotelID == id && (reserva.AnioInicio >= AnioInicio || reserva.AnioFinal <= AnioFinal) && (reserva.MesInicio >= MesInicio || reserva.MesFinal <= MesFinal) && (reserva.DiaInicio >= DiaInicio || reserva.DiaFinal <= DiaFinal) {
 			disponibilidad --
 		}
 	}

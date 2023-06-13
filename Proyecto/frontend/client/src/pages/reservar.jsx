@@ -29,8 +29,12 @@ const ReservaPage = () => {
     const formData = {
       hotel_id: parseInt(hotelId),
       cliente_id: parseInt(accountId),
-      fecha_inicio: parseInt(startDate),
-      fecha_final: parseInt(endDate),
+      anio_inicio: startDateObj.getFullYear(),
+      mes_inicio: startDateObj.getMonth() + 1, 
+      dia_inicio: startDateObj.getDate(),
+      anio_final: endDate.getFullYear(),
+      mes_final: endDate.getMonth() + 1, 
+      dia_final: endDate.getDate(),
       dias: Dias
     };
     alert(formData.hotel_id);
