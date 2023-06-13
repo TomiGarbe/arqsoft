@@ -13,17 +13,22 @@ const OpcionesAdminPage = () => {
   };
 
   return (
+    <body className= "bodyinicioADM">
+     
     <div className="container" onLoad={Verificacion}>
-      <h1 className="titulo">Opciones</h1>
-      <div className="botones-container">
-        <Link to="/administrar-hoteles" className="boton">
+    <div className= "cuadradointerno">
+       <h1 className="titulo">Opciones</h1>
+        <div className="botones-container">
+        <Link to="/administrar-hoteles" className="botonAD">
           Administrar Hoteles
         </Link>
-        <Link to="/administrar-clientes" className="boton">
+        <Link to="/administrar-clientes" className="botonAD">
           Administrar Clientes
         </Link>
+        </div>
       </div>
-    </div>
+      </div>
+    </body>
   );
 };
 

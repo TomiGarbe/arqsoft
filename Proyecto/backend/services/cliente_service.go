@@ -193,7 +193,7 @@ func (s *clienteService) GetReservasById(id int) (dto.ReservasDto, e.ApiError) {
 	for _, reserva := range reservas {
 		var reservaDto dto.ReservaDto
 
-		if reserva.ID == 0 {
+		if reserva.ClienteID == 0 {
 			return reservasDto, e.NewBadRequestApiError("Reservas No Encontradas")
 		}
 

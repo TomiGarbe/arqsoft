@@ -1,4 +1,11 @@
-.container {
+body.bodyCuenta{
+  /*background-image: ;*/
+ background-color: #ccc;
+
+}
+
+
+.containerCU {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,8 +16,10 @@
     max-width: 400px;
     width: 100%;
     padding: 2rem;
-    border: 1px solid #ccc;
+    border: 1px solid #3d3d3d;
     border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.5);
+
   }
   
   .account-buttons {

@@ -27,20 +27,20 @@ const AdminLogin = () => {
   return (
   <body className= "bodyAdmin"> 
     <div className="container">
-      <div className="container2">
+      <div className="container2A">
       <h1 className="title">Bienvenido Administrador</h1>
       <div className="form-container">
         <input
+         className="inputAD"
           type="text"
           placeholder="Correo electrónico"
-          className="input"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
           type="password"
           placeholder="Contraseña"
-          className="input"
+          className="inputAD"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />

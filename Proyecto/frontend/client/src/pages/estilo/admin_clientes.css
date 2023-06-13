@@ -4,6 +4,13 @@
     padding: 20px;
   }
   
+
+  .rectangulo1 {
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    padding: 20px;
+  }
+  
   .titulo {
     text-align: center;
     font-size: 32px;
@@ -15,8 +22,9 @@
     justify-content: center;
   }
   
-  .boton {
-    background-color: #4CAF50;
+
+  .botonAC {
+    background-color: #4c90af;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -25,6 +33,7 @@
     text-decoration: none;
   }
   
-  .boton:hover {
-    background-color: #45a049;
-  }  
+  .botonAC:hover {
+    background-color: rgb(38, 57, 161);
+  }
+  

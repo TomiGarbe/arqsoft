@@ -68,7 +68,8 @@ function AccountDetails() {
   };
 
   return (
-    <div className="container">
+    <body className="bodyCuenta">
+    <div className="containerCU">
       <div className="account-form">
         <h2>Detalles de la cuenta</h2>
         <div className="account-field">
@@ -92,6 +93,7 @@ function AccountDetails() {
         </div>
       </div>
     </div>
+    </body>
   );
 }
 

@@ -18,23 +18,34 @@ const ReservaPage = () => {
   };
 
   const handleReserva = () => {
+    alert(hotelId);
+    alert(accountId);
+    alert(startDate);
+    alert(endDate);
     const startDateObj = new Date(startDate);
     const endDateObj = new Date(endDate);
-    const [formData] = {
-      hotel_id: hotelId,
-      cliente_id: accountId,
-      fecha_inicio: startDate,
-      fecha_final: endDate,
-      dias: endDateObj-startDateObj
+    const Dias = Math.round((endDateObj - startDateObj) / (1000 * 60 * 60 * 24));
+    alert(Dias);
+    const formData = {
+      hotel_id: parseInt(hotelId),
+      cliente_id: parseInt(accountId),
+      fecha_inicio: parseInt(startDate),
+      fecha_final: parseInt(endDate),
+      dias: Dias
     };
+    alert(formData.hotel_id);
+    alert(formData.cliente_id);
+    alert(formData.fecha_inicio);
+    alert(formData.fecha_final);
+    alert(formData.dias);
 
     fetch('http://localhost:8090/cliente/reserva', {
       method: 'POST',
       headers: {
-      'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(formData)
-      })
+    })
       .then(response => response.json())
       .then(data => {
         console.log('Registro exitoso:', data);
@@ -50,13 +61,13 @@ const ReservaPage = () => {
     setHotelData('');
     if (hotelId) {
       fetch(`http://localhost:8090/cliente/hotel/${hotelId}`)
-      .then(response => response.json())
-      .then(data => {
-        setHotelData(data);
-      })
-      .catch(error => {
-        console.error('Error al obtener los datos del cliente:', error);
-      });
+        .then(response => response.json())
+        .then(data => {
+          setHotelData(data);
+        })
+        .catch(error => {
+          console.error('Error al obtener los datos del cliente:', error);
+        });
     }
   }, [hotelId]);
 
@@ -66,7 +77,7 @@ const ReservaPage = () => {
     const endDateObj = new Date(endDate);
     if (startDateObj > endDateObj) {
       setEndDate('');
-      alert("Fechas no validas");
+      alert("Fechas no válidas");
     }
     if (startDate && endDate) {
       filterHotels();
@@ -79,7 +90,7 @@ const ReservaPage = () => {
     const endDateObj = new Date(event.target.value);
     if (startDateObj > endDateObj) {
       setEndDate('');
-      alert("Fechas no validas");
+      alert("Fechas no válidas");
     }
     if (startDate && endDate) {
       filterHotels();
@@ -95,47 +106,54 @@ const ReservaPage = () => {
     }
   };
 
+  const handleVolver = () => {
+    window.history.back();
+  };
+
   return (
     <body className="bodyReserva">
-    <div>
-      {typeof hotelData === 'undefined' ? (
-        <>CARGANDO...</>
-      ) : (
-        
-        <div className="container45" onLoad={Verificacion}>
-          <div className= "descripcion">{hotelData["nombre"]}</div>
-          <div className="reserva-form">
-            <h6>Realice reserva del Hotel</h6>
-            <h6>{hotelData["nombre"]}</h6>
-            <img src="ruta/de/la/foto.jpg" alt="Foto del Hotel" />
-            <form onSubmit={handleReserva}>
+      <div>
+        {typeof hotelData === 'undefined' ? (
+          <>CARGANDO...</>
+        ) : (
+          <div className="container45" onLoad={Verificacion}>
+            <div className="informacion">
+              <div className="cuadroImag"><img src={hotelData.image} alt={hotelData.nombre} className="tamanoImag" /></div>
+              <div className="descripcion">{hotelData["descripcion"]}</div>
+            </div>
+            <div className="reserva-form">
+              <h6>Realice reserva del Hotel</h6>
+              <h6>{hotelData["nombre"]}</h6>
+              <form onSubmit={handleReserva}>
                 <div className="form-group">
-                <label htmlFor="fechaInicio">Fecha de inicio:</label>
-                <input
-                  type="date"
-                  id="fechaInicio"
-                  value={startDate}
-                  onChange={handleStartDateChange}
-                  required
-                />
-                 </div>
-               <div className="form-group">
-                <label htmlFor="fechaFin">Fecha de fin:</label>
-                <input
-                  type="date"
-                  id="fechaFin"
-                  value={endDate}
-                  onChange={handleEndDateChange}
-                  required
-                />
-              </div>
-              <button type="submit" className="confReserva">Confirmar</button>
-            </form>
+                  <label htmlFor="fechaInicio">Fecha de inicio:</label>
+                  <input
+                    type="date"
+                    id="fechaInicio"
+                    value={startDate}
+                    onChange={handleStartDateChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="fechaFin">Fecha de fin:</label>
+                  <input
+                    type="date"
+                    id="fechaFin"
+                    value={endDate}
+                    onChange={handleEndDateChange}
+                    required
+                  />
+                </div>
+                <div>
+                  <button type="submit" className="confReserva">Confirmar</button>
+                  <button type="button" className="confReserva" onClick={handleVolver}>Volver</button>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-        
-      )}
-    </div>
+        )}
+      </div>
     </body>
   );
 };

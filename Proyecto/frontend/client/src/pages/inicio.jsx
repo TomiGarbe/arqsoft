@@ -111,7 +111,7 @@ const HomePage = () => {
                   <img src={hotel.image} alt={hotel.nombre} className="hotel-image" />
                   <div className="hotel-info">
                     <h4>{hotel.nombre}</h4>
-                    <p>{hotel.email}</p>
+                    <p>{hotel.email} </p>
                     <button onClick={() => Verificacion(hotel.id)}>
                       Reservar
                     </button>

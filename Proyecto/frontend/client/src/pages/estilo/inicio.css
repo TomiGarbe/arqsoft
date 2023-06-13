@@ -187,20 +187,22 @@ body.bodyinicio {
 }
 
 .hotel-card button {
-  background-color: #293b6e;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
- border-style: double;
- border-radius: 10%;
- margin-top: 10px; /* Agrega un margen superior para separar el botón del texto */
+  background-color: #006ce4bf;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 15px;
+    margin-top: 10px;
+    font-weight: 600;
+    transition: all 200ms;
 }
 
 
 .hotel-card button:hover {
-  background-color: #0c1841;
+  background-color: rgba(2, 84, 178, 0.749);
+  scale: 1.03;
 }
 
 .fecha {

@@ -14,14 +14,16 @@ const AdminClientesPage = () => {
 
   return (
     <div className="container" onLoad={Verificacion}>
+      <div className= "rectangulo1">
       <h1 className="titulo">Clientes👥</h1>
       <div className="botones-container">
-      <Link to="/ver-reservas" className="boton">
+      <Link to="/ver-reservas" className="botonAC">
           Ver Reservas
         </Link>
-        <Link to="/ver-clientes" className="boton">
+        <Link to="/ver-clientes" className="botonAC">
           Ver Clientes
         </Link>
+        </div>
       </div>
     </div>
   );

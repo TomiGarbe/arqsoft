@@ -38,12 +38,13 @@ body.bodyinicio {
   .hotel-card {
     display: flex;
     align-items: center;
-    width: 900px;
+    width: 100%;
     text-align: left;
     border: 1px solid #ccc;
     padding: 10px;
-    background-color: #fff;
-    margin-bottom: 20px; /* Agrega un margen inferior para separar los hoteles */
+    background-color: #ffffffdb;
+    margin-bottom: 20px;
+    border-radius: 15px;
   }
   
   .hotel-image {

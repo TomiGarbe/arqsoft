@@ -21,7 +21,7 @@ func GetReservaById(id int) model.Reserva {
 func GetReservasById(id int) model.Reservas {
 	var reservas model.Reservas
 
-	Db.Where("id = ?", id).Preload("Hotel").Preload("Cliente").First(&reservas)
+	Db.Where("cliente_id = ?", id).Preload("Hotel").Preload("Cliente").First(&reservas)
 	log.Debug("Reservas: ", reservas)
 
 	return reservas
@@ -30,7 +30,7 @@ func GetReservasById(id int) model.Reservas {
 func GetReservas() model.Reservas {
 	var reservas model.Reservas
 
-	Db.Preload("Hotel").Preload("Cliente").First(&reservas)
+	Db.Preload("Hotel").Preload("Cliente").Find(&reservas)
 	log.Debug("Reservas: ", reservas)
 
 	return reservas

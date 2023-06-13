@@ -4,7 +4,8 @@ body.bodyAdmin {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url(./imagenes/loginadmin.jpg); 
+  /*background-image: url(./imagenes/loginadmin.jpg); */
+  background-image: linear-gradient(to bottom, rgb(111, 111, 111), rgba(200, 192, 192, 0.5)); /* Gradiente difuminado */
   background-repeat: no-repeat;
   background-size: cover;
   z-index: -1;
@@ -18,10 +19,19 @@ body.bodyAdmin {
     justify-content: center;
     height: 100vh;
   }
+
+  .container2A{
+   background-color: rgba(52, 122, 187, 0.3);
+   border-radius: 5%;
+   border: 1px solid black;
+   height: 50vh;
+   width: 25vw;
+
+  }
   
   .title {
     font-size: 24px;
-    text-align: center;
+    text-align: center; 
     margin-bottom: 20px;
   }
   
@@ -29,15 +39,22 @@ body.bodyAdmin {
     display: flex;
     flex-direction: column;
     align-items: center;
+   
   }
   
-  .input {
+  .inputAD {
+   
     margin-bottom: 10px;
     padding: 10px;
     width: 300px;
+  
+    font-weight: 500;
+    color: black;
     font-size: 16px;
-    border: 1px solid #ccc;
+    text-align: center;
     border-radius: 5px;
+    
+  
   }
   
   .button-container {
