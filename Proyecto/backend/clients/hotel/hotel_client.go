@@ -18,6 +18,24 @@ func GetHotelById(id int) model.Hotel {
 	return hotel
 }
 
+func GetHotelByEmail(email string) model.Hotel {
+	var hotel model.Hotel
+
+	Db.Where("email = ?", email).Preload("Telefonos").First(&hotel)
+	log.Debug("Hotel: ", hotel)
+
+	return hotel
+}
+
+func GetHotelByNombre(nombre string) model.Hotel {
+	var hotel model.Hotel
+
+	Db.Where("nombre = ?", nombre).Preload("Telefonos").First(&hotel)
+	log.Debug("Hotel: ", hotel)
+
+	return hotel
+}
+
 func GetHoteles() model.Hoteles {
 	var hoteles model.Hoteles
 

@@ -1,23 +1,44 @@
-body {
+        
+        
+        
+body.bodyReserva {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-image: url(./imagenes/fondo1.avif);
+    background-repeat: no-repeat;
+    background-size: cover;
   }
-  
-  .container {
-    max-width: 800px;
-    margin: 0 auto;
+
+
+
+  .container45 {
+    display: flex;
+    
+    align-items: center; /* Centrar verticalmente */
+    height: 100vh;
     padding: 20px;
   }
-  
+
+  .descripcion {
+  height: 30%;
+  width:60%;
+  background-color: antiquewhite;
+  margin-left:10% ;
+
+  }
   .reserva-form {
+    width: 20%;
     text-align: center;
+    margin-left:30% ;
+    background-color: rgba(150, 150, 150, 0.8); 
     border: 1px solid #ccc;
     padding: 20px;
   }
   
   .reserva-form h2 {
     margin-bottom: 20px;
+    
   }
   
   .reserva-form h3 {
@@ -46,7 +67,7 @@ body {
     border: 1px solid #ccc;
   }
   
-  button {
+  .confReserva {
     background-color: #4CAF50;
     color: white;
     border: none;
@@ -55,7 +76,7 @@ body {
     cursor: pointer;
   }
   
-  button:hover {
+  .confReserva:hover {
     background-color: #45a049;
   }
   

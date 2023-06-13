@@ -8,6 +8,10 @@ import AdminClientes from './pages/admin_clientes'
 import Reservar from './pages/reservar'
 import Cuenta from './pages/cuenta'
 import ReservasCliente from './pages/reservas_cliente'
+import InsertHoteles from './pages/insert_hoteles'
+import VerHoteles from './pages/ver_hoteles'
+import VerReservas from './pages/ver_reservas'
+import VerClientes from './pages/ver_clientes'
 import './App.css';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import { AuthProvider } from './pages/login/auth';
@@ -29,6 +33,10 @@ function App() {
                         <Route path='/reservar/:hotelId' element={<Reservar />}></Route>
                         <Route path='/cuenta' element={<Cuenta />}></Route>
                         <Route path='/reservas-cliente' element={<ReservasCliente />}></Route>
+                        <Route path='/agregar-hoteles' element={<InsertHoteles />}></Route>
+                        <Route path='/ver-hoteles' element={<VerHoteles />}></Route>
+                        <Route path='/ver-reservas' element={<VerReservas />}></Route>
+                        <Route path='/ver-clientes' element={<VerClientes />}></Route>
                     </Routes>
                 </AuthProvider>
             </Router>

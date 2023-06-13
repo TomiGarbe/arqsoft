@@ -42,4 +42,17 @@
 .reservations-button:hover {
   background-color: #2980b9;
 }
-  
+
+.password-toggle {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.password-toggle i {
+  color: #888;
+  transition: color 0.3s;
+}
+
+.password-toggle i:hover {
+  color: #333;
+}

@@ -20,7 +20,7 @@ type clienteServiceInterface interface {
 	GetHoteles() (dto.HotelesDto, e.ApiError)
 	GetHotelById(id int) (dto.HotelDto, e.ApiError)
 	InsertReserva(reservaDto dto.ReservaDto) (dto.ReservaDto, e.ApiError)
-	GetReservas(id int) (dto.ReservasDto, e.ApiError)
+	GetReservasById(id int) (dto.ReservasDto, e.ApiError)
 	GetReservaById(id int) (dto.ReservaDto, e.ApiError)
 	GetDisponibilidad(id, FechaInicio, FechaFinal int) (disponibilidad int)
 }
@@ -114,6 +114,7 @@ func (s *clienteService) GetHoteles() (dto.HotelesDto, e.ApiError) {
 		var hotelDto dto.HotelDto
 		hotelDto.ID = hotel.ID
 		hotelDto.Nombre = hotel.Nombre
+		hotelDto.Descripcion = hotel.Descripcion
 		hotelDto.Email = hotel.Email
 		hotelDto.Image = hotel.Image
 		hotelDto.Cant_Hab = hotel.Cant_Hab
@@ -144,6 +145,7 @@ func (s *clienteService) GetHotelById(id int) (dto.HotelDto, e.ApiError) {
 
 	hotelDto.ID = hotel.ID
 	hotelDto.Nombre = hotel.Nombre
+	hotelDto.Descripcion = hotel.Descripcion
 	hotelDto.Email = hotel.Email
 	hotelDto.Image = hotel.Image
 	hotelDto.Cant_Hab = hotel.Cant_Hab
@@ -170,11 +172,8 @@ func (s *clienteService) InsertReserva(reservaDto dto.ReservaDto) (dto.ReservaDt
 	reserva.FechaFinal = reservaDto.FechaFinal
 	reserva.Dias = reservaDto.Dias
 
-	hotel.Nombre = reservaDto.Nombre
-	cliente.Name = reservaDto.Name
-	cliente.LastName = reservaDto.LastName
-	hotel = hotelClient.InsertHotel(hotel)
-	cliente = clienteClient.InsertCliente(cliente)
+	hotel.ID = reservaDto.HotelID
+	cliente.ID = reservaDto.ClienteID
 
 	reserva.Hotel = hotel
 	reserva.Cliente = cliente
@@ -186,9 +185,9 @@ func (s *clienteService) InsertReserva(reservaDto dto.ReservaDto) (dto.ReservaDt
 	return reservaDto, nil
 }
 
-func (s *clienteService) GetReservas(id int) (dto.ReservasDto, e.ApiError) {
+func (s *clienteService) GetReservasById(id int) (dto.ReservasDto, e.ApiError) {
 
-	var reservas model.Reservas = reservaClient.GetReservas(id)
+	var reservas model.Reservas = reservaClient.GetReservasById(id)
 	var reservasDto dto.ReservasDto
 
 	for _, reserva := range reservas {
@@ -199,9 +198,8 @@ func (s *clienteService) GetReservas(id int) (dto.ReservasDto, e.ApiError) {
 		}
 
 		reservaDto.ID = reserva.ID
-		reservaDto.Nombre = reserva.Hotel.Nombre
-		reservaDto.Name = reserva.Cliente.Name
-		reservaDto.LastName = reserva.Cliente.LastName
+		reservaDto.HotelID = reserva.Hotel.ID
+		reservaDto.ClienteID = reserva.Cliente.ID
 		reservaDto.FechaInicio = reserva.FechaInicio
 		reservaDto.FechaFinal = reserva.FechaFinal
 		reservaDto.Dias = reserva.Dias
@@ -222,9 +220,8 @@ func (s *clienteService) GetReservaById(id int) (dto.ReservaDto, e.ApiError) {
 	}
 
 	reservaDto.ID = reserva.ID
-	reservaDto.Nombre = reserva.Hotel.Nombre
-	reservaDto.Name = reserva.Cliente.Name
-	reservaDto.LastName = reserva.Cliente.LastName
+	reservaDto.HotelID = reserva.Hotel.ID
+	reservaDto.ClienteID = reserva.Cliente.ID
 	reservaDto.FechaInicio = reserva.FechaInicio
 	reservaDto.FechaFinal = reserva.FechaFinal
 	reservaDto.Dias = reserva.Dias

@@ -25,6 +25,7 @@ const AdminLogin = () => {
   };
 
   return (
+  <body className= "bodyAdmin"> 
     <div className="container">
       <div className="container2">
       <h1 className="title">Bienvenido Administrador</h1>
@@ -51,6 +52,7 @@ const AdminLogin = () => {
       </div>
       </div>
     </div>
+  </body>
   );
 };
 

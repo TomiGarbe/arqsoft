@@ -18,7 +18,7 @@ func GetReservaById(id int) model.Reserva {
 	return reserva
 }
 
-func GetReservas(id int) model.Reservas {
+func GetReservasById(id int) model.Reservas {
 	var reservas model.Reservas
 
 	Db.Where("id = ?", id).Preload("Hotel").Preload("Cliente").First(&reservas)
@@ -27,6 +27,15 @@ func GetReservas(id int) model.Reservas {
 	return reservas
 }
 
+func GetReservas() model.Reservas {
+	var reservas model.Reservas
+
+	Db.Preload("Hotel").Preload("Cliente").First(&reservas)
+	log.Debug("Reservas: ", reservas)
+
+	return reservas
+}
+  
 func InsertReserva(reserva model.Reserva) model.Reserva {
 	result := Db.Create(&reserva)
 

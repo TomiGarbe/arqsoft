@@ -129,6 +129,36 @@ func GetHotelById(c *gin.Context) {
 	c.JSON(http.StatusOK, hotelDto)
 }
 
+func GetHotelByEmail(c *gin.Context) {
+	log.Debug("Email de Hotel para cargar: " + c.Param("email"))
+
+	email := c.Param("email")
+	var hotelDto dto.HotelDto
+
+	hotelDto, err := service.AdminService.GetHotelByEmail(email)
+
+	if err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
+	c.JSON(http.StatusOK, hotelDto)
+}
+
+func GetHotelByNombre(c *gin.Context) {
+	log.Debug("Nombre de Hotel para cargar: " + c.Param("nombre"))
+
+	nombre := c.Param("nombre")
+	var hotelDto dto.HotelDto
+
+	hotelDto, err := service.AdminService.GetHotelByNombre(nombre)
+
+	if err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
+	c.JSON(http.StatusOK, hotelDto)
+}
+
 func GetHoteles(c *gin.Context) {
 	var hotelesDto dto.HotelesDto
 	hotelesDto, err := service.AdminService.GetHoteles()
@@ -186,4 +216,16 @@ func AddTelefono(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, hotelDto)
+}
+
+func GetReservas(c *gin.Context) {
+	var reservasDto dto.ReservasDto
+	reservasDto, err := service.AdminService.GetReservas()
+
+	if err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
+
+	c.JSON(http.StatusOK, reservasDto)
 }

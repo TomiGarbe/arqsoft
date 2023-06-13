@@ -91,13 +91,13 @@ func GetReservaById(c *gin.Context) {
 	c.JSON(http.StatusOK, reservaDto)
 }
 
-func GetReservas(c *gin.Context) {
+func GetReservasById(c *gin.Context) {
 	log.Debug("ID de reserva para cargar: " + c.Param("id"))
 
 	id, _ := strconv.Atoi(c.Param("id"))
 	var reservasDto dto.ReservasDto
 
-	reservasDto, err := service.ClienteService.GetReservas(id)
+	reservasDto, err := service.ClienteService.GetReservasById(id)
 
 	if err != nil {
 		c.JSON(err.Status(), err)

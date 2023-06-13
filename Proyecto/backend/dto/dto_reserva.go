@@ -3,14 +3,14 @@ package dto
 type ReservaDto struct {
 	ID             int    `json:"id"`
 	
-	Nombre   	   string `json:"nombre"`
+	HotelID   	   int 	  `json:"hotel_id"`
 
-	Name     	   string `json:"name"`
-	LastName 	   string `json:"last_name"`
+	ClienteID 	   int	  `json:"cliente_id"`
 
 	FechaInicio    int 	  `json:"fecha_inicio"`
 	FechaFinal     int 	  `json:"fecha_final"`
 	Dias           int    `json:"dias"`
+	Disponibilidad int    `json:"disponibilidad"`
 }
 
 type ReservasDto []ReservaDto

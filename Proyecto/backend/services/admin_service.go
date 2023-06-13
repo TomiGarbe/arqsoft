@@ -5,6 +5,7 @@ import (
 	telefonoClient "backend/clients/telefono"
 	clienteClient "backend/clients/cliente"
 	hotelClient "backend/clients/hotel"
+	reservaClient "backend/clients/reserva"
 
 	"backend/dto"
 	"backend/model"
@@ -22,9 +23,12 @@ type adminServiceInterface interface {
 	GetClienteById(id int) (dto.ClienteDto, e.ApiError)
 	GetClientes() (dto.ClientesDto, e.ApiError)
 	GetHotelById(id int) (dto.HotelDto, e.ApiError)
+	GetHotelByEmail(email string) (dto.HotelDto, e.ApiError)
+	GetHotelByNombre(nombre string) (dto.HotelDto, e.ApiError)
 	GetHoteles() (dto.HotelesDto, e.ApiError)
 	InsertHotel(hotelDto dto.HotelDto) (dto.HotelDto, e.ApiError)
 	AddTelefono(telefonoDto dto.TelefonoDto) (dto.HotelDto, e.ApiError)
+	GetReservas() (dto.ReservasDto, e.ApiError)
 }
 
 var (
@@ -179,6 +183,63 @@ func (s *adminService) GetHotelById(id int) (dto.HotelDto, e.ApiError) {
 
 	hotelDto.ID = hotel.ID
 	hotelDto.Nombre = hotel.Nombre
+	hotelDto.Descripcion = hotel.Descripcion
+	hotelDto.Email = hotel.Email
+	hotelDto.Image = hotel.Image
+	hotelDto.Cant_Hab = hotel.Cant_Hab
+
+	for _, telefono := range hotel.Telefonos {
+		var dtoTelefono dto.TelefonoDto
+
+		dtoTelefono.Codigo = telefono.Codigo
+		dtoTelefono.Numero = telefono.Numero
+
+		hotelDto.TelefonosDto = append(hotelDto.TelefonosDto, dtoTelefono)
+	}
+
+	return hotelDto, nil
+}
+
+func (s *adminService) GetHotelByEmail(email string) (dto.HotelDto, e.ApiError) {
+
+	var hotel model.Hotel = hotelClient.GetHotelByEmail(email)
+	var hotelDto dto.HotelDto
+
+	if hotel.Email == "" {
+		return hotelDto, e.NewBadRequestApiError("Hotel No Encontrado")
+	}
+
+	hotelDto.ID = hotel.ID
+	hotelDto.Nombre = hotel.Nombre
+	hotelDto.Descripcion = hotel.Descripcion
+	hotelDto.Email = hotel.Email
+	hotelDto.Image = hotel.Image
+	hotelDto.Cant_Hab = hotel.Cant_Hab
+
+	for _, telefono := range hotel.Telefonos {
+		var dtoTelefono dto.TelefonoDto
+
+		dtoTelefono.Codigo = telefono.Codigo
+		dtoTelefono.Numero = telefono.Numero
+
+		hotelDto.TelefonosDto = append(hotelDto.TelefonosDto, dtoTelefono)
+	}
+
+	return hotelDto, nil
+}
+
+func (s *adminService) GetHotelByNombre(nombre string) (dto.HotelDto, e.ApiError) {
+
+	var hotel model.Hotel = hotelClient.GetHotelByNombre(nombre)
+	var hotelDto dto.HotelDto
+
+	if hotel.Nombre == "" {
+		return hotelDto, e.NewBadRequestApiError("Hotel No Encontrado")
+	}
+
+	hotelDto.ID = hotel.ID
+	hotelDto.Nombre = hotel.Nombre
+	hotelDto.Descripcion = hotel.Descripcion
 	hotelDto.Email = hotel.Email
 	hotelDto.Image = hotel.Image
 	hotelDto.Cant_Hab = hotel.Cant_Hab
@@ -204,6 +265,7 @@ func (s *adminService) GetHoteles() (dto.HotelesDto, e.ApiError) {
 		var hotelDto dto.HotelDto
 		hotelDto.ID = hotel.ID
 		hotelDto.Nombre = hotel.Nombre
+		hotelDto.Descripcion = hotel.Descripcion
 		hotelDto.Email = hotel.Email
 		hotelDto.Image = hotel.Image
 		hotelDto.Cant_Hab = hotel.Cant_Hab
@@ -228,6 +290,7 @@ func (s *adminService) InsertHotel(hotelDto dto.HotelDto) (dto.HotelDto, e.ApiEr
 	var hotel model.Hotel
 
 	hotel.Nombre = hotelDto.Nombre
+	hotel.Descripcion = hotelDto.Descripcion
 	hotel.Email = hotelDto.Email
 	hotel.Image = hotelDto.Image
 	hotel.Cant_Hab = hotelDto.Cant_Hab
@@ -254,6 +317,7 @@ func (s *adminService) AddTelefono(telefonoDto dto.TelefonoDto) (dto.HotelDto, e
 	var hotelDto dto.HotelDto
 
 	hotelDto.Nombre = hotel.Nombre
+	hotelDto.Descripcion = hotel.Descripcion
 	hotelDto.Email = hotel.Email
 	hotelDto.Image = hotel.Image
 	hotelDto.Cant_Hab = hotel.Cant_Hab
@@ -268,4 +332,24 @@ func (s *adminService) AddTelefono(telefonoDto dto.TelefonoDto) (dto.HotelDto, e
 	}
 
 	return hotelDto, nil
+}
+
+func (s *adminService) GetReservas() (dto.ReservasDto, e.ApiError) {
+
+	var reservas model.Reservas = reservaClient.GetReservas()
+	var reservasDto dto.ReservasDto
+
+	for _, reserva := range reservas {
+		var reservaDto dto.ReservaDto
+		reservaDto.ID = reserva.ID
+		reservaDto.HotelID = reserva.Hotel.ID
+		reservaDto.ClienteID = reserva.Cliente.ID
+		reservaDto.FechaInicio = reserva.FechaInicio
+		reservaDto.FechaFinal = reserva.FechaFinal
+		reservaDto.Dias = reserva.Dias
+
+		reservasDto = append(reservasDto, reservaDto)
+	}
+
+	return reservasDto, nil
 }

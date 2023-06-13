@@ -7,7 +7,7 @@ function AccountDetails() {
     nombre: '',
     apellido: '',
     username: '',
-    password: '',
+    password: '*****',
     email: ''
   });
 
@@ -26,7 +26,7 @@ function AccountDetails() {
               nombre: data.name,
               apellido: data.last_name,
               username: data.username,
-              password: data.password,
+              password: '*****',
               email: data.email
             });
           })
@@ -43,7 +43,7 @@ function AccountDetails() {
               nombre: data.name,
               apellido: data.last_name,
               username: data.username,
-              password: data.password,
+              password: '*****',
               email: data.email
             });
           })

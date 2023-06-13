@@ -5,9 +5,14 @@
   background-color: #003c94;
   height: 10vh;
   padding: 10px;
+  box-shadow: 0px 3px 20px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
 }
 
 #start-date{
+  font-family: inherit;
+  font-weight: 600;
   background-color: transparent;
   border: none;
   border-radius: 0;
@@ -17,9 +22,12 @@
   font-size: 16px;
   padding: 10px;
   margin: 0px;
+  box-shadow: none;
 }
 
 #end-date{
+  font-family: inherit;
+  font-weight: 600;
   background-color: transparent;
   border: none;
   border-radius: 0;
@@ -29,6 +37,7 @@
   font-size: 16px;
   padding: 10px;
   margin: 0px;
+  box-shadow: none;
 }
 
 .contdeFechas {
@@ -41,22 +50,31 @@
 
 .date-pickerINI1 {
   display: flex;
-  /* margin-top: 2.5rem; */
   margin: 2.5rem 20px 0px 0px;
   align-items: center;
-  height: 10%;
-  width: 30vh;
+  height: 3.2rem;
   border-radius: 10px;
   background-color: rgb(255 255 255 / 75%);
+  box-shadow: 0px 0px 10px 0.1px rgb(108, 108, 108);
 }
 
 .botbusquedaFec {
-  background-color: #15941a;
+  background-color: #0a793a;
   color: white;
   border: none;
+  padding: 10px;
   margin-top: 2.5rem;
   font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
+  border-radius: 25px;
+  transition: all 200ms;
+}
+
+.botbusquedaFec:hover{
+  scale: 1.03;
+  background-color: rgb(43, 143, 87);
+  box-shadow: 0px 0px 10px;
 }
 
 body.bodyinicio {
@@ -105,8 +123,11 @@ body.bodyinicio {
   color: #006ce4;
   padding: 10px 20px;
   font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
   border-radius: 10px;
+  border: none;
+  transition: all 200ms;
 }
 
 .cuenta-button {
@@ -115,9 +136,22 @@ body.bodyinicio {
   color: #006ce4;
   padding: 10px 20px;
   font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
   border-radius: 10px;
+  border: none;
+  transition: all 200ms;
 }
+
+.admin-button:hover, .cuenta-button:hover {
+  scale: 1.03;
+  background-color: rgb(222, 222, 222);
+}
+
+.admin-button:active, .cuenta-button:active{
+  background-color: white;
+}
+
 
 .hotels-container {
   display: grid;
@@ -127,26 +161,29 @@ body.bodyinicio {
 }
 
 .hotel-card {
+  display: flex;
+  align-items: center;
   width: 900px;
   text-align: left;
   border: 1px solid #ccc;
   padding: 10px;
   background-color: #fff;
   margin-bottom: 20px; /* Agrega un margen inferior para separar los hoteles */
-
 }
 
-.hotel-card img {
-  max-width: 200px; /* Ajusta el tamaño máximo de la imagen según tus necesidades */
-  margin-right: 20px; /* Añade un margen a la derecha de la imagen para separarla del contenido */
+.hotel-image {
+  max-width: 220px;
+  margin-right: 20px;
+  margin-left: -10%;
 }
 
+.hotel-info {
+  flex-grow: 1; /* Permite que el contenido se expanda y ocupe todo el espacio disponible */
+}
 
 .hotel-card h4,
 .hotel-card p {
-  margin: 5px 0;
-  word-wrap: break-word; /* Realiza un salto de línea en palabras largas */
-  word-break: break-word; /* Realiza un salto de línea en palabras largas en navegadores más antiguos */
+  margin: 0;
 }
 
 .hotel-card button {
@@ -158,7 +195,9 @@ body.bodyinicio {
   cursor: pointer;
  border-style: double;
  border-radius: 10%;
+ margin-top: 10px; /* Agrega un margen superior para separar el botón del texto */
 }
+
 
 .hotel-card button:hover {
   background-color: #0c1841;

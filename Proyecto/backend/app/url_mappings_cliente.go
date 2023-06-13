@@ -15,7 +15,7 @@ func mapUrlsCliente() {
 	router.GET("/cliente/hoteles", clienteController.GetHoteles)
 	router.GET("/cliente/hotel/:id", clienteController.GetHotelById)
 	router.POST("/cliente/reserva", clienteController.InsertReserva)
-	router.GET("/cliente/reservas/:id", clienteController.GetReservas)
+	router.GET("/cliente/reservas/:id", clienteController.GetReservasById)
 	router.GET("/cliente/reserva/:id", clienteController.GetReservaById)
 	router.GET("/cliente/disponibilidad/:id/:FechaInicio/:FechaFinal", clienteController.GetDisponibilidad)
 

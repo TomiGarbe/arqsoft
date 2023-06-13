@@ -5,13 +5,10 @@ import './estilo/opciones_admin.css';
 
 const OpcionesAdminPage = () => {
   const { isLoggedAdmin } = useContext(AuthContext);
-  const Verificacion = (hotelId) => {
+  
+  const Verificacion = () => {
     if (!isLoggedAdmin) {
-      window.location.href = '/login-cliente';
-    }
-    else
-    {
-      window.location.href = `/reservar/${hotelId}`;
+      window.location.href = '/login-admin';
     }
   };
 
