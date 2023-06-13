@@ -6,11 +6,24 @@ import './estilo/reservar.css';
 const ReservaPage = () => {
   const { hotelId } = useParams();
   const [hotelData, setHotelData] = useState('');
+  const [clientData, setClienteData] = useState('');
   const [cantidadPersonas, setCantidadPersonas] = useState('');
   const [commodities, setCommodities] = useState('');
   const { isLoggedCliente } = useContext(AuthContext);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+
+  const [formData, setFormData] = useState({
+    nombre: hotelData.nombre,
+    name: clientData.name,
+    last_name: clientData.last_name,
+    fecha_inicio: startDate,
+    fecha_final: endDate
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const Verificacion = (hotelId) => {
     if (!isLoggedCliente) {
@@ -18,12 +31,35 @@ const ReservaPage = () => {
     }
     else
     {
-      window.location.href = `/reservar/${hotelId}`;
+      const accountId = localStorage.getItem("id_cliente");
+      fetch(`http://localhost:8090/cliente/${accountId}`)
+      .then(response => response.json())
+      .then(data => {
+        setClienteData(data);
+      })
+      .catch(error => {
+        console.error('Error al obtener los datos del cliente:', error);
+      });
     }
   };
 
   const handleReserva = () => {
-    
+    fetch('http://localhost:8090/cliente/reserva', {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Registro exitoso:', data);
+        window.location.href = '/login-cliente';
+      })
+      .catch(error => {
+        console.error('Error en el registro:', error);
+        alert('Credenciales incorrectas');
+      });
   };
 
   useEffect(() => {
@@ -42,6 +78,7 @@ const ReservaPage = () => {
 
   const handleStartDateChange = (event) => {
     setStartDate(event.target.value);
+    handleChange();
     const selectedStartDateObj = new Date(event.target.value);
     const endDateObj = new Date(endDate);
     if (selectedStartDateObj > endDateObj) {
@@ -55,6 +92,7 @@ const ReservaPage = () => {
 
   const handleEndDateChange = (event) => {
     setEndDate(event.target.value);
+    handleChange();
     const selectedStartDateObj = new Date(startDate);
     const endDateObj = new Date(event.target.value);
     if (selectedStartDateObj > endDateObj) {
@@ -64,6 +102,11 @@ const ReservaPage = () => {
     if (startDate && endDate) {
       filterHotels();
     }
+  };
+
+  const handleCantPersonasChange = (event) => {
+    setCantidadPersonas(event.target.value)
+    handleChange();
   };
 
   const filterHotels = async () => {
@@ -111,12 +154,12 @@ const ReservaPage = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="cantidadPersonas" onChange={filterHotels}>Cantidad de personas:</label>
+                <label htmlFor="cantidadPersonas">Cantidad de personas:</label>
                 <input
                   type="number"
                   id="cantidadPersonas"
                   value={cantidadPersonas}
-                  onChange={(e) => setCantidadPersonas(e.target.value)}
+                  onChange={handleCantPersonasChange}
                   required
                 />
               </div>

@@ -32,7 +32,6 @@ const HomePage = () => {
 
   return (
       <div className="reservations-container1">
-       
         <div className="reservations-container2" onLoad={getReservations}>
           <h4>Datos de tus reservas:</h4>
           {reservations.length ? (

@@ -1,9 +1,12 @@
 .reservations-container1 {
+ 
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color:;
+    background-image: url(./imagenes/reservaClient.jpg);
+    background-repeat: no-repeat;
+    background-size: cover
   }
   
   .reservations-container2 {

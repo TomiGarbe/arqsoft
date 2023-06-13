@@ -66,14 +66,14 @@ const HomePage = () => {
   return (
     <body className= "bodyinicio">
       <div className="header-content">
-        <div className="admin-button-container">
-          <Link to="/login-admin" className="admin-button">
-            Admin
-          </Link>
-        </div>
         <div className="cuenta-button-container">
           <Link to="/cuenta" className="cuenta-button">
             Tu Cuenta
+          </Link>
+        </div>
+        <div className="admin-button-container">
+          <Link to="/login-admin" className="admin-button">
+            Admin
           </Link>
         </div>
       </div>
@@ -90,22 +90,26 @@ const HomePage = () => {
             <button className="botbusquedaFec" onClick={filterHotels}>Buscar</button>
             </div>
       <div className="containerIni">
-        <div className="hotels-container">
-          {hotels.length ? 
-            ( hotels.map((hotel) => (
-              <div className='hotel-card' key={hotel.id}>
-                <img src={hotel.image} alt={hotel.nombre}></img>
-                <h4>{hotel.nombre}</h4>
-                <p>{hotel.email}</p>
-                  <button onClick={() => Verificacion(hotel.id)}>
-                    Reservar
-                  </button>
+            <div className="hotels-container">
+        {hotels.length ? 
+          ( hotels.map((hotel) => (
+            <div className='hotel-card' key={hotel.id}>
+              <div className="hotel-content">
+                <img src={hotel.image} alt={hotel.nombre} className="hotel-image" />
+                <div className="hotel-info">
+                  <h4>{hotel.nombre}</h4>
+                  <p>{hotel.email}</p>
+                </div>
               </div>
-            ))
-            ) : (
-              <p>No hay hoteles</p>
-          )}
-        </div>
+              <button onClick={() => Verificacion(hotel.id)}>
+                Reservar
+              </button>
+            </div>
+          ))
+          ) : (
+            <p>No hay hoteles</p>
+        )}
+      </div>
       </div>
     </body> 
   );

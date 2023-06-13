@@ -1,6 +1,6 @@
 .header-content {
   display: flex;
-  justify-content: center;
+  justify-content: right;
   align-items: center;
   background-color: #003c94;
   height: 10vh;
@@ -85,28 +85,24 @@ body.bodyinicio {
   scrollbar-width: none;
 }
 
-
 .containerIni::-webkit-scrollbar {
   display: none; /* Ocultar la barra de desplazamiento*/
 }
 
-.admin-button-container {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+.admin-button-container{
+  display: flex;
+  margin-right: 15px;
 }
 
-.cuenta-button-container {
-  position: absolute;
-  top: 10px;
-  left: 10px;
+.cuenta-button-container{
+  display: flex;
+  margin-right: 15px;
 }
 
 .admin-button {
   display: flex;
   background-color: white;
-  color: rgb(87, 121, 245);
-  border: none;
+  color: #006ce4;
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
@@ -116,8 +112,7 @@ body.bodyinicio {
 .cuenta-button {
   display: flex;
   background-color: white;
-  color: rgb(87, 121, 245);
-  border: none;
+  color: #006ce4;
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
@@ -137,20 +132,21 @@ body.bodyinicio {
   border: 1px solid #ccc;
   padding: 10px;
   background-color: #fff;
-  display: flex;
-  align-items: center;
+  margin-bottom: 20px; /* Agrega un margen inferior para separar los hoteles */
+
 }
 
 .hotel-card img {
-  max-width: 100%;
-  height: auto;
-  width: 290px; /* Tamaño fijo deseado para las imágenes */
+  max-width: 200px; /* Ajusta el tamaño máximo de la imagen según tus necesidades */
+  margin-right: 20px; /* Añade un margen a la derecha de la imagen para separarla del contenido */
 }
 
 
 .hotel-card h4,
 .hotel-card p {
   margin: 5px 0;
+  word-wrap: break-word; /* Realiza un salto de línea en palabras largas */
+  word-break: break-word; /* Realiza un salto de línea en palabras largas en navegadores más antiguos */
 }
 
 .hotel-card button {
