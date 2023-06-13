@@ -18,30 +18,20 @@ const ReservaPage = () => {
   };
 
   const handleReserva = () => {
-    alert(hotelId);
-    alert(accountId);
-    alert(startDate);
-    alert(endDate);
     const startDateObj = new Date(startDate);
     const endDateObj = new Date(endDate);
     const Dias = Math.round((endDateObj - startDateObj) / (1000 * 60 * 60 * 24));
-    alert(Dias);
     const formData = {
       hotel_id: parseInt(hotelId),
       cliente_id: parseInt(accountId),
       anio_inicio: startDateObj.getFullYear(),
+      anio_final: endDateObj.getFullYear(),
       mes_inicio: startDateObj.getMonth() + 1, 
-      dia_inicio: startDateObj.getDate(),
-      anio_final: endDate.getFullYear(),
-      mes_final: endDate.getMonth() + 1, 
-      dia_final: endDate.getDate(),
+      mes_final: endDateObj.getMonth() + 1, 
+      dia_inicio: startDateObj.getDate() + 1,
+      dia_final: endDateObj.getDate() + 1,
       dias: Dias
     };
-    alert(formData.hotel_id);
-    alert(formData.cliente_id);
-    alert(formData.fecha_inicio);
-    alert(formData.fecha_final);
-    alert(formData.dias);
 
     fetch('http://localhost:8090/cliente/reserva', {
       method: 'POST',
@@ -53,7 +43,8 @@ const ReservaPage = () => {
       .then(response => response.json())
       .then(data => {
         console.log('Registro exitoso:', data);
-        window.location.href = '/';
+        alert(JSON.stringify(formData));
+        /*window.location.href = '/';*/
       })
       .catch(error => {
         console.error('Error en el registro:', error);
@@ -115,7 +106,7 @@ const ReservaPage = () => {
   };
 
   return (
-    <body className="bodyReserva">
+    <div className="bodyReserva">
       <div>
         {typeof hotelData === 'undefined' ? (
           <>CARGANDO...</>
@@ -158,7 +149,7 @@ const ReservaPage = () => {
           </div>
         )}
       </div>
-    </body>
+    </div>
   );
 };
 
