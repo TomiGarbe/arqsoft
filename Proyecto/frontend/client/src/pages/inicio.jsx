@@ -35,11 +35,19 @@ const HomePage = () => {
 
   const handleStartDateChange = (event) => {
     setStartDate(event.target.value);
+    const selectedStartDateObj = new Date(event.target.value);
+    const endDateObj = new Date(endDate);
+    if (selectedStartDateObj > endDateObj) {
+      setEndDate('');
+      alert("Fechas no validas");
+    }
   };
 
   const handleEndDateChange = (event) => {
     setEndDate(event.target.value);
-    if (startDate > endDate) {
+    const selectedStartDateObj = new Date(startDate);
+    const endDateObj = new Date(event.target.value);
+    if (selectedStartDateObj > endDateObj) {
       setEndDate('');
       alert("Fechas no validas");
     }
@@ -57,7 +65,7 @@ const HomePage = () => {
 
   return (
     <body className= "bodyinicio">
-      <div className="header-content"> </div>
+      <div className="header-content">
         <div className="admin-button-container">
           <Link to="/login-admin" className="admin-button">
             Admin
@@ -68,6 +76,8 @@ const HomePage = () => {
             Tu Cuenta
           </Link>
         </div>
+      </div>
+        
         <div className="contdeFechas">
           <div className="date-pickerINI1">
             <label htmlFor="start-date" className="fecha">Fecha de inicio:</label>

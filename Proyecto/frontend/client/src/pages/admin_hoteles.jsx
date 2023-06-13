@@ -13,9 +13,6 @@ const AdminHotelesPage = () => {
         <Link to="/ver-hoteles" className="boton">
           Ver Hoteles
         </Link>
-        <Link to="/ver-reservas" className="boton">
-          Ver Reservas
-        </Link>
       </div>
     </div>
   );

@@ -7,8 +7,8 @@ const AdminClientesPage = () => {
     <div className="container">
       <h1 className="titulo">Clientes</h1>
       <div className="botones-container">
-        <Link to="/agregar-clientes" className="boton">
-          Agregar Clientes
+      <Link to="/ver-reservas" className="boton">
+          Ver Reservas
         </Link>
         <Link to="/ver-clientes" className="boton">
           Ver Clientes

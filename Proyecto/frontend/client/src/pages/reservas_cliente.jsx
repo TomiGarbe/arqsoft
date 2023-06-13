@@ -32,14 +32,16 @@ const HomePage = () => {
 
   return (
       <div className="reservations-container1">
+       
         <div className="reservations-container2" onLoad={getReservations}>
-          <h4>Tus reservas:</h4>
+          <h4>Datos de tus reservas:</h4>
           {reservations.length ? (
             reservations.map((reservation) => (
               <div className="reservation-card" key={reservation.id}>
                 <p>Hotel: {reservation.hotel}</p>
-                <p>Fecha de inicio: {reservation.fechaInicio}</p>
+                <p>Fecha de llegada: {reservation.fechaInicio}</p>
                 <p>Fecha de fin: {reservation.fechaFin}</p>
+                <p>Gracias por elegirnos!</p>
               </div>
             ))
           ) : (

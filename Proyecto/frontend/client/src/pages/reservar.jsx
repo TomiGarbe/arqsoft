@@ -42,6 +42,12 @@ const ReservaPage = () => {
 
   const handleStartDateChange = (event) => {
     setStartDate(event.target.value);
+    const selectedStartDateObj = new Date(event.target.value);
+    const endDateObj = new Date(endDate);
+    if (selectedStartDateObj > endDateObj) {
+      setEndDate('');
+      alert("Fechas no validas");
+    }
     if (startDate && endDate) {
       filterHotels();
     }
@@ -49,11 +55,13 @@ const ReservaPage = () => {
 
   const handleEndDateChange = (event) => {
     setEndDate(event.target.value);
-    if (startDate > endDate) {
+    const selectedStartDateObj = new Date(startDate);
+    const endDateObj = new Date(event.target.value);
+    if (selectedStartDateObj > endDateObj) {
       setEndDate('');
       alert("Fechas no validas");
     }
-    else if (startDate && endDate) {
+    if (startDate && endDate) {
       filterHotels();
     }
   };
@@ -64,6 +72,10 @@ const ReservaPage = () => {
     if (response === 0) {
       setEndDate('');
       alert("No hay habitaciones disponibles para esas fechas");
+    }
+    else if (response === cantidadPersonas) {
+      setCantidadPersonas('');
+      alert("No hay habitaciones disponibles para esa cantidad de personas");
     }
   };
 
@@ -99,7 +111,7 @@ const ReservaPage = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="cantidadPersonas">Cantidad de personas:</label>
+                <label htmlFor="cantidadPersonas" onChange={filterHotels}>Cantidad de personas:</label>
                 <input
                   type="number"
                   id="cantidadPersonas"
