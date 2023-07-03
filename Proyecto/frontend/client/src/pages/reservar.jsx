@@ -42,13 +42,12 @@ const ReservaPage = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('Registro exitoso:', data);
-        alert(JSON.stringify(formData));
-        /*window.location.href = '/';*/
+        console.log('Reserva exitosa:', data);
+        window.location.href = 'http://localhost:3000/';
       })
       .catch(error => {
         console.error('Error en el registro:', error);
-        alert('Credenciales incorrectas');
+        alert('Error al reservar');
       });
   };
 

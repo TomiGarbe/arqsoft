@@ -39,7 +39,7 @@ const HomePage = () => {
 
   useEffect(() => {
     getReservations();
-  }, []); // Se elimina la dependencia de getReservations
+  }, [getReservations]);
 
   useEffect(() => {
     getHoteles();
