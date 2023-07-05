@@ -4,11 +4,12 @@ import './estilo/reservas_cliente.css';
 
 const HomePage = () => {
   const [reservations, setReservations] = useState([]);
+  const [reservasFiltradas, setReservasFiltradas] = useState([]);
   const [hoteles, setHoteles] = useState([]);
   const { isLoggedCliente } = useContext(AuthContext);
   const [hotelFiltrado, setHotelFiltrado] = useState('');
-  //const [startDateFilter, setStartDateFilter] = useState('');
-  //const [endDateFilter, setEndDateFilter] = useState('');
+  const [startDateFilter, setStartDateFilter] = useState('');
+  const [endDateFilter, setEndDateFilter] = useState('');
 
   const getHoteles = useCallback(async () => {
     try {
@@ -17,9 +18,12 @@ const HomePage = () => {
         const reserva = reservations[i];
         const request = await fetch(`http://localhost:8090/cliente/hotel/${reserva.hotel_id}`);
         const response = await request.json();
-        hotelesArray.push(response);
+        hotelesArray.push({ id: response.id, nombre: response.nombre });
       }
-      setHoteles(hotelesArray);
+      const uniqueHotels = Array.from(new Set(hotelesArray.map((hotel) => hotel.id))).map((id) => {
+        return hotelesArray.find((hotel) => hotel.id === id);
+      });
+      setHoteles(uniqueHotels);
     } catch (error) {
       console.log("No se pudieron obtener los hoteles:", error);
     }
@@ -32,6 +36,7 @@ const HomePage = () => {
         const request = await fetch(`http://localhost:8090/cliente/reservas/${accountId}`);
         const response = await request.json();
         setReservations(response);
+        setReservasFiltradas(response);
       } catch (error) {
         console.log("No se pudieron obtener las reservas:", error);
       }
@@ -40,9 +45,34 @@ const HomePage = () => {
     }
   }, [isLoggedCliente]);
 
+  const getReservasFiltradas = useCallback(async () => {
+    try {
+      const startDateObj = new Date(startDateFilter);
+      const endDateObj = new Date(endDateFilter);
+      let reservasArray = [];
+  
+      if (startDateFilter && endDateFilter) {
+        const request = await fetch(`http://localhost:8090/cliente/reservas-por-fecha/${startDateObj.getFullYear()}/${startDateObj.getMonth() + 1}/${startDateObj.getDate() + 1}/${endDateObj.getFullYear()}/${endDateObj.getMonth() + 1}/${endDateObj.getDate() + 1}`);
+        const response = await request.json();
+        reservasArray = response;
+        reservasArray = reservasArray.filter((reserva) => hotelFiltrado === '' || hotelFiltrado === 0 || hotelFiltrado === reserva.hotel_id);
+      } else {
+        reservasArray = reservations.filter((reserva) => hotelFiltrado === '' || hotelFiltrado === 0 || hotelFiltrado === reserva.hotel_id);
+      }
+  
+      setReservasFiltradas(reservasArray);
+    } catch (error) {
+      console.log("No se pudieron obtener las reservas:", error);
+    }
+  }, [reservations, hotelFiltrado, startDateFilter, endDateFilter]);
+
   useEffect(() => {
     getReservations();
   }, [getReservations]);
+
+  useEffect(() => {
+    getReservasFiltradas();
+  }, [getReservasFiltradas]);
 
   useEffect(() => {
     getHoteles();
@@ -52,30 +82,25 @@ const HomePage = () => {
     setHotelFiltrado(event.target.value);
   };
 
-  /*const handleStartDateFilterChange = (event) => {
+  const handleStartDateFilterChange = (event) => {
     setStartDateFilter(event.target.value);
+    const selectedStartDateObj = new Date(event.target.value);
+    const endDateObj = new Date(endDateFilter);
+    if (selectedStartDateObj > endDateObj) {
+      setEndDateFilter('');
+      alert("Fechas no validas");
+    }
   };
 
   const handleEndDateFilterChange = (event) => {
     setEndDateFilter(event.target.value);
-  };*/
-
-  // Obtener una lista de nombres de hoteles únicos
-  const uniqueHotelNames = Array.from(new Set(hoteles.map((hotel) => ({ id: hotel.id, nombre: hotel.nombre }))));
-  const filteredReservations = reservations.filter((reservation) => {
-    const hotel = hoteles.find((hotel) => hotel.id === reservation.hotel_id);
-    const hotelName = hotel ? hotel.nombre : 'Hotel desconocido';
-    //const startDate = new Date(reservation.anio_inicio, reservation.mes_inicio - 1, reservation.dia_inicio);
-    //const endDate = new Date(reservation.anio_final, reservation.mes_final - 1, reservation.dia_final);
-
-    // Aplicar filtros
-    const hotelFilterMatch = hotelName === hotelFiltrado.selectedHotel;
-    //const startDateFilterMatch = startDateFilter === '' || startDate >= new Date(startDateFilter);
-    //const endDateFilterMatch = endDateFilter === '' || endDate <= new Date(endDateFilter);
-
-    //return hotelFilterMatch && startDateFilterMatch && endDateFilterMatch;
-    return hotelFilterMatch;
-  });
+    const startDateObj = new Date(startDateFilter);
+    const selectedEndDateObj = new Date(event.target.value);
+    if (startDateObj > selectedEndDateObj) {
+      setEndDateFilter('');
+      alert("Fechas no validas");
+    }
+  };
 
   return (
     <div className="reservations-container1">
@@ -84,18 +109,26 @@ const HomePage = () => {
           <div>
             <label htmlFor="hotelFilter">Hotel:</label>
             <ul id="hotelFilter">
-              <li value="" onClick={handleHotelFilterChange}>Todos los hoteles</li>
-              {uniqueHotelNames.map((hotel) => (
+              <li value="0" onClick={handleHotelFilterChange}>Todos los hoteles</li>
+              {hoteles.map((hotel) => (
                 <li key={hotel.id} value={hotel.id} onClick={handleHotelFilterChange}>
-                  {hotel.name}
+                  {hotel.nombre}
                 </li>
               ))}
             </ul>
           </div>
+          <div>
+            <label htmlFor="startDateFilter">Fecha de inicio:</label>
+            <input type="date" id="startDateFilter" value={startDateFilter} onChange={handleStartDateFilterChange} />
+          </div>
+          <div>
+            <label htmlFor="endDateFilter">Fecha de fin:</label>
+            <input type="date" id="endDateFilter" value={endDateFilter} onChange={handleEndDateFilterChange} />
+          </div>
         </div>
         <h4>Datos de tus reservas:</h4>
-        {filteredReservations.length ? (
-          filteredReservations.map((reservation) => {
+        {reservasFiltradas.length ? (
+          reservasFiltradas.map((reservation) => {
             const hotel = hoteles.find((hotel) => hotel.id === reservation.hotel_id);
             const fechaInicio = `${reservation.dia_inicio}/${reservation.mes_inicio}/${reservation.anio_inicio}`;
             const fechaFin = `${reservation.dia_final}/${reservation.mes_final}/${reservation.anio_final}`;
@@ -115,16 +148,6 @@ const HomePage = () => {
     </div>
   );
 };
-/*
-<div>
-            <label htmlFor="startDateFilter">Fecha de inicio:</label>
-            <input type="date" id="startDateFilter" value={startDateFilter} onChange={handleStartDateFilterChange} />
-          </div>
-          <div>
-            <label htmlFor="endDateFilter">Fecha de fin:</label>
-            <input type="date" id="endDateFilter" value={endDateFilter} onChange={handleEndDateFilterChange} />
-          </div
-*/
 export default HomePage;
 
 

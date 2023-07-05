@@ -7,6 +7,7 @@ type HotelDto struct {
 	Email    	string 	`json:"email"`
 	Image    	string 	`json:"image"`
 	Cant_Hab 	int    	`json:"cant_hab"`
+	Amenities 	string 	`json:"amenities"`
 
 	TelefonosDto TelefonosDto `json:"telefonos,omitempty"`
 }

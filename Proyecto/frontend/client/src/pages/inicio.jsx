@@ -45,9 +45,9 @@ const HomePage = () => {
 
   const handleEndDateChange = (event) => {
     setEndDate(event.target.value);
-    const selectedStartDateObj = new Date(startDate);
-    const endDateObj = new Date(event.target.value);
-    if (selectedStartDateObj > endDateObj) {
+    const startDateObj = new Date(startDate);
+    const selectedEndDateObj = new Date(event.target.value);
+    if (startDateObj > selectedEndDateObj) {
       setEndDate('');
       alert("Fechas no validas");
     }

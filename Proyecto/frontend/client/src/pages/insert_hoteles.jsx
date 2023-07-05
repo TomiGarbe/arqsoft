@@ -6,6 +6,8 @@ function RegistrationHotel() {
   const [Email, setEmail] = useState({});
   const [Nombre, setNombre] = useState({});
   const { isLoggedAdmin } = useContext(AuthContext);
+  const [amenities, setAmenities] = useState([]);
+
   
   const Verificacion = () => {
     if (!isLoggedAdmin) {
@@ -18,22 +20,25 @@ function RegistrationHotel() {
     descripcion: '',
     email: '',
     image: '',
-    cant_hab: ''
+    cant_hab: '',
+    amenities: ''
   });
 
   const handleChange = (event) => {
     const { name, value } = event.target;
   
-    if (name === "cant_hab" && value !== '') {
+    if (name === "cant_hab" && value !== "") {
       const intValue = parseInt(value);
       setFormData((prevFormData) => ({
         ...prevFormData,
-        [name]: intValue
+        [name]: intValue,
       }));
+    } else if (name === "amenities") {
+      setAmenities(value.split(","));
     } else {
       setFormData((prevFormData) => ({
         ...prevFormData,
-        [name]: value
+        [name]: value,
       }));
     }
   };
@@ -151,6 +156,17 @@ function RegistrationHotel() {
             value={formData.cant_hab}
             onChange={handleChange}
             required
+          />
+        </label>
+        <br />
+        <label>
+         Amenities:
+          <input
+            type="text"
+            name="amenities"
+            value={amenities}
+            onChange={handleChange}
+            placeholder="Ingrese las Amenities separadas por comas"
           />
         </label>
         <br />

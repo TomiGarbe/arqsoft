@@ -229,3 +229,25 @@ func GetReservas(c *gin.Context) {
 
 	c.JSON(http.StatusOK, reservasDto)
 }
+
+func GetReservasByDate(c *gin.Context) {
+	log.Debug("Reservas para cargar: " + c.Param("AnioInicio") + c.Param("MesInicio") + c.Param("DiaInicio") + c.Param("AnioFinal") + c.Param("MesFinal") + c.Param("DiaFinal"))
+
+	AnioInicio, _ := strconv.Atoi(c.Param("AnioInicio"))
+	AnioFinal, _ := strconv.Atoi(c.Param("AnioFinal"))
+	MesInicio, _ := strconv.Atoi(c.Param("MesInicio"))
+	MesFinal, _ := strconv.Atoi(c.Param("MesFinal"))
+	DiaInicio, _ := strconv.Atoi(c.Param("DiaInicio"))
+	DiaFinal, _ := strconv.Atoi(c.Param("DiaFinal"))
+
+	var reservasDto dto.ReservasDto
+
+	reservasDto, err := service.AdminService.GetReservasByDate(AnioInicio, AnioFinal, MesInicio, MesFinal, DiaInicio, DiaFinal)
+
+	if err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
+
+	c.JSON(http.StatusOK, reservasDto)
+}

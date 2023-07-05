@@ -55,3 +55,12 @@ func GetDisponibilidad(id int) model.Reservas {
 
 	return reservas
 }
+
+func GetReservasByDate() model.Reservas {
+	var reservas model.Reservas
+
+	Db.Preload("Hotel").Preload("Cliente").Find(&reservas)
+	log.Debug("Reservas: ", reservas)
+
+	return reservas
+}

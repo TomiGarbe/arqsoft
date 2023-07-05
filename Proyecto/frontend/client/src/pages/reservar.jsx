@@ -11,6 +11,7 @@ const ReservaPage = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const accountId = localStorage.getItem("id_cliente");
+  const [Hoteles, setHoteles] = useState([]);
 
   const Verificacion = () => {
     if (!isLoggedCliente) {
@@ -101,45 +102,26 @@ const ReservaPage = () => {
     setEndDate(event.target.value);
   };
 
-
-
-  /*const handleStartDateChange = (event) => {
-    setStartDate(event.target.value);
-    filterHotels();
-    const startDateObj = new Date(event.target.value);
-    const endDateObj = new Date(endDate);
-    if (startDateObj > endDateObj) {
-      setEndDate('');
-      alert("Fechas no válidas");
-    }
-  };
-
-  const handleEndDateChange = (event) => {
-    setEndDate(event.target.value);
-    filterHotels();
-    const startDateObj = new Date(startDate);
-    const endDateObj = new Date(event.target.value);
-    if (startDateObj > endDateObj) {
-      setEndDate('');
-      alert("Fechas no válidas");
-    }
-  };
-
-  const filterHotels = async () => {
-    alert(startDate,endDate);
-    if (startDate && endDate) {
-      const request = await fetch(`http://localhost:8090/cliente/disponibilidad/${hotelId}/${startDate}/${endDate}`);
-      const response = await request.json();
-      if (response === 0) {
-        setStartDate('');
-        setEndDate('');
-        alert("No hay habitaciones disponibles para esas fechas");
-      }
-    }
-  };*/
+  useEffect(() => {
+    setHoteles([]);
+    fetch('http://localhost:8090/cliente/hoteles')
+      .then(response => response.json())
+      .then(data => {
+        let hotelesArray = data;
+        hotelesArray = hotelesArray.filter((hotel) => hotel.id !== parseInt(hotelId));
+        setHoteles(hotelesArray);
+      })
+      .catch(error => {
+        console.error('Error al obtener los datos de hoteles:', error);
+      });
+  }, [hotelId]);
 
   const handleVolver = () => {
     window.location.href = 'http://localhost:3000/';
+  };
+
+  const Reservar = (hotelId) => {
+    window.location.href = `/reservar/${hotelId}`;
   };
 
   return (
@@ -150,8 +132,32 @@ const ReservaPage = () => {
         ) : (
           <div className="container45" onLoad={Verificacion}>
             <div className="informacion">
-              <div className="cuadroImag"><img src={hotelData.image} alt={hotelData.nombre} className="tamanoImag" /></div>
+              <div className="cuadroImag">
+                <img src={hotelData.image} alt={hotelData.nombre} className="tamanoImag" />
+              </div>
               <div className="descripcion">{hotelData["descripcion"]}</div>
+              <div className="amenities">
+                <h6>Amenities:</h6>
+                {hotelData.amenities && hotelData.amenities.length > 0 ? (
+                  hotelData.amenities.map((amenity, index) => (
+                    <span key={index} className="amenity">{amenity}</span>
+                  ))
+                ) : (
+                  <span>No hay amenities disponibles</span>
+                )}
+              </div>
+              <div className='other-hotels-title'><h6>Otras opciones:</h6></div>
+              <div className="other-hotels">
+                {Hoteles.map((hotel) => (
+                  <div key={hotel.id} className="other-hotels">
+                    <img src={hotel.image} alt={hotel.nombre} className="other-hotel-image" />
+                    <h4>{hotel.nombre}</h4>
+                    <button className="confReserva" onClick={() => Reservar(hotel.id)}>
+                      Reservar
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
             <div className="reserva-form">
               <h6>Realice reserva del Hotel</h6>
@@ -188,6 +194,7 @@ const ReservaPage = () => {
       </div>
     </div>
   );
+
 };
 
 export default ReservaPage;

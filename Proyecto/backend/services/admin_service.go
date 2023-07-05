@@ -29,6 +29,7 @@ type adminServiceInterface interface {
 	InsertHotel(hotelDto dto.HotelDto) (dto.HotelDto, e.ApiError)
 	AddTelefono(telefonoDto dto.TelefonoDto) (dto.HotelDto, e.ApiError)
 	GetReservas() (dto.ReservasDto, e.ApiError)
+	GetReservasByDate(AnioInicio, AnioFinal, MesInicio, MesFinal, DiaInicio, DiaFinal int) (dto.ReservasDto, e.ApiError)
 }
 
 var (
@@ -187,6 +188,8 @@ func (s *adminService) GetHotelById(id int) (dto.HotelDto, e.ApiError) {
 	hotelDto.Email = hotel.Email
 	hotelDto.Image = hotel.Image
 	hotelDto.Cant_Hab = hotel.Cant_Hab
+	hotelDto.Amenities = hotel.Amenities
+
 
 	for _, telefono := range hotel.Telefonos {
 		var dtoTelefono dto.TelefonoDto
@@ -215,6 +218,8 @@ func (s *adminService) GetHotelByEmail(email string) (dto.HotelDto, e.ApiError) 
 	hotelDto.Email = hotel.Email
 	hotelDto.Image = hotel.Image
 	hotelDto.Cant_Hab = hotel.Cant_Hab
+	hotelDto.Amenities = hotel.Amenities
+
 
 	for _, telefono := range hotel.Telefonos {
 		var dtoTelefono dto.TelefonoDto
@@ -243,6 +248,7 @@ func (s *adminService) GetHotelByNombre(nombre string) (dto.HotelDto, e.ApiError
 	hotelDto.Email = hotel.Email
 	hotelDto.Image = hotel.Image
 	hotelDto.Cant_Hab = hotel.Cant_Hab
+	hotelDto.Amenities = hotel.Amenities
 
 	for _, telefono := range hotel.Telefonos {
 		var dtoTelefono dto.TelefonoDto
@@ -269,6 +275,7 @@ func (s *adminService) GetHoteles() (dto.HotelesDto, e.ApiError) {
 		hotelDto.Email = hotel.Email
 		hotelDto.Image = hotel.Image
 		hotelDto.Cant_Hab = hotel.Cant_Hab
+		hotelDto.Amenities = hotel.Amenities
 
 		for _, telefono := range hotel.Telefonos {
 			var dtoTelefono dto.TelefonoDto
@@ -294,6 +301,7 @@ func (s *adminService) InsertHotel(hotelDto dto.HotelDto) (dto.HotelDto, e.ApiEr
 	hotel.Email = hotelDto.Email
 	hotel.Image = hotelDto.Image
 	hotel.Cant_Hab = hotelDto.Cant_Hab
+	hotel.Amenities = hotelDto.Amenities
 
 	hotel = hotelClient.InsertHotel(hotel)
 
@@ -321,6 +329,8 @@ func (s *adminService) AddTelefono(telefonoDto dto.TelefonoDto) (dto.HotelDto, e
 	hotelDto.Email = hotel.Email
 	hotelDto.Image = hotel.Image
 	hotelDto.Cant_Hab = hotel.Cant_Hab
+	hotelDto.Amenities = hotel.Amenities
+
 
 	for _, telefono := range hotel.Telefonos {
 		var dtoTelefono dto.TelefonoDto
@@ -352,6 +362,33 @@ func (s *adminService) GetReservas() (dto.ReservasDto, e.ApiError) {
 		reservaDto.Dias = reserva.Dias
 
 		reservasDto = append(reservasDto, reservaDto)
+	}
+
+	return reservasDto, nil
+}
+
+func (s *adminService) GetReservasByDate(AnioInicio, AnioFinal, MesInicio, MesFinal, DiaInicio, DiaFinal int) (dto.ReservasDto, e.ApiError) {
+	
+	var reservas model.Reservas = reservaClient.GetReservasByDate()
+	var reservasDto dto.ReservasDto
+
+	for _, reserva := range reservas {
+		var reservaDto dto.ReservaDto
+
+		if reserva.AnioFinal >= AnioInicio && reserva.AnioInicio <= AnioFinal && reserva.MesFinal >= MesInicio && reserva.MesInicio <= MesFinal && reserva.DiaFinal >= DiaInicio && reserva.DiaInicio <= DiaFinal {
+			reservaDto.ID = reserva.ID
+			reservaDto.HotelID = reserva.Hotel.ID
+			reservaDto.ClienteID = reserva.Cliente.ID
+			reservaDto.AnioInicio = reserva.AnioInicio
+			reservaDto.AnioFinal = reserva.AnioFinal
+			reservaDto.MesInicio = reserva.MesInicio
+			reservaDto.MesFinal = reserva.MesFinal
+			reservaDto.DiaInicio = reserva.DiaInicio
+			reservaDto.DiaFinal = reserva.DiaFinal
+			reservaDto.Dias = reserva.Dias
+
+			reservasDto = append(reservasDto, reservaDto)
+		}
 	}
 
 	return reservasDto, nil

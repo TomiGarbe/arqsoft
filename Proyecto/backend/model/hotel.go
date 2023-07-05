@@ -10,6 +10,9 @@ type Hotel struct {
 	Email     	string    	`gorm:"type:varchar(150);not null;unique"`
 	Image     	string 		`gorm:"type:varchar(255)"`
 	Cant_Hab  	int			`gorm:"not null"`
+
+	Amenities 	string 		`gorm:"type:varchar(1000)"`
+
 }
 
 type Hoteles []Hotel

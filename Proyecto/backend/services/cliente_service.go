@@ -24,6 +24,7 @@ type clienteServiceInterface interface {
 	GetReservasById(id int) (dto.ReservasDto, e.ApiError)
 	GetReservaById(id int) (dto.ReservaDto, e.ApiError)
 	GetDisponibilidad(id, AnioInicio, AnioFinal, MesInicio, MesFinal, DiaInicio, DiaFinal int) (disponibilidad int)
+	GetReservasByDate(AnioInicio, AnioFinal, MesInicio, MesFinal, DiaInicio, DiaFinal int) (dto.ReservasDto, e.ApiError)
 }
 
 var (
@@ -119,6 +120,8 @@ func (s *clienteService) GetHoteles() (dto.HotelesDto, e.ApiError) {
 		hotelDto.Email = hotel.Email
 		hotelDto.Image = hotel.Image
 		hotelDto.Cant_Hab = hotel.Cant_Hab
+		hotelDto.Amenities = hotel.Amenities
+
 
 		for _, telefono := range hotel.Telefonos {
 			var dtoTelefono dto.TelefonoDto
@@ -150,6 +153,8 @@ func (s *clienteService) GetHotelById(id int) (dto.HotelDto, e.ApiError) {
 	hotelDto.Email = hotel.Email
 	hotelDto.Image = hotel.Image
 	hotelDto.Cant_Hab = hotel.Cant_Hab
+	hotelDto.Amenities = hotel.Amenities
+
 
 	for _, telefono := range hotel.Telefonos {
 		var dtoTelefono dto.TelefonoDto
@@ -250,15 +255,37 @@ func (s *clienteService) GetDisponibilidad(id, AnioInicio, AnioFinal, MesInicio,
 	disponibilidad = hotel.Cant_Hab
 
 	for _, reserva := range reservas {
-		/*log.Debug("reserva.DiaFinal + DiaInicio + reserva.DiaInicio + DiaFinal")
-		log.Debug(reserva.DiaInicio)
-		log.Debug(reserva.DiaFinal)
-		log.Debug(DiaInicio)
-		log.Debug(DiaFinal)*/
 		if reserva.HotelID == id && reserva.AnioFinal >= AnioInicio && reserva.AnioInicio <= AnioFinal && reserva.MesFinal >= MesInicio && reserva.MesInicio <= MesFinal && reserva.DiaFinal >= DiaInicio && reserva.DiaInicio <= DiaFinal {
 			disponibilidad --
 		}
 	}
 
 	return disponibilidad
+}
+
+func (s *clienteService) GetReservasByDate(AnioInicio, AnioFinal, MesInicio, MesFinal, DiaInicio, DiaFinal int) (dto.ReservasDto, e.ApiError) {
+	
+	var reservas model.Reservas = reservaClient.GetReservasByDate()
+	var reservasDto dto.ReservasDto
+
+	for _, reserva := range reservas {
+		var reservaDto dto.ReservaDto
+
+		if reserva.AnioFinal >= AnioInicio && reserva.AnioInicio <= AnioFinal && reserva.MesFinal >= MesInicio && reserva.MesInicio <= MesFinal && reserva.DiaFinal >= DiaInicio && reserva.DiaInicio <= DiaFinal {
+			reservaDto.ID = reserva.ID
+			reservaDto.HotelID = reserva.Hotel.ID
+			reservaDto.ClienteID = reserva.Cliente.ID
+			reservaDto.AnioInicio = reserva.AnioInicio
+			reservaDto.AnioFinal = reserva.AnioFinal
+			reservaDto.MesInicio = reserva.MesInicio
+			reservaDto.MesFinal = reserva.MesFinal
+			reservaDto.DiaInicio = reserva.DiaInicio
+			reservaDto.DiaFinal = reserva.DiaFinal
+			reservaDto.Dias = reserva.Dias
+
+			reservasDto = append(reservasDto, reservaDto)
+		}
+	}
+
+	return reservasDto, nil
 }
