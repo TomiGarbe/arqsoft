@@ -17,7 +17,6 @@ func mapUrlsCliente() {
 	router.POST("/cliente/reserva", clienteController.InsertReserva)
 	router.GET("/cliente/reservas/:id", clienteController.GetReservasById)
 	router.GET("/cliente/reserva/:id", clienteController.GetReservaById)
-	router.GET("/cliente/disponibilidad/:id/:FechaInicio/:FechaFinal", clienteController.GetDisponibilidad)
-
+	router.GET("/cliente/disponibilidad/:id/:AnioInicio/:MesInicio/:DiaInicio/:AnioFinal/:MesFinal/:DiaFinal", clienteController.GetDisponibilidad)
 	log.Info("Terminando configuraciones de mapeos")
 }

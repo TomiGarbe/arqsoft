@@ -21,7 +21,7 @@ func GetReservaById(id int) model.Reserva {
 func GetReservasById(id int) model.Reservas {
 	var reservas model.Reservas
 
-	Db.Where("cliente_id = ?", id).Preload("Hotel").Preload("Cliente").First(&reservas)
+	Db.Where("cliente_id = ?", id).Preload("Hotel").Preload("Cliente").Find(&reservas)
 	log.Debug("Reservas: ", reservas)
 
 	return reservas
@@ -47,10 +47,10 @@ func InsertReserva(reserva model.Reserva) model.Reserva {
 	return reserva
 }
 
-func GetDisponibilidad(id, AnioInicio, AnioFinal, MesInicio, MesFinal, DiaInicio, DiaFinal int) model.Reservas {
+func GetDisponibilidad(id int) model.Reservas {
 	var reservas model.Reservas
 
-	Db.Preload("Hotel").Preload("Cliente").Where("hotel_id = ? AND anio_inicio >= ? OR anio_final <= ? AND mes_inicio >= ? OR mes_final <= ? AND dia_inicio >= ? OR dia_final <= ?", id, AnioInicio, AnioFinal, MesInicio, MesFinal, DiaInicio, DiaFinal).Find(&reservas)
+	Db.Where("hotel_id = ?", id).Preload("Hotel").Preload("Cliente").Find(&reservas)
 	log.Debug("Reservas: ", reservas)
 
 	return reservas

@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { AuthContext } from './login/auth';
 import { useParams } from 'react-router-dom';
 import './estilo/reservar.css';
+
 
 const ReservaPage = () => {
   const { hotelId } = useParams();
@@ -65,43 +66,80 @@ const ReservaPage = () => {
     }
   }, [hotelId]);
 
+
+
+  const filterHotels = useCallback(async () => {
+    const startDateObj = new Date(startDate);
+    const endDateObj = new Date(endDate);
+    const request = await fetch(`http://localhost:8090/cliente/disponibilidad/${hotelId}/${startDateObj.getFullYear()}/${startDateObj.getMonth() + 1}/${startDateObj.getDate() + 1}/${endDateObj.getFullYear()}/${endDateObj.getMonth() + 1}/${endDateObj.getDate() + 1}`);
+    const response = await request.json();
+    if (response === 0) {
+      setStartDate('');
+      setEndDate('');
+      alert("No hay habitaciones disponibles para esas fechas");
+    }
+  }, [startDate, endDate, hotelId]);
+
+  useEffect(() => {
+    if (startDate && endDate) {
+      const startDateObj = new Date(startDate);
+      const endDateObj = new Date(endDate);
+      if (startDateObj > endDateObj) {
+        setEndDate('');
+        alert("Fechas no válidas");
+      } else {
+        filterHotels();
+      }
+    }
+  }, [startDate, endDate, filterHotels]);
+
   const handleStartDateChange = (event) => {
     setStartDate(event.target.value);
+  };
+
+  const handleEndDateChange = (event) => {
+    setEndDate(event.target.value);
+  };
+
+
+
+  /*const handleStartDateChange = (event) => {
+    setStartDate(event.target.value);
+    filterHotels();
     const startDateObj = new Date(event.target.value);
     const endDateObj = new Date(endDate);
     if (startDateObj > endDateObj) {
       setEndDate('');
       alert("Fechas no válidas");
     }
-    if (startDate && endDate) {
-      filterHotels();
-    }
   };
 
   const handleEndDateChange = (event) => {
     setEndDate(event.target.value);
+    filterHotels();
     const startDateObj = new Date(startDate);
     const endDateObj = new Date(event.target.value);
     if (startDateObj > endDateObj) {
       setEndDate('');
       alert("Fechas no válidas");
     }
-    if (startDate && endDate) {
-      filterHotels();
-    }
   };
 
   const filterHotels = async () => {
-    const request = await fetch(`http://localhost:8090/cliente/disponibilidad/${hotelId}/${startDate}/${endDate}`);
-    const response = await request.json();
-    if (response === 0) {
-      setEndDate('');
-      alert("No hay habitaciones disponibles para esas fechas");
+    alert(startDate,endDate);
+    if (startDate && endDate) {
+      const request = await fetch(`http://localhost:8090/cliente/disponibilidad/${hotelId}/${startDate}/${endDate}`);
+      const response = await request.json();
+      if (response === 0) {
+        setStartDate('');
+        setEndDate('');
+        alert("No hay habitaciones disponibles para esas fechas");
+      }
     }
-  };
+  };*/
 
   const handleVolver = () => {
-    window.history.back();
+    window.location.href = 'http://localhost:3000/';
   };
 
   return (

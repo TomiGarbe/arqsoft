@@ -54,11 +54,19 @@ const HomePage = () => {
   };
 
   const filterHotels = async () => {
-    for (let i = 0; i < hotels.length; i++) {
-      const request = await fetch(`http://localhost:8090/cliente/disponibilidad/${hotels[i].id}/${startDate}/${endDate}`);
-      const response = await request.json();
-      if (response === 0) {
-        setHotels((prevHotels) => prevHotels.filter((hotel) => hotel.id !== hotels[i].id));
+    if (startDate === '' || endDate === '') {
+      window.location.href = '/';
+    }
+    else {
+      getHotels();
+      const startDateObj = new Date(startDate);
+      const endDateObj = new Date(endDate);
+      for (let i = 0; i < hotels.length; i++) {
+        const request = await fetch(`http://localhost:8090/cliente/disponibilidad/${hotels[i].id}/${startDateObj.getFullYear()}/${startDateObj.getMonth() + 1}/${startDateObj.getDate() + 1}/${endDateObj.getFullYear()}/${endDateObj.getMonth() + 1}/${endDateObj.getDate() + 1}`);
+        const response = await request.json();
+        if (response === 0) {
+          setHotels((prevHotels) => prevHotels.filter((hotel) => hotel.id !== hotels[i].id));
+        }
       }
     }
   };

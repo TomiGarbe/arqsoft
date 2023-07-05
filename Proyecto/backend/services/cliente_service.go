@@ -8,6 +8,7 @@ import (
 	"backend/dto"
 	"backend/model"
 	e "backend/utils/errors"
+	//log "github.com/sirupsen/logrus"
 )
 
 type clienteService struct{}
@@ -176,8 +177,8 @@ func (s *clienteService) InsertReserva(reservaDto dto.ReservaDto) (dto.ReservaDt
 	reserva.DiaFinal = reservaDto.DiaFinal
 	reserva.Dias = reservaDto.Dias
 
-	hotel.ID = reservaDto.HotelID
-	cliente.ID = reservaDto.ClienteID
+	reserva.HotelID = reservaDto.HotelID
+	reserva.ClienteID = reservaDto.ClienteID
 
 	reserva.Hotel = hotel
 	reserva.Cliente = cliente
@@ -243,13 +244,18 @@ func (s *clienteService) GetReservaById(id int) (dto.ReservaDto, e.ApiError) {
 
 func (s *clienteService) GetDisponibilidad(id, AnioInicio, AnioFinal, MesInicio, MesFinal, DiaInicio, DiaFinal int) (disponibilidad int) {
 	
-	var reservas model.Reservas = reservaClient.GetDisponibilidad(id, AnioInicio, AnioFinal, MesInicio, MesFinal, DiaInicio, DiaFinal)
+	var reservas model.Reservas = reservaClient.GetDisponibilidad(id)
 	var hotel model.Hotel = hotelClient.GetHotelById(id)
 	
 	disponibilidad = hotel.Cant_Hab
 
 	for _, reserva := range reservas {
-		if reserva.HotelID == id && (reserva.AnioInicio >= AnioInicio || reserva.AnioFinal <= AnioFinal) && (reserva.MesInicio >= MesInicio || reserva.MesFinal <= MesFinal) && (reserva.DiaInicio >= DiaInicio || reserva.DiaFinal <= DiaFinal) {
+		/*log.Debug("reserva.DiaFinal + DiaInicio + reserva.DiaInicio + DiaFinal")
+		log.Debug(reserva.DiaInicio)
+		log.Debug(reserva.DiaFinal)
+		log.Debug(DiaInicio)
+		log.Debug(DiaFinal)*/
+		if reserva.HotelID == id && reserva.AnioFinal >= AnioInicio && reserva.AnioInicio <= AnioFinal && reserva.MesFinal >= MesInicio && reserva.MesInicio <= MesFinal && reserva.DiaFinal >= DiaInicio && reserva.DiaInicio <= DiaFinal {
 			disponibilidad --
 		}
 	}
