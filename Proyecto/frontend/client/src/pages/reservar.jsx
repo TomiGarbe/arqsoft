@@ -151,7 +151,7 @@ const ReservaPage = () => {
                 {Hoteles.map((hotel) => (
                   <div key={hotel.id} className="other-hotels">
                     <img src={hotel.image} alt={hotel.nombre} className="other-hotel-image" />
-                    <h4>{hotel.nombre}</h4>
+                    <h6>{hotel.nombre}</h6>
                     <button className="confReserva" onClick={() => Reservar(hotel.id)}>
                       Reservar
                     </button>
