@@ -168,10 +168,12 @@ const ReservaPage = () => {
                 {Hoteles.map((hotel) => (
                   <div key={hotel.id} className="other-hotels">
                     <img src={hotel.image} alt={hotel.nombre} className="other-hotel-image" />
-                    <h6>{hotel.nombre}</h6>
-                    <button className="confReserva" onClick={() => Reservar(hotel.id)}>
-                      Reservar
-                    </button>
+                    <div className="hotel-details">
+                      <h6>{hotel.nombre}</h6>
+                      <button className="reservar-button" onClick={() => Reservar(hotel.id)}>
+                        Reservar
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
