@@ -12,6 +12,7 @@ const ReservaPage = () => {
   const [endDate, setEndDate] = useState('');
   const accountId = localStorage.getItem("id_cliente");
   const [Hoteles, setHoteles] = useState([]);
+  const [confirmarReserva, setConfirmarReserva] = useState(false);
 
   const Verificacion = () => {
     if (!isLoggedCliente) {
@@ -20,37 +21,43 @@ const ReservaPage = () => {
   };
 
   const handleReserva = () => {
-    const startDateObj = new Date(startDate);
-    const endDateObj = new Date(endDate);
-    const Dias = Math.round((endDateObj - startDateObj) / (1000 * 60 * 60 * 24));
-    const formData = {
-      hotel_id: parseInt(hotelId),
-      cliente_id: parseInt(accountId),
-      anio_inicio: startDateObj.getFullYear(),
-      anio_final: endDateObj.getFullYear(),
-      mes_inicio: startDateObj.getMonth() + 1, 
-      mes_final: endDateObj.getMonth() + 1, 
-      dia_inicio: startDateObj.getDate() + 1,
-      dia_final: endDateObj.getDate() + 1,
-      dias: Dias
-    };
+    if (confirmarReserva) {
+      const startDateObj = new Date(startDate);
+      const endDateObj = new Date(endDate);
+      const Dias = Math.round((endDateObj - startDateObj) / (1000 * 60 * 60 * 24));
+      const formData = {
+        hotel_id: parseInt(hotelId),
+        cliente_id: parseInt(accountId),
+        anio_inicio: startDateObj.getFullYear(),
+        anio_final: endDateObj.getFullYear(),
+        mes_inicio: startDateObj.getMonth() + 1, 
+        mes_final: endDateObj.getMonth() + 1, 
+        dia_inicio: startDateObj.getDate() + 1,
+        dia_final: endDateObj.getDate() + 1,
+        dias: Dias
+      };
 
-    fetch('http://localhost:8090/cliente/reserva', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    })
+      fetch('http://localhost:8090/cliente/reserva', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
       .then(response => response.json())
       .then(data => {
         console.log('Reserva exitosa:', data);
-        window.location.href = 'http://localhost:3000/';
+        alert('Reserva exitosa');
+        handleVolver();
       })
       .catch(error => {
         console.error('Error en el registro:', error);
         alert('Error al reservar');
       });
+    }
+    else {
+      alert("No hay habitaciones disponibles para esas fechas");
+    }
   };
 
   useEffect(() => {
@@ -62,37 +69,61 @@ const ReservaPage = () => {
           setHotelData(data);
         })
         .catch(error => {
-          console.error('Error al obtener los datos del cliente:', error);
+          console.error('Error al obtener los datos del hotel:', error);
         });
     }
   }, [hotelId]);
 
+  const getHoteles = useCallback(async () => {
+    try {
+      let hotelesArray = [];
+      const request = await fetch('http://localhost:8090/cliente/hoteles');
+      const response = await request.json();
+      hotelesArray = response.filter((hotel) => hotel.id !== parseInt(hotelId));
+      setHoteles(hotelesArray);
+    } catch (error) {
+      console.log("No se pudieron obtener los hoteles:", error);
+    }
+  }, [hotelId]);
 
+  useEffect(() => {
+    getHoteles();
+  }, [getHoteles]);
 
-  const filterHotels = useCallback(async () => {
+  const filterHotel = useCallback(async () => {
     const startDateObj = new Date(startDate);
     const endDateObj = new Date(endDate);
     const request = await fetch(`http://localhost:8090/cliente/disponibilidad/${hotelId}/${startDateObj.getFullYear()}/${startDateObj.getMonth() + 1}/${startDateObj.getDate() + 1}/${endDateObj.getFullYear()}/${endDateObj.getMonth() + 1}/${endDateObj.getDate() + 1}`);
     const response = await request.json();
     if (response === 0) {
-      setStartDate('');
-      setEndDate('');
-      alert("No hay habitaciones disponibles para esas fechas");
+      setConfirmarReserva(false);
     }
-  }, [startDate, endDate, hotelId]);
+    else {
+      setConfirmarReserva(true);
+    }
+    for (let i = 0; i < Hoteles.length; i++) {
+      const request = await fetch(`http://localhost:8090/cliente/disponibilidad/${Hoteles[i].id}/${startDateObj.getFullYear()}/${startDateObj.getMonth() + 1}/${startDateObj.getDate() + 1}/${endDateObj.getFullYear()}/${endDateObj.getMonth() + 1}/${endDateObj.getDate() + 1}`);
+      const response = await request.json();
+      if (response === 0) {
+        setHoteles((prevHotels) => prevHotels.filter((hotel) => hotel.id !== Hoteles[i].id));
+      }
+    }
+  }, [startDate, endDate, hotelId, Hoteles]);
 
   useEffect(() => {
     if (startDate && endDate) {
       const startDateObj = new Date(startDate);
       const endDateObj = new Date(endDate);
       if (startDateObj > endDateObj) {
-        setEndDate('');
         alert("Fechas no válidas");
       } else {
-        filterHotels();
+        filterHotel();
       }
     }
-  }, [startDate, endDate, filterHotels]);
+    else {
+      getHoteles();
+    }
+  }, [startDate, endDate, filterHotel, getHoteles]);
 
   const handleStartDateChange = (event) => {
     setStartDate(event.target.value);
@@ -101,20 +132,6 @@ const ReservaPage = () => {
   const handleEndDateChange = (event) => {
     setEndDate(event.target.value);
   };
-
-  useEffect(() => {
-    setHoteles([]);
-    fetch('http://localhost:8090/cliente/hoteles')
-      .then(response => response.json())
-      .then(data => {
-        let hotelesArray = data;
-        hotelesArray = hotelesArray.filter((hotel) => hotel.id !== parseInt(hotelId));
-        setHoteles(hotelesArray);
-      })
-      .catch(error => {
-        console.error('Error al obtener los datos de hoteles:', error);
-      });
-  }, [hotelId]);
 
   const handleVolver = () => {
     window.location.href = 'http://localhost:3000/';

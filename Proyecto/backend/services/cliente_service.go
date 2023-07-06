@@ -195,6 +195,33 @@ func (s *clienteService) InsertReserva(reservaDto dto.ReservaDto) (dto.ReservaDt
 	return reservaDto, nil
 }
 
+/*func (s *clienteService) InsertReserva(reservaDto dto.ReservaDto) (dto.ReservaDto, e.ApiError) {
+
+	var reserva model.Reserva
+	var hotel model.Hotel
+	var cliente model.Cliente
+
+	reserva.FechaInicio = reservaDto.FechaInicio
+	reserva.FechaFinal = reservaDto.FechaFinal
+	reserva.Dias = reservaDto.Dias
+	reserva.Disponibilidad = reservaDto.Disponibilidad
+
+	hotel.Nombre = reservaDto.Nombre
+	cliente.Name = reservaDto.Name
+	cliente.LastName = reservaDto.LastName
+	hotel = hotelClient.InsertHotel(hotel)
+	cliente = clienteClient.InsertCliente(cliente)
+
+	reserva.Hotel = hotel
+	reserva.Cliente = cliente
+
+	reserva = reservaClient.InsertReserva(reserva)
+
+	reservaDto.ID = reserva.ID
+
+	return reservaDto, nil
+}*/
+
 func (s *clienteService) GetReservasById(id int) (dto.ReservasDto, e.ApiError) {
 
 	var reservas model.Reservas = reservaClient.GetReservasById(id)
