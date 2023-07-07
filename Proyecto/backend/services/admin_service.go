@@ -10,6 +10,12 @@ import (
 	"backend/dto"
 	"backend/model"
 	e "backend/utils/errors"
+
+	"mime/multipart"
+	"path/filepath"
+	"github.com/google/uuid"
+	"os"
+	"io"
 )
 
 type adminService struct{}
@@ -26,7 +32,8 @@ type adminServiceInterface interface {
 	GetHotelByEmail(email string) (dto.HotelDto, e.ApiError)
 	GetHotelByNombre(nombre string) (dto.HotelDto, e.ApiError)
 	GetHoteles() (dto.HotelesDto, e.ApiError)
-	InsertHotel(hotelDto dto.HotelDto) (dto.HotelDto, e.ApiError)
+	InsertHotel(hotelDto dto.HotelDto, file *multipart.FileHeader) (dto.HotelDto, e.ApiError)
+	//InsertHotel(hotelDto dto.HotelDto) (dto.HotelDto, e.ApiError)
 	AddTelefono(telefonoDto dto.TelefonoDto) (dto.HotelDto, e.ApiError)
 	GetReservas() (dto.ReservasDto, e.ApiError)
 	GetReservasByDate(AnioInicio, AnioFinal, MesInicio, MesFinal, DiaInicio, DiaFinal int) (dto.ReservasDto, e.ApiError)
@@ -292,7 +299,62 @@ func (s *adminService) GetHoteles() (dto.HotelesDto, e.ApiError) {
 	return hotelesDto, nil
 }
 
-func (s *adminService) InsertHotel(hotelDto dto.HotelDto) (dto.HotelDto, e.ApiError) {
+func (s *adminService) InsertHotel(hotelDto dto.HotelDto, file *multipart.FileHeader) (dto.HotelDto, e.ApiError) {
+	var hotel model.Hotel
+
+	fileName := uuid.New().String()
+	fileExt := filepath.Ext(file.Filename)
+
+	filePath := "Imagenes" + "/" + fileName + fileExt
+
+	hotelDto.Image = filePath
+
+	hotel.Nombre = hotelDto.Nombre
+	hotel.Descripcion = hotelDto.Descripcion
+	hotel.Email = hotelDto.Email
+	hotel.Image = hotelDto.Image
+	hotel.Cant_Hab = hotelDto.Cant_Hab
+	hotel.Amenities = hotelDto.Amenities
+
+	hotel = hotelClient.InsertHotel(hotel)
+
+	err := saveFile(file, filePath)
+	if err != nil {
+		// Manejar el error en caso de fallo al guardar la imagen
+		//_ = i.DeleteImageById(image.Id) // Eliminar la imagen insertada anteriormente
+		return hotelDto, e.NewInternalServerApiError("Failed to save image", err)
+	}
+
+	hotelDto.ID = hotel.ID
+
+	return hotelDto, nil
+}
+
+func saveFile(imageFile *multipart.FileHeader, filePath string) error {
+	// Abrir el archivo cargado
+	file, err := imageFile.Open()
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	// Crear el archivo destino en el sistema de archivos
+	dst, err := os.Create(filePath)
+	if err != nil {
+		return err
+	}
+	defer dst.Close()
+
+	// Copiar el contenido del archivo cargado al archivo destino
+	_, err = io.Copy(dst, file)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+/*func (s *adminService) InsertHotel(hotelDto dto.HotelDto) (dto.HotelDto, e.ApiError) {
 
 	var hotel model.Hotel
 
@@ -308,7 +370,7 @@ func (s *adminService) InsertHotel(hotelDto dto.HotelDto) (dto.HotelDto, e.ApiEr
 	hotelDto.ID = hotel.ID
 
 	return hotelDto, nil
-}
+}*/
 
 func (s *adminService) AddTelefono(telefonoDto dto.TelefonoDto) (dto.HotelDto, e.ApiError) {
 

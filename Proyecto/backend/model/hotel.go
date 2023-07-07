@@ -8,7 +8,7 @@ type Hotel struct {
 	Telefonos 	Telefonos 	`gorm:"foreignkey:HotelID;unique"`
 
 	Email     	string    	`gorm:"type:varchar(150);not null;unique"`
-	Image     	string 		`gorm:"type:varchar(255)"`
+	Image     	string 		`gorm:"type:varchar(500)"`
 	Cant_Hab  	int			`gorm:"not null"`
 
 	Amenities 	string 		`gorm:"type:varchar(1000)"`
