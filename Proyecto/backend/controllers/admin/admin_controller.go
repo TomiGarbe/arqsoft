@@ -182,7 +182,7 @@ func InsertHotel(c *gin.Context) {
 	}
 
 	// Guardar archivo de imagen
-	file, err := c.FormFile("imagen")
+	file, err := c.FormFile("image")
 	if err != nil {
 		log.Error(err.Error())
 		c.JSON(http.StatusBadRequest, err.Error())

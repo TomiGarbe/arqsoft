@@ -18,7 +18,7 @@ function RegistrationHotel() {
     nombre: '',
     descripcion: '',
     email: '',
-    imagen: '',
+    image: '',
     cant_hab: '',
     amenities: ''
   });
@@ -26,7 +26,7 @@ function RegistrationHotel() {
   const handleChange = (event) => {
     const { name, value, files } = event.target;
 
-    if (name === "imagen") {
+    if (name === "image") {
       setFormData((prevFormData) => ({
         ...prevFormData,
         [name]: files[0],
@@ -45,7 +45,7 @@ function RegistrationHotel() {
         [name]: value,
       }));
     }
-    alert(formData);
+    alert(JSON.stringify(formData));
   };
 
   useEffect(() => {
@@ -88,7 +88,7 @@ function RegistrationHotel() {
       formDataWithImage.append("nombre", formData.nombre);
       formDataWithImage.append("descripcion", formData.descripcion);
       formDataWithImage.append("email", formData.email);
-      formDataWithImage.append("imagen", formData.imagen);
+      formDataWithImage.append("image", formData.image);
       formDataWithImage.append("cant_hab", formData.cant_hab);
       formDataWithImage.append("amenities", amenities.join(","));
 
@@ -149,8 +149,9 @@ function RegistrationHotel() {
           Imagen:
           <input
             type="file"
-            name="imagen"
+            name="image"
             onChange={handleChange}
+            accept="image/*"
           />
         </label>
         <br />
