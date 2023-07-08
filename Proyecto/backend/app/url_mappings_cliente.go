@@ -13,6 +13,7 @@ func mapUrlsCliente() {
 	router.GET("/cliente/email/:email", clienteController.GetClienteByEmail)
 	router.POST("/cliente", clienteController.InsertCliente)
 	router.GET("/cliente/hoteles", clienteController.GetHoteles)
+	router.GET("/image/hotel/:id", clienteController.GetImagenesByHotelId)
 	router.GET("/cliente/hotel/:id", clienteController.GetHotelById)
 	router.POST("/cliente/reserva", clienteController.InsertReserva)
 	router.GET("/cliente/reservas/:id", clienteController.GetReservasById)

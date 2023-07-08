@@ -4,11 +4,11 @@ import (
 	clienteClient "backend/clients/cliente"
 	hotelClient "backend/clients/hotel"
 	reservaClient "backend/clients/reserva"
+	imagenClient "backend/clients/imagen"
 
 	"backend/dto"
 	"backend/model"
 	e "backend/utils/errors"
-	//log "github.com/sirupsen/logrus"
 )
 
 type clienteService struct{}
@@ -19,6 +19,7 @@ type clienteServiceInterface interface {
 	GetClienteByEmail(email string) (dto.ClienteDto, e.ApiError)
 	InsertCliente(clienteDto dto.ClienteDto) (dto.ClienteDto, e.ApiError)
 	GetHoteles() (dto.HotelesDto, e.ApiError)
+	GetImagenesByHotelId(hotelID int) (dto.ImagenesDto, e.ApiError)
 	GetHotelById(id int) (dto.HotelDto, e.ApiError)
 	InsertReserva(reservaDto dto.ReservaDto) (dto.ReservaDto, e.ApiError)
 	GetReservasById(id int) (dto.ReservasDto, e.ApiError)
@@ -118,7 +119,6 @@ func (s *clienteService) GetHoteles() (dto.HotelesDto, e.ApiError) {
 		hotelDto.Nombre = hotel.Nombre
 		hotelDto.Descripcion = hotel.Descripcion
 		hotelDto.Email = hotel.Email
-		hotelDto.Image = hotel.Image
 		hotelDto.Cant_Hab = hotel.Cant_Hab
 		hotelDto.Amenities = hotel.Amenities
 
@@ -138,6 +138,23 @@ func (s *clienteService) GetHoteles() (dto.HotelesDto, e.ApiError) {
 	return hotelesDto, nil
 }
 
+func (i *clienteService) GetImagenesByHotelId(hotelID int) (dto.ImagenesDto, e.ApiError) {
+	imagenes := imagenClient.GetImagenesByHotelId(hotelID)
+	imagenDtos := make([]dto.ImagenDto, len(imagenes))
+
+	for i, imagen := range imagenes {
+		imagenDto := dto.ImagenDto{
+			Id:   imagen.ID,
+			Url:  imagen.Url,
+		}
+		imagenDtos[i] = imagenDto
+	}
+
+	return dto.ImagenesDto{
+		Imagenes: imagenDtos,
+	}, nil
+}
+
 func (s *clienteService) GetHotelById(id int) (dto.HotelDto, e.ApiError) {
 
 	var hotel model.Hotel = hotelClient.GetHotelById(id)
@@ -151,7 +168,6 @@ func (s *clienteService) GetHotelById(id int) (dto.HotelDto, e.ApiError) {
 	hotelDto.Nombre = hotel.Nombre
 	hotelDto.Descripcion = hotel.Descripcion
 	hotelDto.Email = hotel.Email
-	hotelDto.Image = hotel.Image
 	hotelDto.Cant_Hab = hotel.Cant_Hab
 	hotelDto.Amenities = hotel.Amenities
 
@@ -194,33 +210,6 @@ func (s *clienteService) InsertReserva(reservaDto dto.ReservaDto) (dto.ReservaDt
 
 	return reservaDto, nil
 }
-
-/*func (s *clienteService) InsertReserva(reservaDto dto.ReservaDto) (dto.ReservaDto, e.ApiError) {
-
-	var reserva model.Reserva
-	var hotel model.Hotel
-	var cliente model.Cliente
-
-	reserva.FechaInicio = reservaDto.FechaInicio
-	reserva.FechaFinal = reservaDto.FechaFinal
-	reserva.Dias = reservaDto.Dias
-	reserva.Disponibilidad = reservaDto.Disponibilidad
-
-	hotel.Nombre = reservaDto.Nombre
-	cliente.Name = reservaDto.Name
-	cliente.LastName = reservaDto.LastName
-	hotel = hotelClient.InsertHotel(hotel)
-	cliente = clienteClient.InsertCliente(cliente)
-
-	reserva.Hotel = hotel
-	reserva.Cliente = cliente
-
-	reserva = reservaClient.InsertReserva(reserva)
-
-	reservaDto.ID = reserva.ID
-
-	return reservaDto, nil
-}*/
 
 func (s *clienteService) GetReservasById(id int) (dto.ReservasDto, e.ApiError) {
 

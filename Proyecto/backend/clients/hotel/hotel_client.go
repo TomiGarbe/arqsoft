@@ -55,14 +55,3 @@ func InsertHotel(hotel model.Hotel) model.Hotel {
 	log.Debug("hotel Creado: ", hotel.ID)
 	return hotel
 }
-
-/*func InsertHotel(hotel model.Hotel) model.Hotel {
-	result := Db.Create(&hotel)
-
-	if result.Error != nil {
-		log.Error("")
-	}
-	
-	log.Debug("hotel Creado: ", hotel.ID)
-	return hotel
-}*/

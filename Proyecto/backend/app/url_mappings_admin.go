@@ -23,6 +23,9 @@
 		router.POST("/admin/hotel/:id/telefono", adminController.AddTelefono)
 		router.GET("/admin/reservas", adminController.GetReservas)
 		router.GET("/admin/reservas-por-fecha/:AnioInicio/:MesInicio/:DiaInicio/:AnioFinal/:MesFinal/:DiaFinal", adminController.GetReservasByDate)
+		router.POST("/admin/hotel/:id/add-imagen", adminController.InsertImagenByHotelId)
+		router.GET("/imagen/hotel/:id", adminController.GetImagenesByHotelId)
+		router.DELETE("/imagendelete/:id", adminController.DeleteImagenById)
 
 		log.Info("Terminando configuraciones de mapeos")
 	}

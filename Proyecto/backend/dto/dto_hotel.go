@@ -5,7 +5,7 @@ type HotelDto struct {
 	Nombre   	string 	`json:"nombre"`
 	Descripcion	string 	`json:"descripcion"`
 	Email    	string 	`json:"email"`
-	Image    	string 	`json:"image"`
+	Imagenes  []string  `json:"imagenes"`
 	Cant_Hab 	int    	`json:"cant_hab"`
 	Amenities 	string 	`json:"amenities"`
 

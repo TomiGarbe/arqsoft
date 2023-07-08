@@ -140,6 +140,20 @@ func GetHoteles(c *gin.Context) {
 	c.JSON(http.StatusOK, hotelesDto)
 }
 
+func GetImagenesByHotelId(c *gin.Context) {
+	log.Debug("Hotel id to load images: " + c.Param("id"))
+
+	hotelID, _ := strconv.Atoi(c.Param("id"))
+	imagenesDto, err := service.AdminService.GetImagenesByHotelId(hotelID)
+
+	if err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
+
+	c.JSON(http.StatusOK, imagenesDto)
+}
+
 func GetHotelById(c *gin.Context) {
 	log.Debug("ID de Hotel para cargar: " + c.Param("id"))
 

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+/*import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from './login/auth';
 import './estilo/insert_hoteles.css';
 
@@ -203,7 +203,7 @@ function RegistrationHotel() {
   );
 }
 
-export default RegistrationHotel;
+export default RegistrationHotel;*/
 
 
 
@@ -400,7 +400,7 @@ export default RegistrationHotel;*/
 
 
 
-/*import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from './login/auth';
 import './estilo/insert_hoteles.css'
 
@@ -409,7 +409,7 @@ function RegistrationHotel() {
   const [Nombre, setNombre] = useState({});
   const { isLoggedAdmin } = useContext(AuthContext);
   const [amenities, setAmenities] = useState([]);
-
+  const [image, setImage] = useState('');
   
   const Verificacion = () => {
     if (!isLoggedAdmin) {
@@ -421,15 +421,16 @@ function RegistrationHotel() {
     nombre: '',
     descripcion: '',
     email: '',
-    image: '',
     cant_hab: '',
     amenities: ''
   });
 
   const handleChange = (event) => {
-    const { name, value } = event.target;
-  
-    if (name === "cant_hab" && value !== "") {
+    const { name, value, files } = event.target;
+
+    if (name === "image") {
+      setImage(files[0]);
+    } else if (name === "cant_hab" && value !== "") {
       const intValue = parseInt(value);
       setFormData((prevFormData) => ({
         ...prevFormData,
@@ -443,6 +444,7 @@ function RegistrationHotel() {
         [name]: value,
       }));
     }
+    //alert(JSON.stringify(formData));
   };
 
   useEffect(() => {
@@ -484,6 +486,12 @@ function RegistrationHotel() {
     }
     else
     {
+      const formDataWithImage = new FormData();
+      formDataWithImage.append("image", image);
+      console.log(formDataWithImage)
+      let hotelId = '';
+      alert(JSON.stringify(formData));
+
       fetch('http://localhost:8090/admin/hotel', {
       method: 'POST',
       headers: {
@@ -494,7 +502,21 @@ function RegistrationHotel() {
       .then(response => response.json())
       .then(data => {
         console.log('Registro exitoso:', data);
-        window.location.href = '/ver-hoteles';
+        hotelId = data.id;
+        fetch(`http://localhost:8090/admin/${hotelId}/add-image`, {
+        method: 'POST',
+        body: formDataWithImage
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Registro exitoso:', data);
+          //window.location.href = '/ver-hoteles';
+        })
+        .catch(error => {
+          console.error('Error en el registro:', error);
+          alert('Imagen no registrada');
+        });
+        alert(hotelId);
       })
       .catch(error => {
         console.error('Error en el registro:', error);
@@ -543,9 +565,8 @@ function RegistrationHotel() {
         <label>
          Imagen:
           <input
-            type="text"
-            name="imagen"
-            value={formData.imagen}
+            type="file"
+            name="image"
             onChange={handleChange}
           />
         </label>
@@ -578,4 +599,4 @@ function RegistrationHotel() {
   );
 }
 
-export default RegistrationHotel;*/
+export default RegistrationHotel;
