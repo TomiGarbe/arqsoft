@@ -6,6 +6,7 @@ import (
 	clienteClient "backend/clients/cliente"
 	hotelClient "backend/clients/hotel"
 	reservaClient "backend/clients/reserva"
+	imagenClient "backend/clients/imagen"
 
 	"backend/model"
 
@@ -42,6 +43,7 @@ func init() {
 	hotelClient.Db = db
 	telefonoClient.Db = db
 	reservaClient.Db = db
+	imagenClient.Db = db
 }
 
 func StartDbEngine() {
@@ -51,6 +53,7 @@ func StartDbEngine() {
 	db.AutoMigrate(&model.Hotel{})
 	db.AutoMigrate(&model.Reserva{})
 	db.AutoMigrate(&model.Telefono{})
+	db.AutoMigrate(&model.Imagen{})
 
 	log.Info("Finalización de las tablas de la base de datos de migración")
 }
