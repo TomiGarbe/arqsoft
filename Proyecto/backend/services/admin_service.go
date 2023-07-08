@@ -32,7 +32,7 @@ type adminServiceInterface interface {
 	GetHotelByEmail(email string) (dto.HotelDto, e.ApiError)
 	GetHotelByNombre(nombre string) (dto.HotelDto, e.ApiError)
 	GetHoteles() (dto.HotelesDto, e.ApiError)
-	InsertHotel(hotelDto dto.HotelDto, file *multipart.FileHeader) (dto.HotelDto, e.ApiError)
+	InsertHotel(hotelDto dto.HotelDto) (dto.HotelDto, e.ApiError)
 	//InsertHotel(hotelDto dto.HotelDto) (dto.HotelDto, e.ApiError)
 	AddTelefono(telefonoDto dto.TelefonoDto) (dto.HotelDto, e.ApiError)
 	GetReservas() (dto.ReservasDto, e.ApiError)
@@ -301,13 +301,6 @@ func (s *adminService) GetHoteles() (dto.HotelesDto, e.ApiError) {
 
 func (s *adminService) InsertHotel(hotelDto dto.HotelDto, file *multipart.FileHeader) (dto.HotelDto, e.ApiError) {
 	var hotel model.Hotel
-
-	fileName := uuid.New().String()
-	fileExt := filepath.Ext(file.Filename)
-
-	filePath := "Imagenes" + "/" + fileName + fileExt
-
-	hotelDto.Image = filePath
 
 	hotel.Nombre = hotelDto.Nombre
 	hotel.Descripcion = hotelDto.Descripcion

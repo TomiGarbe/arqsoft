@@ -8,6 +8,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
+
+	"path/filepath"
+	"github.com/google/uuid"
 )
 
 func GetAdminById(c *gin.Context) {
@@ -172,16 +175,16 @@ func GetHoteles(c *gin.Context) {
 }
 
 func InsertHotel(c *gin.Context) {
+	log.Info("Recibiendo solicitud POST para InsertHotel")
 	var hotelDto dto.HotelDto
-	err := c.ShouldBindJSON(&hotelDto)
+	err := c.ShouldBind(&hotelDto.Image)
 
 	if err != nil {
 		log.Error(err.Error())
-		c.JSON(http.StatusBadRequest, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error al enlazar los datos de la solicitud"})
 		return
 	}
 
-	// Guardar archivo de imagen
 	file, err := c.FormFile("image")
 	if err != nil {
 		log.Error(err.Error())
@@ -189,10 +192,24 @@ func InsertHotel(c *gin.Context) {
 		return
 	}
 
-	// Actualizar el campo de imagen en el DTO
-	//hotelDto.Image = filename
+	fileName := uuid.New().String()
+	fileExt := filepath.Ext(file.Filename)
 
-	hotelDto, er := service.AdminService.InsertHotel(hotelDto, file)
+	filePath := "Imagenes" + "/" + fileName + fileExt
+
+	hotelDto.Image = filePath
+
+	e := c.ShouldBindJSON(&hotelDto)
+
+	if e != nil {
+		log.Error(e.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error al enlazar los datos de la solicitud"})
+		return
+	}
+
+	hotelDto, er := service.AdminService.InsertHotel(hotelDto)
+
+	log.Infof("Datos recibidos: %+v", hotelDto)
 
 	if er != nil {
 		c.JSON(er.Status(), er)
