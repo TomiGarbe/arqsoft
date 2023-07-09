@@ -119,9 +119,15 @@ textarea {
     margin-left: 10px;
 }
 
-.amenities {
+.amenities .amenity {
     margin-left: 20px;
     margin-top: 15px;
+    flex-direction: column;
+}
+
+.amenities .amenity {
+  display: block;
+  margin-bottom: 5px; 
 }
   
 .amenities h6 {

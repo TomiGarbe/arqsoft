@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/static/css/main.b368c5f7.css",
+    "main.js": "/static/js/main.9b68c083.js",
+    "static/js/787.c4e7f8f9.chunk.js": "/static/js/787.c4e7f8f9.chunk.js",
+    "static/media/fondoop1.jpg": "/static/media/fondoop1.cc88423209e2003de24f.jpg",
+    "static/media/fondLogClien.jpg": "/static/media/fondLogClien.02337ad7926767f319ec.jpg",
+    "static/media/Aston_Panorama_Habana.jpeg": "/static/media/Aston_Panorama_Habana.ecdbcd35cb17d8e8d155.jpeg",
+    "static/media/fondo1.avif": "/static/media/fondo1.5cc5e2bcf5b39b95e5f1.avif",
+    "index.html": "/index.html",
+    "main.b368c5f7.css.map": "/static/css/main.b368c5f7.css.map",
+    "main.9b68c083.js.map": "/static/js/main.9b68c083.js.map",
+    "787.c4e7f8f9.chunk.js.map": "/static/js/787.c4e7f8f9.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b368c5f7.css",
+    "static/js/main.9b68c083.js"
+  ]
+}

@@ -41,6 +41,7 @@ type adminServiceInterface interface {
 	AddTelefono(telefonoDto dto.TelefonoDto) (dto.HotelDto, e.ApiError)
 	GetReservas() (dto.ReservasDto, e.ApiError)
 	GetReservasByDate(AnioInicio, AnioFinal, MesInicio, MesFinal, DiaInicio, DiaFinal int) (dto.ReservasDto, e.ApiError)
+	UpdateHotel(hotelID int, updatedHotelDto dto.HotelDto) (dto.HotelDto, e.ApiError)
 }
 
 var (
@@ -554,4 +555,28 @@ func (s *adminService) GetReservasByDate(AnioInicio, AnioFinal, MesInicio, MesFi
 	}
 
 	return reservasDto, nil
+}
+
+func (s *adminService) UpdateHotel(hotelID int, updatedHotelDto dto.HotelDto) (dto.HotelDto, e.ApiError) {
+	// Obtener el hotel existente desde la base de datos
+	hotel := hotelClient.GetHotelById(hotelID)
+
+	if hotel.ID == 0 {
+		return dto.HotelDto{}, e.NewNotFoundApiError("Hotel not found")
+	}
+
+	// Actualizar los valores del hotel con los datos proporcionados
+	hotel.Nombre = updatedHotelDto.Nombre
+	hotel.Descripcion = updatedHotelDto.Descripcion
+	hotel.Email = updatedHotelDto.Email
+	hotel.Cant_Hab = updatedHotelDto.Cant_Hab
+	hotel.Amenities = updatedHotelDto.Amenities
+
+	// Guardar los cambios en la base de datos
+	hotel = hotelClient.UpdateHotel(hotel)
+
+	// Construir el DTO del hotel actualizado para devolverlo como respuesta
+	updatedHotelDto.ID = hotel.ID
+
+	return updatedHotelDto, nil
 }

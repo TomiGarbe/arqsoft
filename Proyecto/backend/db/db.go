@@ -55,5 +55,5 @@ func StartDbEngine() {
 	db.AutoMigrate(&model.Telefono{})
 	db.AutoMigrate(&model.Imagen{})
 
-	log.Info("Finalización de las tablas de la base de datos de migración")
+	log.Info("Finalizacion de las tablas de la base de datos de migracion")
 }

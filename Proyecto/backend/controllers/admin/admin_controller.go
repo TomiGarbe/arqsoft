@@ -233,7 +233,6 @@ func InsertHotel(c *gin.Context) {
 func InsertImagenByHotelId(c *gin.Context) {
 	var imagenDto dto.ImagenDto
 	hotelID, erint := strconv.Atoi(c.Param("id"))
-	err := c.BindJSON(&imagenDto)
 	if erint != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": erint.Error()})
 		return
@@ -386,4 +385,39 @@ func GetReservasByDate(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, reservasDto)
+}
+
+func UpdateHotel(c *gin.Context) {
+	// Obtener el ID del hotel a editar
+	hotelID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid hotel ID"})
+		return
+	}
+
+	// Obtener los datos actualizados del hotel desde el cuerpo de la solicitud
+	var updatedHotelDto dto.HotelDto
+	err = c.BindJSON(&updatedHotelDto)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid data"})
+		return
+	}
+
+	// Obtener el hotel existente desde la base de datos
+	existingHotel, err := service.AdminService.GetHotelById(hotelID)
+	if existingHotel.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Hotel not found"})
+		return
+	}
+
+	// Actualizar los atributos del hotel con los nuevos valores
+	existingHotel.Nombre = updatedHotelDto.Nombre
+	existingHotel.Descripcion = updatedHotelDto.Descripcion
+	existingHotel.Email = updatedHotelDto.Email
+	existingHotel.Cant_Hab = updatedHotelDto.Cant_Hab
+	existingHotel.Amenities = updatedHotelDto.Amenities
+
+	// Guardar los cambios en la base de datos
+	updatedHotel, err := service.AdminService.UpdateHotel(hotelID, existingHotel)
+	c.JSON(http.StatusOK, updatedHotel)
 }

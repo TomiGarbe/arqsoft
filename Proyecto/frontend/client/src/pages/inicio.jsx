@@ -1,9 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { AuthContext } from './login/auth';
 import './estilo/inicio.css';
+import imagen from './estilo/imagenes/fondoop1.jpg';
 
 const HomePage = () => {
   const [hotels, setHotels] = useState([]);
+  const [imagenes, setImagenes] = useState([]);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const { isLoggedCliente } = useContext(AuthContext);
@@ -19,9 +21,30 @@ const HomePage = () => {
     }
   };
 
+  const getImagenes = useCallback(async () => {
+    try {
+      const imagenesArray = [];
+      for (let i = 0; i < hotels.length; i++) {
+        const hotel = hotels[i];
+        const request = await fetch(`http://localhost:8090/imagenes/hotel/${hotel.id}`);
+        const response = await request.json();
+        if (response.length > 0) {
+          imagenesArray.push(response[0]);
+        }
+      }
+      setImagenes(imagenesArray);
+    } catch (error) {
+      console.log("No se pudieron obtener los hoteles:", error);
+    }
+  }, [hotels]);
+
   useEffect(() => {
     getHotels();
   }, []);
+
+  useEffect(() => {
+    getImagenes();
+  }, [getImagenes]);
 
   const Verificacion = (hotelId) => {
     if (!isLoggedCliente) {
@@ -114,9 +137,11 @@ const HomePage = () => {
       <div className="containerIni">
       <div className="hotels-container">
             {hotels.length ? 
-              ( hotels.map((hotel) => (
+              ( hotels.map((hotel) => {
+                //const imagen = imagenes.find((imagen) => imagen.hotel_id === hotels.id);
+                return (
                 <div className='hotel-card' key={hotel.id}>
-                  <img src={hotel.image} alt={hotel.nombre} className="hotel-image" />
+                  <img src="fondLogClien.jpg" alt={hotel.nombre} className="hotel-image" />
                   <div className="hotel-info">
                     <h4>{hotel.nombre}</h4>
                     <p>{hotel.email} </p>
@@ -125,7 +150,7 @@ const HomePage = () => {
                     </button>
                   </div>
                 </div>
-              ))
+              );})
               ) : (
                 <p>No hay hoteles</p>
             )}
