@@ -12,9 +12,8 @@ const ClienteLogin = () => {
     fetch(`http://localhost:8090/cliente/email/${email}`)
     .then(response => response.json())
     .then(data => {
-      if (email === data.email && password === data.password) {
-        const token = 'TOKEN_CLIENTE';
-        loginCliente(token, data.id);
+      if (email === data.cliente.email && password === data.cliente.password) {
+        loginCliente(data.token, data.cliente.id);
         window.location.href = '/';
       } else {
         alert('Credenciales incorrectas');

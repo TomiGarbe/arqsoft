@@ -33,7 +33,7 @@ const HomePage = () => {
       }
       setImagenes(imagenesArray);
     } catch (error) {
-      console.log("No se pudieron obtener los hoteles:", error);
+      console.log("No se pudieron obtener las imagenes de loshoteles:", error);
     }
   }, [hotels]);
 
@@ -143,7 +143,7 @@ const HomePage = () => {
                 return (
                   <div className="hotel-card" key={hotel.id}>
                     {imagen ? (
-                      <img src={imagen.url} alt={hotel.nombre} className="hotel-image" />
+                      <img src={require(imagen.url)} alt={hotel.nombre} className="hotel-image" />
                     ) : (
                       <div className="hotel-image-placeholder" />
                     )}

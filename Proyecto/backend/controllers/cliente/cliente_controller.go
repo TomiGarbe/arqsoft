@@ -5,7 +5,9 @@ import (
 	service "backend/services"
 	"net/http"
 	"strconv"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 )
@@ -52,7 +54,23 @@ func GetClienteByEmail(c *gin.Context) {
 		c.JSON(err.Status(), err)
 		return
 	}
-	c.JSON(http.StatusOK, clienteDto)
+
+	token := generateToken(clienteDto)
+    if err != nil {
+        log.Error(err.Error())
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
+        return
+    }
+
+    response := struct {
+        Token string      `json:"token"`
+        Cliente  dto.ClienteDto `json:"cliente"`
+    }{
+        Token: token,
+        Cliente:  clienteDto,
+    }
+
+	c.JSON(http.StatusOK, response)
 }
 
 func InsertCliente(c *gin.Context) {
@@ -208,4 +226,18 @@ func GetReservasByDate(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, reservasDto)
+}
+
+func generateToken(loginDto dto.ClienteDto) (string) {
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
+	claims["id"] = loginDto.ID
+	claims["expiration"] = time.Now().Add(time.Hour * 24).Unix()
+
+	tokenString, err := token.SignedString([]byte("your-secret-key"))
+	if err != nil {
+		return ""
+	}
+
+	return tokenString
 }

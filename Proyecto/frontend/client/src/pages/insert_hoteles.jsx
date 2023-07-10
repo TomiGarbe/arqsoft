@@ -90,36 +90,38 @@ function RegistrationHotel() {
       let hotelId = '';
       alert(JSON.stringify(formData));
 
-      fetch('http://localhost:8090/admin/hotel', {
+      const response = await fetch('http://localhost:8090/admin/hotel', {
       method: 'POST',
       headers: {
       'Content-Type': 'application/json'
       },
       body: JSON.stringify(formData)
       })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Registro exitoso:', data);
+
+      const data = await response.json()
+
+      if (response.ok) {
+        console.log('Registro exitoso:', response);
         hotelId = data.id;
-        fetch(`http://localhost:8090/admin/hotel/${hotelId}/add-imagen`, {
-        method: 'POST',
-        body: formDataWithImage
+
+        const res = await fetch(`http://localhost:8090/admin/hotel/${hotelId}/add-imagen`, {
+          method: 'POST',
+          body: formDataWithImage
         })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Registro exitoso:', data);
+
+        if (res.ok) {
+          console.log('Registro exitoso:', res);
           window.location.href = '/ver-hoteles';
-        })
-        .catch(error => {
-          console.error('Error en el registro:', error);
+        }
+        else {
+          console.error('Error en el registro:', res);
           alert('Imagen no registrada');
-        });
-        alert(hotelId);
-      })
-      .catch(error => {
-        console.error('Error en el registro:', error);
+        }
+      }
+      else {
+        console.error('Error en el registro:', response);
         alert('Hotel no registrado');
-      });
+      }
     }
   };
 
