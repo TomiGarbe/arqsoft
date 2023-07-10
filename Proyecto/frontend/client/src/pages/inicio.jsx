@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { AuthContext } from './login/auth';
 import './estilo/inicio.css';
-import imagen from './estilo/imagenes/fondoop1.jpg';
 
 const HomePage = () => {
   const [hotels, setHotels] = useState([]);
@@ -26,10 +25,10 @@ const HomePage = () => {
       const imagenesArray = [];
       for (let i = 0; i < hotels.length; i++) {
         const hotel = hotels[i];
-        const request = await fetch(`http://localhost:8090/imagenes/hotel/${hotel.id}`);
+        const request = await fetch(`http://localhost:8090/cliente/imagenes/hotel/${hotel.id}`);
         const response = await request.json();
         if (response.length > 0) {
-          imagenesArray.push(response[0]);
+          imagenesArray.push({url: response[0].url, hotel_id: response[0].hotel_id});
         }
       }
       setImagenes(imagenesArray);
@@ -109,7 +108,7 @@ const HomePage = () => {
   }
 
   return (
-    <body className= "bodyinicio">
+    <div className= "bodyinicio">
       <div className="header-content">
         <div className="cuenta-button-container">
           <button className="cuenta-button" onClick={Cuenta}>
@@ -135,28 +134,33 @@ const HomePage = () => {
             <button className="botbusquedaFec" onClick={filterHotels}>Buscar</button>
             </div>
       <div className="containerIni">
-      <div className="hotels-container">
-            {hotels.length ? 
-              ( hotels.map((hotel) => {
-                //const imagen = imagenes.find((imagen) => imagen.hotel_id === hotels.id);
+        <div>
+        </div>
+          <div className="hotels-container">
+            {hotels.length ? (
+              hotels.map((hotel) => {
+                const imagen = imagenes.find((imagen) => imagen.hotel_id === hotel.id);
                 return (
-                <div className='hotel-card' key={hotel.id}>
-                  <img src="fondLogClien.jpg" alt={hotel.nombre} className="hotel-image" />
-                  <div className="hotel-info">
-                    <h4>{hotel.nombre}</h4>
-                    <p>{hotel.email} </p>
-                    <button onClick={() => Verificacion(hotel.id)}>
-                      Reservar
-                    </button>
+                  <div className="hotel-card" key={hotel.id}>
+                    {imagen ? (
+                      <img src={imagen.url} alt={hotel.nombre} className="hotel-image" />
+                    ) : (
+                      <div className="hotel-image-placeholder" />
+                    )}
+                    <div className="hotel-info">
+                      <h4>{hotel.nombre}</h4>
+                      <p>{hotel.email}</p>
+                      <button onClick={() => Verificacion(hotel.id)}>Reservar</button>
+                    </div>
                   </div>
-                </div>
-              );})
-              ) : (
-                <p>No hay hoteles</p>
+                );
+              })
+            ) : (
+              <p>No hay hoteles</p>
             )}
           </div>
       </div>
-    </body> 
+    </div> 
   );
 };
 

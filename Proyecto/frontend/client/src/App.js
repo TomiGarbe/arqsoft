@@ -45,17 +45,3 @@ function App() {
 }
 
 export default App;
-
-
-/*
-<h1>Cliente</h1>
-
-                <p>{typeof clientData === 'undefined' ? (<> ACA VA LA INFO DEL CLIENTE... CARGANDO </>) :
-                (
-                    <>
-                    <h4>Nombre: {clientData["name"]} </h4>
-                    <h4>Last Name: {clientData["last_name"]}</h4>
-                    <h4>PWD: {clientData["password"]}</h4>
-                    </>
-                ) }</p>
-*/

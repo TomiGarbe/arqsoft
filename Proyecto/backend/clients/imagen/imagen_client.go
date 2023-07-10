@@ -34,8 +34,8 @@ func InsertImageByHotelId(imagen model.Imagen) model.Imagen {
 func GetImagenesByHotelId(hotelID int) model.Imagenes {
 	var imagenes model.Imagenes
 
-	Db.Where("hotel_id = ?", hotelID).Find(&imagenes)
-	log.Debug("Images: ", imagenes)
+	Db.Where("hotel_id = ?", hotelID).Preload("Hotel").Find(&imagenes)
+	log.Debug("Imagenes: ", imagenes)
 
 	return imagenes
 }

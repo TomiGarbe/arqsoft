@@ -300,54 +300,6 @@ func (s *adminService) GetHoteles() (dto.HotelesDto, e.ApiError) {
 	return hotelesDto, nil
 }
 
-/*func (s *adminService) InsertHotel(hotelDto dto.HotelDto) (dto.HotelDto, e.ApiError) {
-	var hotel model.Hotel
-
-	hotel.Nombre = hotelDto.Nombre
-	hotel.Descripcion = hotelDto.Descripcion
-	hotel.Email = hotelDto.Email
-	hotel.Image = hotelDto.Image
-	hotel.Cant_Hab = hotelDto.Cant_Hab
-	hotel.Amenities = hotelDto.Amenities
-
-	hotel = hotelClient.InsertHotel(hotel)
-
-	err := saveFile(hotelDto, filePath)
-	if err != nil {
-		// Manejar el error en caso de fallo al guardar la imagen
-		//_ = i.DeleteImageById(image.Id) // Eliminar la imagen insertada anteriormente
-		return hotelDto, e.NewInternalServerApiError("Failed to save image", err)
-	}
-
-	hotelDto.ID = hotel.ID
-
-	return hotelDto, nil
-}*/
-
-/*func saveFile(imageFile *multipart.FileHeader, filePath string) error {
-	// Abrir el archivo cargado
-	file, err := hotelDto.Image.Open()
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	// Crear el archivo destino en el sistema de archivos
-	dst, err := os.Create(filePath)
-	if err != nil {
-		return err
-	}
-	defer dst.Close()
-
-	// Copiar el contenido del archivo cargado al archivo destino
-	_, err = io.Copy(dst, file)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}*/
-
 func (s *adminService) InsertHotel(hotelDto dto.HotelDto) (dto.HotelDto, e.ApiError) {
 	var hotel model.Hotel
 
@@ -378,11 +330,15 @@ func (i *adminService) InsertImageByHotelId(hotelID int, imagenFile *multipart.F
 	filePath := "Imagenes" + "/" + fileName + fileExt
 
 	// Crear una nueva instancia de model.Image
-	imagen := model.Imagen{
+	var imagen model.Imagen
+
+	imagen.Url = filePath
+	imagen.HotelID = hotelID
+	/*imagen := model.Imagen{
 		Url:     filePath,
 		HotelID: hotelID,
-	}
-
+	}*/
+	
 	// Llamar al DAO de imágenes para insertar la imagen
 	imagen = imagenClient.InsertImageByHotelId(imagen)
 
@@ -395,9 +351,9 @@ func (i *adminService) InsertImageByHotelId(hotelID int, imagenFile *multipart.F
 	}
 
 	// Actualizar imageDto con el ID generado
-	imagenDto.Id = imagen.ID
+	imagenDto.ID = imagen.ID
 	imagenDto.Url = imagen.Url
-	imagenDto.HotelId = imagen.HotelID
+	imagenDto.HotelID = imagen.HotelID
 
 	return imagenDto, nil
 }
@@ -449,29 +405,32 @@ func (i *adminService) GetImagenById(id int) (dto.ImagenDto, e.ApiError) {
 		return dto.ImagenDto{}, e.NewNotFoundApiError("Image not found")
 	}
 
-	imageDto := dto.ImagenDto{
-		Id:  imagen.ID,
-		Url: imagen.Url,
-	}
+	var imageDto dto.ImagenDto
+	imageDto.ID =  imagen.ID
+	imageDto.Url = imagen.Url
 
 	return imageDto, nil
 }
 
 func (i *adminService) GetImagenesByHotelId(hotelID int) (dto.ImagenesDto, e.ApiError) {
-	imagenes := imagenClient.GetImagenesByHotelId(hotelID)
-	imagenDtos := make([]dto.ImagenDto, len(imagenes))
+	var imagenes model.Imagenes = imagenClient.GetImagenesByHotelId(hotelID)
+	var imagenesDto dto.ImagenesDto
 
-	for i, imagen := range imagenes {
-		imagenDto := dto.ImagenDto{
-			Id:   imagen.ID,
-			Url:  imagen.Url,
+	for _, imagen := range imagenes {
+		var imagenDto dto.ImagenDto
+
+		if imagen.HotelID == 0 {
+			return imagenesDto, e.NewBadRequestApiError("Imagenes No Encontradas")
 		}
-		imagenDtos[i] = imagenDto
+
+		imagenDto.ID = imagen.ID
+		imagenDto.Url = imagen.Url
+		imagenDto.HotelID = imagen.Hotel.ID
+
+		imagenesDto = append(imagenesDto, imagenDto)
 	}
 
-	return dto.ImagenesDto{
-		Imagenes: imagenDtos,
-	}, nil
+	return imagenesDto, nil
 }
 
 func (s *adminService) AddTelefono(telefonoDto dto.TelefonoDto) (dto.HotelDto, e.ApiError) {

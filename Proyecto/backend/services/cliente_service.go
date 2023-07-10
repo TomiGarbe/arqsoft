@@ -139,20 +139,24 @@ func (s *clienteService) GetHoteles() (dto.HotelesDto, e.ApiError) {
 }
 
 func (i *clienteService) GetImagenesByHotelId(hotelID int) (dto.ImagenesDto, e.ApiError) {
-	imagenes := imagenClient.GetImagenesByHotelId(hotelID)
-	imagenDtos := make([]dto.ImagenDto, len(imagenes))
+	var imagenes model.Imagenes = imagenClient.GetImagenesByHotelId(hotelID)
+	var imagenesDto dto.ImagenesDto
 
-	for i, imagen := range imagenes {
-		imagenDto := dto.ImagenDto{
-			Id:   imagen.ID,
-			Url:  imagen.Url,
+	for _, imagen := range imagenes {
+		var imagenDto dto.ImagenDto
+
+		if imagen.HotelID == 0 {
+			return imagenesDto, e.NewBadRequestApiError("Imagenes No Encontradas")
 		}
-		imagenDtos[i] = imagenDto
+
+		imagenDto.ID = imagen.ID
+		imagenDto.Url = imagen.Url
+		imagenDto.HotelID = imagen.Hotel.ID
+
+		imagenesDto = append(imagenesDto, imagenDto)
 	}
 
-	return dto.ImagenesDto{
-		Imagenes: imagenDtos,
-	}, nil
+	return imagenesDto, nil
 }
 
 func (s *clienteService) GetHotelById(id int) (dto.HotelDto, e.ApiError) {

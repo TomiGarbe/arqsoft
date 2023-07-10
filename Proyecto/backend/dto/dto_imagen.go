@@ -1,12 +1,10 @@
 package dto
 
 type ImagenDto struct {
-	Id      int    `json:"id"`
+	ID      int    `json:"id"`
 	Url    string `json:"url"`
 
-	HotelId int    `json:"hotel_id"`
+	HotelID int    `json:"hotel_id"`
 }
 
-type ImagenesDto struct {
-	Imagenes []ImagenDto `json:"images"`
-}
+type ImagenesDto []ImagenDto

@@ -13,7 +13,7 @@ var (
 func init() {
 	router = gin.Default()
 	router.Use(cors.Default())
-	router.Static("/Imagenes", "../frontend/client/src/Imagenes")
+	router.Static("/Imagenes", "./Imagenes")
 }
 
 func StartRoute() {
