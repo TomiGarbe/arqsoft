@@ -125,21 +125,20 @@ function RegistrationHotel() {
     try {
       const formDataWithImagen = new FormData();
       formDataWithImagen.append("imagen", imagen);
-      console.log(formDataWithImagen)
-      //alert(JSON.stringify(formDataWithImagen));
-
+      console.log(formDataWithImagen);
+  
       const req = await fetch(`http://localhost:8090/admin/hotel/${hotelId}/add-imagen`, {
         method: 'POST',
         body: formDataWithImagen
-      })
-
+      });
+  
       const res = await req.json();
-
+  
       if (req.ok) {
         return true;
-      }
-      else {
+      } else {
         console.error('Error en el registro:', res);
+        alert('Error en el registro de la imagen');
         return false;
       }
     } catch (error) {
@@ -147,6 +146,7 @@ function RegistrationHotel() {
       throw error;
     }
   };
+  
 
   return (
     <div className="registration-container" onLoad={Verificacion}>
