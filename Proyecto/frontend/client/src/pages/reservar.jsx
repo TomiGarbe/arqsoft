@@ -155,7 +155,7 @@ const ReservaPage = () => {
               <div className="descripcion">{hotelData["descripcion"]}</div>
               <div className="amenities">
                 <h6>Amenities:</h6>
-                {hotelData.amenities && hotelData.amenities.length > 0 ? (
+                {Array.isArray(hotelData.amenities) && hotelData.amenities.length > 0 ? (
                   hotelData.amenities.map((amenity, index) => (
                     <span key={index} className="amenity">{amenity}</span>
                   ))
