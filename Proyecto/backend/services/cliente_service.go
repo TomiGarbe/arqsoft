@@ -122,16 +122,6 @@ func (s *clienteService) GetHoteles() (dto.HotelesDto, e.ApiError) {
 		hotelDto.Cant_Hab = hotel.Cant_Hab
 		hotelDto.Amenities = hotel.Amenities
 
-
-		for _, telefono := range hotel.Telefonos {
-			var dtoTelefono dto.TelefonoDto
-	
-			dtoTelefono.Codigo = telefono.Codigo
-			dtoTelefono.Numero = telefono.Numero
-	
-			hotelDto.TelefonosDto = append(hotelDto.TelefonosDto, dtoTelefono)
-		}
-
 		hotelesDto = append(hotelesDto, hotelDto)
 	}
 
@@ -174,16 +164,6 @@ func (s *clienteService) GetHotelById(id int) (dto.HotelDto, e.ApiError) {
 	hotelDto.Email = hotel.Email
 	hotelDto.Cant_Hab = hotel.Cant_Hab
 	hotelDto.Amenities = hotel.Amenities
-
-
-	for _, telefono := range hotel.Telefonos {
-		var dtoTelefono dto.TelefonoDto
-
-		dtoTelefono.Codigo = telefono.Codigo
-		dtoTelefono.Numero = telefono.Numero
-
-		hotelDto.TelefonosDto = append(hotelDto.TelefonosDto, dtoTelefono)
-	}
 
 	return hotelDto, nil
 }

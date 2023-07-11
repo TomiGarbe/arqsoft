@@ -20,7 +20,6 @@
 		router.GET("/admin/hotel/nombre/:nombre", adminController.GetHotelByNombre)
 		router.GET("/admin/hoteles", adminController.GetHoteles)
 		router.POST("/admin/hotel", adminController.InsertHotel)
-		router.POST("/admin/hotel/:id/telefono", adminController.AddTelefono)
 		router.GET("/admin/reservas", adminController.GetReservas)
 		router.GET("/admin/reservas-por-fecha/:AnioInicio/:MesInicio/:DiaInicio/:AnioFinal/:MesFinal/:DiaFinal", adminController.GetReservasByDate)
 		router.POST("/admin/hotel/:id/add-imagen", adminController.InsertImagenByHotelId)

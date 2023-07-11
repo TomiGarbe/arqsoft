@@ -250,33 +250,6 @@ func DeleteImagenById(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Image deleted successfully"})
 }
 
-func AddTelefono(c *gin.Context) {
-
-	log.Debug("Agregar Teléfono al hotel: " + c.Param("id"))
-	id, _ := strconv.Atoi(c.Param("id"))
-
-	var telefonoDto dto.TelefonoDto
-	err := c.BindJSON(&telefonoDto)
-
-	if err != nil {
-		log.Error(err.Error())
-		c.JSON(http.StatusBadRequest, err.Error())
-		return
-	}
-	telefonoDto.HotelID = id
-
-	var hotelDto dto.HotelDto
-
-	hotelDto, er := service.AdminService.AddTelefono(telefonoDto)
-	
-	if er != nil {
-		c.JSON(er.Status(), er)
-		return
-	}
-
-	c.JSON(http.StatusCreated, hotelDto)
-}
-
 func GetReservas(c *gin.Context) {
 	var reservasDto dto.ReservasDto
 	reservasDto, err := service.AdminService.GetReservas()

@@ -2,7 +2,6 @@ package services
 
 import (
 	adminClient "backend/clients/admin"
-	telefonoClient "backend/clients/telefono"
 	clienteClient "backend/clients/cliente"
 	hotelClient "backend/clients/hotel"
 	reservaClient "backend/clients/reserva"
@@ -38,7 +37,6 @@ type adminServiceInterface interface {
 	GetImagenesByHotelId(hotelID int) (dto.ImagenesDto, e.ApiError)
 	DeleteImagenById(id int) e.ApiError
 	GetImagenById(id int) (dto.ImagenDto, e.ApiError)
-	AddTelefono(telefonoDto dto.TelefonoDto) (dto.HotelDto, e.ApiError)
 	GetReservas() (dto.ReservasDto, e.ApiError)
 	GetReservasByDate(AnioInicio, AnioFinal, MesInicio, MesFinal, DiaInicio, DiaFinal int) (dto.ReservasDto, e.ApiError)
 	UpdateHotel(hotelID int, updatedHotelDto dto.HotelDto) (dto.HotelDto, e.ApiError)
@@ -204,16 +202,6 @@ func (s *adminService) GetHotelById(id int) (dto.HotelDto, e.ApiError) {
 	hotelDto.Cant_Hab = hotel.Cant_Hab
 	hotelDto.Amenities = hotel.Amenities
 
-
-	for _, telefono := range hotel.Telefonos {
-		var dtoTelefono dto.TelefonoDto
-
-		dtoTelefono.Codigo = telefono.Codigo
-		dtoTelefono.Numero = telefono.Numero
-
-		hotelDto.TelefonosDto = append(hotelDto.TelefonosDto, dtoTelefono)
-	}
-
 	return hotelDto, nil
 }
 
@@ -232,16 +220,6 @@ func (s *adminService) GetHotelByEmail(email string) (dto.HotelDto, e.ApiError) 
 	hotelDto.Email = hotel.Email
 	hotelDto.Cant_Hab = hotel.Cant_Hab
 	hotelDto.Amenities = hotel.Amenities
-
-
-	for _, telefono := range hotel.Telefonos {
-		var dtoTelefono dto.TelefonoDto
-
-		dtoTelefono.Codigo = telefono.Codigo
-		dtoTelefono.Numero = telefono.Numero
-
-		hotelDto.TelefonosDto = append(hotelDto.TelefonosDto, dtoTelefono)
-	}
 
 	return hotelDto, nil
 }
@@ -262,15 +240,6 @@ func (s *adminService) GetHotelByNombre(nombre string) (dto.HotelDto, e.ApiError
 	hotelDto.Cant_Hab = hotel.Cant_Hab
 	hotelDto.Amenities = hotel.Amenities
 
-	for _, telefono := range hotel.Telefonos {
-		var dtoTelefono dto.TelefonoDto
-
-		dtoTelefono.Codigo = telefono.Codigo
-		dtoTelefono.Numero = telefono.Numero
-
-		hotelDto.TelefonosDto = append(hotelDto.TelefonosDto, dtoTelefono)
-	}
-
 	return hotelDto, nil
 }
 
@@ -287,15 +256,6 @@ func (s *adminService) GetHoteles() (dto.HotelesDto, e.ApiError) {
 		hotelDto.Email = hotel.Email
 		hotelDto.Cant_Hab = hotel.Cant_Hab
 		hotelDto.Amenities = hotel.Amenities
-
-		for _, telefono := range hotel.Telefonos {
-			var dtoTelefono dto.TelefonoDto
-	
-			dtoTelefono.Codigo = telefono.Codigo
-			dtoTelefono.Numero = telefono.Numero
-	
-			hotelDto.TelefonosDto = append(hotelDto.TelefonosDto, dtoTelefono)
-		}
 
 		hotelesDto = append(hotelesDto, hotelDto)
 	}
@@ -434,39 +394,6 @@ func (i *adminService) GetImagenesByHotelId(hotelID int) (dto.ImagenesDto, e.Api
 	}
 
 	return imagenesDto, nil
-}
-
-func (s *adminService) AddTelefono(telefonoDto dto.TelefonoDto) (dto.HotelDto, e.ApiError) {
-
-	var telefono model.Telefono
-
-	telefono.Codigo = telefonoDto.Codigo
-	telefono.Numero = telefonoDto.Numero
-	telefono.HotelID = telefonoDto.HotelID
-	
-	telefono = telefonoClient.AddTelefono(telefono)
-
-	
-	var hotel model.Hotel = hotelClient.GetHotelById(telefonoDto.HotelID)
-	var hotelDto dto.HotelDto
-
-	hotelDto.Nombre = hotel.Nombre
-	hotelDto.Descripcion = hotel.Descripcion
-	hotelDto.Email = hotel.Email
-	hotelDto.Cant_Hab = hotel.Cant_Hab
-	hotelDto.Amenities = hotel.Amenities
-
-
-	for _, telefono := range hotel.Telefonos {
-		var dtoTelefono dto.TelefonoDto
-
-		dtoTelefono.Codigo = telefono.Codigo
-		dtoTelefono.Numero = telefono.Numero
-
-		hotelDto.TelefonosDto = append(hotelDto.TelefonosDto, dtoTelefono)
-	}
-
-	return hotelDto, nil
 }
 
 func (s *adminService) GetReservas() (dto.ReservasDto, e.ApiError) {

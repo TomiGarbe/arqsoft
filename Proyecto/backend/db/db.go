@@ -2,7 +2,6 @@ package db
 
 import (
 	adminClient "backend/clients/admin"
-	telefonoClient "backend/clients/telefono"
 	clienteClient "backend/clients/cliente"
 	hotelClient "backend/clients/hotel"
 	reservaClient "backend/clients/reserva"
@@ -41,7 +40,6 @@ func init() {
 	adminClient.Db = db
 	clienteClient.Db = db
 	hotelClient.Db = db
-	telefonoClient.Db = db
 	reservaClient.Db = db
 	imagenClient.Db = db
 }
@@ -52,7 +50,6 @@ func StartDbEngine() {
 	db.AutoMigrate(&model.Cliente{})
 	db.AutoMigrate(&model.Hotel{})
 	db.AutoMigrate(&model.Reserva{})
-	db.AutoMigrate(&model.Telefono{})
 	db.AutoMigrate(&model.Imagen{})
 
 	log.Info("Finalizacion de las tablas de la base de datos de migracion")

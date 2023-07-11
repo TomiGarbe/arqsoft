@@ -8,8 +8,6 @@ type HotelDto struct {
 	Imagenes  []string  `json:"imagenes"`
 	Cant_Hab 	int    	`json:"cant_hab"`
 	Amenities 	string 	`json:"amenities"`
-
-	TelefonosDto TelefonosDto `json:"telefonos,omitempty"`
 }
 
 
