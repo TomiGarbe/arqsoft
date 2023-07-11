@@ -42,7 +42,6 @@ function RegistrationHotel() {
         [name]: value,
       }));
     }
-    //alert(JSON.stringify(formData));
   };
 
   useEffect(() => {
@@ -84,13 +83,7 @@ function RegistrationHotel() {
     }
     else
     {
-      const formDataWithImage = new FormData();
-      formDataWithImage.append("image", image);
-      console.log(formDataWithImage)
-      let hotelId = '';
-      alert(JSON.stringify(formData));
-
-      const response = await fetch('http://localhost:8090/admin/hotel', {
+      const request = await fetch('http://localhost:8090/admin/hotel', {
       method: 'POST',
       headers: {
       'Content-Type': 'application/json'
@@ -98,19 +91,23 @@ function RegistrationHotel() {
       body: JSON.stringify(formData)
       })
 
-      const data = await response.json()
+      const response = await request.json()
 
-      if (response.ok) {
-        console.log('Registro exitoso:', response);
-        hotelId = data.id;
+      if (request.ok) {
+        const formDataWithImage = new FormData();
+        formDataWithImage.append("image", image);
+        console.log(formDataWithImage)
+        //alert(JSON.stringify(data));
 
-        const res = await fetch(`http://localhost:8090/admin/hotel/${hotelId}/add-imagen`, {
+        const req = await fetch(`http://localhost:8090/admin/hotel/${response.id}/add-imagen`, {
           method: 'POST',
           body: formDataWithImage
         })
 
-        if (res.ok) {
-          console.log('Registro exitoso:', res);
+        const res = await req.json();
+        alert('hola');
+        if (req.ok) {
+          alert('hola');
           window.location.href = '/ver-hoteles';
         }
         else {

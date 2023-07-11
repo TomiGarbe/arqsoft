@@ -143,7 +143,7 @@ const HomePage = () => {
                 return (
                   <div className="hotel-card" key={hotel.id}>
                     {imagen ? (
-                      <img src={require(imagen.url)} alt={hotel.nombre} className="hotel-image" />
+                      <img src={`http://localhost:8090/${imagen.url}`} alt={hotel.nombre} className="hotel-image" />
                     ) : (
                       <div className="hotel-image-placeholder" />
                     )}

@@ -1,5 +1,5 @@
 import React from 'react';
-import './estilo/opciones_login.css';
+//import './estilo/opciones_login.css';
 
 const RoleSelection = () => {
   const handleLoginAdmin = () => {
