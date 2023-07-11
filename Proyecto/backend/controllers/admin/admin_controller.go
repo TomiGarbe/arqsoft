@@ -347,7 +347,7 @@ func UpdateHotel(c *gin.Context) {
 }
 
 
-func InsertAmenidades(c *gin.Context) {
+/*func InsertAmenidades(c *gin.Context) {
 	// Obtener el ID del hotel desde los parámetros de la solicitud
 	hotelID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -364,7 +364,7 @@ func InsertAmenidades(c *gin.Context) {
 	}
 
 	// Llamar al servicio para actualizar las amenidades del hotel
-	updatedHotelDto, err := service.AdminService.UpdateHotel(hotelID, HotelDto.Amenities)
+	updatedHotelDto, err := service.AdminService.UpdateHotel(hotelID, HotelDto)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -409,5 +409,5 @@ func DeleteAmenidades(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, updatedHotelDto)
-}
+}*/
 

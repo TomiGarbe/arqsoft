@@ -7,11 +7,13 @@ import './estilo/reservar.css';
 const ReservaPage = () => {
   const { hotelId } = useParams();
   const [hotelData, setHotelData] = useState('');
+  const [imagenHotel, setImagenHotel] = useState([]);
   const { isLoggedCliente } = useContext(AuthContext);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const accountId = localStorage.getItem("id_cliente");
   const [Hoteles, setHoteles] = useState([]);
+  const [Imagenes, setImagenes] = useState([]);
   const [confirmarReserva, setConfirmarReserva] = useState(false);
 
   const Verificacion = () => {
@@ -74,6 +76,26 @@ const ReservaPage = () => {
     }
   }, [hotelId]);
 
+  const getImagen = useCallback(async () => {
+    if (hotelId) {
+      try {
+        let imagen = [];
+        const request = await fetch(`http://localhost:8090/cliente/imagenes/hotel/${hotelId}`);
+        const response = await request.json();
+        for (let i = 0; i < response.length; i++) {
+          imagen.push(response[i].url);
+        }
+        setImagenHotel(imagen);
+      } catch (error) {
+        console.log("No se pudieron obtener los hoteles:", error);
+      }
+    }
+  }, [hotelId]);
+
+  useEffect(() => {
+    getImagen();
+  }, [getImagen]);
+
   const getHoteles = useCallback(async () => {
     try {
       let hotelesArray = [];
@@ -85,6 +107,28 @@ const ReservaPage = () => {
       console.log("No se pudieron obtener los hoteles:", error);
     }
   }, [hotelId]);
+
+  const getImagenes = useCallback(async () => {
+    try {
+      let imagenesHotelesArray = [];
+      for (let i = 0; i < Hoteles.length; i++) {
+        const Hotel = Hoteles[i];
+        const request = await fetch(`http://localhost:8090/cliente/imagenes/hotel/${Hotel.id}`);
+        const response = await request.json();
+        if (response.length > 0) {
+          imagenesHotelesArray.push({url: response[0].url, hotel_id: response[0].hotel_id});
+        }
+      }
+      imagenesHotelesArray = imagenesHotelesArray.filter((imagen) => imagen.hotel_id !== parseInt(hotelId));
+      setImagenes(imagenesHotelesArray);
+    } catch (error) {
+      console.log("No se pudieron obtener los hoteles:", error);
+    }
+  }, [hotelId, Hoteles]);
+
+  useEffect(() => {
+    getImagenes();
+  }, [getImagenes]);
 
   useEffect(() => {
     getHoteles();
@@ -110,27 +154,28 @@ const ReservaPage = () => {
     }
   }, [startDate, endDate, hotelId, Hoteles]);
 
-  useEffect(() => {
-    if (startDate && endDate) {
-      const startDateObj = new Date(startDate);
-      const endDateObj = new Date(endDate);
-      if (startDateObj > endDateObj) {
-        alert("Fechas no válidas");
-      } else {
-        filterHotel();
-      }
-    }
-    else {
-      getHoteles();
-    }
-  }, [startDate, endDate, filterHotel, getHoteles]);
-
   const handleStartDateChange = (event) => {
     setStartDate(event.target.value);
+    const startDateObj = new Date(event.target.value);
+    const endDateObj = new Date(endDate);
+    if (startDateObj >= endDateObj) {
+      alert("Fechas no válidas");
+      setEndDate('');
+    } else {
+      filterHotel();
+    }
   };
 
   const handleEndDateChange = (event) => {
     setEndDate(event.target.value);
+    const startDateObj = new Date(startDate);
+    const endDateObj = new Date(event.target.value);
+    if (startDateObj >= endDateObj) {
+      alert("Fechas no válidas");
+      setEndDate('');
+    } else {
+      filterHotel();
+    }
   };
 
   const handleVolver = () => {
@@ -150,7 +195,14 @@ const ReservaPage = () => {
           <div className="container45" onLoad={Verificacion}>
             <div className="informacion">
               <div className="cuadroImag">
-                <img src={hotelData.image} alt={hotelData.nombre} className="tamanoImag" />
+                {imagenHotel.map((imagen, index) => (
+                  <img
+                    key={index}
+                    src={`http://localhost:8090/${imagen}`}
+                    alt={hotelData.nombre}
+                    className="tamanoImag"
+                  />
+                ))}
               </div>
               <div className="descripcion">{hotelData["descripcion"]}</div>
               <div className="amenities">
@@ -165,9 +217,15 @@ const ReservaPage = () => {
               </div>
               <div className='other-hotels-title'><h6>Otras opciones:</h6></div>
               <div className="other-hotels">
-                {Hoteles.map((hotel) => (
+                {Hoteles.map((hotel) => {
+                  const imagen = Imagenes.find((imagen) => imagen.hotel_id === hotel.id);
+                  return(
                   <div key={hotel.id} className="other-hotels">
-                    <img src={hotel.image} alt={hotel.nombre} className="other-hotel-image" />
+                    {imagen ? (
+                      <img src={`http://localhost:8090/${imagen.url}`} alt={hotel.nombre} className="other-hotel-image" />
+                    ) : (
+                      <div className="hotel-image-placeholder" />
+                    )}
                     <div className="hotel-details">
                       <h6>{hotel.nombre}</h6>
                       <button className="reservar-button" onClick={() => Reservar(hotel.id)}>
@@ -175,7 +233,7 @@ const ReservaPage = () => {
                       </button>
                     </div>
                   </div>
-                ))}
+                )})}
               </div>
             </div>
             <div className="reserva-form">
