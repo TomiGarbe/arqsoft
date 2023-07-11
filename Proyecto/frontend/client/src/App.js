@@ -12,6 +12,8 @@ import InsertHoteles from './pages/insert_hoteles'
 import VerHoteles from './pages/ver_hoteles'
 import VerReservas from './pages/ver_reservas'
 import VerClientes from './pages/ver_clientes'
+import EditarHoteles from './pages/editar_hoteles'
+import EditarHotel from './pages/editar_hotel'
 import './App.css';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import { AuthProvider } from './pages/login/auth';
@@ -37,6 +39,8 @@ function App() {
                         <Route path='/ver-hoteles' element={<VerHoteles />}></Route>
                         <Route path='/ver-reservas' element={<VerReservas />}></Route>
                         <Route path='/ver-clientes' element={<VerClientes />}></Route>
+                        <Route path='/editar-hoteles' element={<EditarHoteles />}></Route>
+                        <Route path='/editar-hotel' element={<EditarHotel />}></Route>
                     </Routes>
                 </AuthProvider>
             </Router>

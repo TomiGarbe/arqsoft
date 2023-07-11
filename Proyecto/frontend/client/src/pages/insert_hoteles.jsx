@@ -7,7 +7,7 @@ function RegistrationHotel() {
   const [Nombre, setNombre] = useState({});
   const { isLoggedAdmin } = useContext(AuthContext);
   const [amenities, setAmenities] = useState([]);
-  const [image, setImage] = useState('');
+  const [imagen, setImagen] = useState('');
   
   const Verificacion = () => {
     if (!isLoggedAdmin) {
@@ -25,9 +25,10 @@ function RegistrationHotel() {
 
   const handleChange = (event) => {
     const { name, value, files } = event.target;
-
-    if (name === "image") {
-      setImage(files[0]);
+    //alert(imagen);
+    if (name === "imagen") {
+      setImagen(files[0]);
+      console.log(imagen)
     } else if (name === "cant_hab" && value !== "") {
       const intValue = parseInt(value);
       setFormData((prevFormData) => ({
@@ -61,7 +62,6 @@ function RegistrationHotel() {
 
   useEffect(() => {
     setNombre('');
-  
     if (formData.nombre) {
       fetch(`http://localhost:8090/admin/hotel/nombre/${formData.nombre}`)
         .then(response => response.json())
@@ -83,42 +83,68 @@ function RegistrationHotel() {
     }
     else
     {
-      const request = await fetch('http://localhost:8090/admin/hotel', {
-      method: 'POST',
-      headers: {
-      'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-      })
-
-      const response = await request.json()
-
-      if (request.ok) {
-        const formDataWithImage = new FormData();
-        formDataWithImage.append("image", image);
-        console.log(formDataWithImage)
-        //alert(JSON.stringify(data));
-
-        const req = await fetch(`http://localhost:8090/admin/hotel/${response.id}/add-imagen`, {
-          method: 'POST',
-          body: formDataWithImage
+      try {
+        const request = await fetch('http://localhost:8090/admin/hotel', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
         })
 
-        const res = await req.json();
-        alert('hola');
-        if (req.ok) {
-          alert('hola');
-          window.location.href = '/ver-hoteles';
+        const response = await request.json()
+
+        if (request.ok) {
+          try {
+            var imagenRegistered = await Registerimagen(response.id);
+            //alert('hola');
+            if (imagenRegistered) {
+              //alert('hola');
+              window.location.href = '/ver-hoteles';
+            }
+            else {
+              alert('Imagen no registrada');
+            }
+          } catch (error) {
+            console.error('Error en la carga de la imagen:', error);
+            alert('Error al registrar la imagen');
+          }
         }
         else {
-          console.error('Error en el registro:', res);
-          alert('Imagen no registrada');
+          console.error('Error en el registro:', response);
+          alert('Hotel no registrado');
         }
+      } catch (error) {
+        console.error('Error en la solicitud:', error);
+        alert('Error en la solicitud');
+      }
+    }
+  };
+
+  const Registerimagen = async (hotelId) => {
+    try {
+      const formDataWithImagen = new FormData();
+      formDataWithImagen.append("imagen", imagen);
+      console.log(formDataWithImagen)
+      //alert(JSON.stringify(formDataWithImagen));
+
+      const req = await fetch(`http://localhost:8090/admin/hotel/${hotelId}/add-imagen`, {
+        method: 'POST',
+        body: formDataWithImagen
+      })
+
+      const res = await req.json();
+
+      if (req.ok) {
+        return true;
       }
       else {
-        console.error('Error en el registro:', response);
-        alert('Hotel no registrado');
+        console.error('Error en el registro:', res);
+        return false;
       }
+    } catch (error) {
+      console.error('Error en la solicitud:', error);
+      throw error;
     }
   };
 
@@ -163,7 +189,7 @@ function RegistrationHotel() {
          Imagen:
           <input
             type="file"
-            name="image"
+            name="imagen"
             onChange={handleChange}
           />
         </label>

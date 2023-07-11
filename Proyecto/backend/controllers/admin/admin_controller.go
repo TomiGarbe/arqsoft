@@ -199,20 +199,20 @@ func InsertImagenByHotelId(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": erint.Error()})
 		return
 	}
-
-	imagen, err := c.FormFile("image")
+	log.Debug("1")
+	imagen, err := c.FormFile("imagen")
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	
+	log.Debug("2")
 	// Guardar la imagen y manejar la lógica de relación con el hotel
 	imagenDto, er := service.AdminService.InsertImageByHotelId(hotelID, imagen)
 	if er != nil {
 		c.JSON(er.Status(), er)
 		return
 	}
-	
+	log.Debug("3")
 	c.JSON(http.StatusCreated, imagenDto)
 }
 

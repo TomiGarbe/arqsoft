@@ -12,7 +12,7 @@ var Db *gorm.DB
 func GetHotelById(id int) model.Hotel {
 	var hotel model.Hotel
 
-	Db.Where("id = ?", id).Preload("Telefonos").First(&hotel)
+	Db.Where("id = ?", id).First(&hotel)
 	log.Debug("Hotel: ", hotel)
 
 	return hotel
@@ -21,7 +21,7 @@ func GetHotelById(id int) model.Hotel {
 func GetHotelByEmail(email string) model.Hotel {
 	var hotel model.Hotel
 
-	Db.Where("email = ?", email).Preload("Telefonos").First(&hotel)
+	Db.Where("email = ?", email).First(&hotel)
 	log.Debug("Hotel: ", hotel)
 
 	return hotel
@@ -30,7 +30,7 @@ func GetHotelByEmail(email string) model.Hotel {
 func GetHotelByNombre(nombre string) model.Hotel {
 	var hotel model.Hotel
 
-	Db.Where("nombre = ?", nombre).Preload("Telefonos").First(&hotel)
+	Db.Where("nombre = ?", nombre).First(&hotel)
 	log.Debug("Hotel: ", hotel)
 
 	return hotel
@@ -39,7 +39,7 @@ func GetHotelByNombre(nombre string) model.Hotel {
 func GetHoteles() model.Hoteles {
 	var hoteles model.Hoteles
 
-	Db.Preload("Telefonos").Find(&hoteles)
+	Db.Find(&hoteles)
 	log.Debug("Hoteles: ", hoteles)
 
 	return hoteles
