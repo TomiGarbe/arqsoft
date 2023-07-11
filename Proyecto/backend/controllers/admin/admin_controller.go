@@ -345,3 +345,66 @@ func UpdateHotel(c *gin.Context) {
 	updatedHotel, err := service.AdminService.UpdateHotel(hotelID, existingHotel)
 	c.JSON(http.StatusOK, updatedHotel)
 }
+
+
+func InsertAmenidades(c *gin.Context) {
+	// Obtener el ID del hotel desde los parámetros de la solicitud
+	hotelID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid hotel ID"})
+		return
+	}
+
+	// Obtener los datos de las amenidades desde el cuerpo de la solicitud
+	var amenidadesDto dto.AmenidadesDto
+	err = c.BindJSON(&amenidadesDto)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid data"})
+		return
+	}
+
+	// Llamar al servicio para insertar las amenidades para el hotel
+	err = service.AdminService.InsertAmenidades(hotelID, amenidadesDto.Amenidades)
+	if err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Amenidades insertadas exitosamente"})
+}
+
+func GetAmenidades(c *gin.Context) {
+	// Obtener el ID del hotel desde los parámetros de la solicitud
+	hotelID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid hotel ID"})
+		return
+	}
+
+	// Llamar al servicio para obtener las amenidades del hotel
+	amenidades, err := service.AdminService.GetAmenidades(hotelID)
+	if err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"amenidades": amenidades})
+}
+
+func DeleteAmenidades(c *gin.Context) {
+	// Obtener el ID del hotel desde los parámetros de la solicitud
+	hotelID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid hotel ID"})
+		return
+	}
+
+	// Llamar al servicio para eliminar las amenidades del hotel
+	err = service.AdminService.DeleteAmenidades(hotelID)
+	if err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Amenidades eliminadas exitosamente"})
+}

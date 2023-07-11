@@ -42,6 +42,9 @@ type adminServiceInterface interface {
 	GetReservas() (dto.ReservasDto, e.ApiError)
 	GetReservasByDate(AnioInicio, AnioFinal, MesInicio, MesFinal, DiaInicio, DiaFinal int) (dto.ReservasDto, e.ApiError)
 	UpdateHotel(hotelID int, updatedHotelDto dto.HotelDto) (dto.HotelDto, e.ApiError)
+	InsertAmenidades(hotelID int, amenidades string) e.ApiError 
+	GetAmenidades(hotelID int) (string, e.ApiError)
+	DeleteAmenidades(hotelID int) e.ApiError
 }
 
 var (
@@ -538,4 +541,47 @@ func (s *adminService) UpdateHotel(hotelID int, updatedHotelDto dto.HotelDto) (d
 	updatedHotelDto.ID = hotel.ID
 
 	return updatedHotelDto, nil
+}
+
+func (s *adminService) InsertAmenidades(hotelID int, amenidades string) e.ApiError {
+    hotel := hotelClient.GetHotelById(hotelID)
+
+    if hotel.ID == 0 {
+        return e.NewNotFoundApiError("Hotel no encontrado")
+    }
+
+    // Agregar las nuevas amenidades al hotel
+    hotel.Amenities = amenidades
+
+    // Guardar los cambios en la base de datos
+    hotelClient.UpdateHotel(hotel)
+
+    return nil
+}
+
+func (s *adminService) GetAmenidades(hotelID int) (string, e.ApiError) {
+    hotel := hotelClient.GetHotelById(hotelID)
+
+    if hotel.ID == 0 {
+        return "", e.NewNotFoundApiError("Hotel no encontrado")
+    }
+
+    // Devolver las amenidades del hotel
+    return hotel.Amenities, nil
+}
+
+func (s *adminService) DeleteAmenidades(hotelID int) e.ApiError {
+    hotel := hotelClient.GetHotelById(hotelID)
+
+    if hotel.ID == 0 {
+        return e.NewNotFoundApiError("Hotel no encontrado")
+    }
+
+    // Borrar las amenidades del hotel
+    hotel.Amenities = ""
+
+    // Guardar los cambios en la base de datos
+    hotelClient.UpdateHotel(hotel)
+
+    return nil
 }
