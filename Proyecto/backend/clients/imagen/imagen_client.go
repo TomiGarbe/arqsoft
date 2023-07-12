@@ -30,7 +30,7 @@ func GetImagenByHotelId(hotelID int) model.Imagen {
 	return imagen
 }
 
-func InsertImageByHotelId(imagen model.Imagen) model.Imagen {
+func InsertImagenByHotelId(imagen model.Imagen) model.Imagen {
 	result := Db.Create(&imagen)
 
 	if result.Error != nil {

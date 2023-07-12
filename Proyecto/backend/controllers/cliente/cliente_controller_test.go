@@ -1,601 +1,616 @@
-package cliente_controller_test
+package clienteController_test
 
 import (
-	"bytes"
+	"backend/controllers/clienteController"
+	"backend/dto"
+	"backend/service"
+	"backend/utils/errors"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"strconv"
+	"strings"
 	"testing"
-	"time"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
-
-	cliente_controller "backend/controllers"
-	"backend/dto"
-	"backend/services"
 )
 
-func TestGetClienteById(t *testing.T) {
-	// Configuración del router Gin
-	router := gin.Default()
-
-	// Configuración de la ruta y el controlador
-	router.GET("/clientes/:id", cliente_controller.GetClienteById)
-
-	// Configuración de los servicios de prueba
-	mockClienteService := &services.MockClienteService{} // Suponiendo que tienes una implementación de servicio simulada para las pruebas
-	cliente_controller.SetClienteService(mockClienteService) // Inyecta el servicio en el controlador
-
-	// Datos de prueba
-	clienteID := 1
-	clienteDto := dto.ClienteDto{
-		ID:   clienteID,
-		Name: "John Doe",
-	}
-
-	// Configuración del comportamiento simulado del servicio
-	mockClienteService.On("GetClienteById", clienteID).Return(clienteDto, nil)
-
-	// Ejecución de la solicitud HTTP de prueba
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/clientes/"+strconv.Itoa(clienteID), nil)
-	router.ServeHTTP(w, req)
-
-	// Verificación del estado de la respuesta HTTP
-	assert.Equal(t, http.StatusOK, w.Code)
-
-	// Verificación del cuerpo de la respuesta JSON
-	var responseDto dto.ClienteDto
-	err := json.Unmarshal(w.Body.Bytes(), &responseDto)
-	assert.NoError(t, err)
-
-	// Verificación de los datos del cliente devuelto
-	assert.Equal(t, clienteDto.ID, responseDto.ID)
-	assert.Equal(t, clienteDto.Name, responseDto.Name)
-
-	// Verificación de que se llamó al método del servicio esperado
-	mockClienteService.AssertCalled(t, "GetClienteById", clienteID)
+type TestClienteService struct {
+	GetClienteByIdFunc     func(id int) (dto.ClienteDto, errors.APIError)
+	GetClienteByUsernameFunc func(username string) (dto.ClienteDto, errors.APIError)
+	// Implementa los demás métodos que necesites para tus pruebas
 }
 
-func TestGetClienteByUsername(t *testing.T) {
-	// Configuración del router Gin
-	router := gin.Default()
+func (s *TestClienteService) GetClienteById(id int) (dto.ClienteDto, errors.APIError) {
+	return s.GetClienteByIdFunc(id)
+}
 
-	// Configuración de la ruta y el controlador
-	router.GET("/clientes/username/:username", cliente_controller.GetClienteByUsername)
+func (s *TestClienteService) GetClienteByUsername(username string) (dto.ClienteDto, errors.APIError) {
+	return s.GetClienteByUsernameFunc(username)
+}
 
-	// Configuración del servicio simulado
-	mockClienteService := &services.MockClienteService{}
-	cliente_controller.SetClienteService(mockClienteService)
+// Implementa los demás métodos del servicio según sea necesario
 
-	// Datos de prueba
-	username := "john_doe"
-	clienteDto := dto.ClienteDto{
-		ID:       1,
-		Username: username,
+func TestGetClienteById(t *testing.T) {
+	// Configura los datos de prueba
+	id := 1
+	expectedClient := dto.ClienteDto{
+		ID:       id,
+		Username: "testuser",
+		Email:    "test@example.com",
+		// Completa los demás campos del cliente según tu estructura
 	}
 
-	// Configuración del comportamiento simulado del servicio
-	mockClienteService.On("GetClienteByUsername", username).Return(clienteDto, nil)
+	// Configura el servicio de prueba
+	mockService := &TestClienteService{
+		GetClienteByIdFunc: func(id int) (dto.ClienteDto, errors.APIError) {
+			if id == expectedClient.ID {
+				return expectedClient, nil
+			}
+			return dto.ClienteDto{}, errors.NewNotFoundAPIError("Cliente no encontrado")
+		},
+	}
 
-	// Ejecución de la solicitud HTTP de prueba
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/clientes/username/"+username, nil)
-	router.ServeHTTP(w, req)
+	// Configura el controlador con el servicio de prueba
+	clienteController.ClienteService = mockService
 
-	// Verificación del estado de la respuesta HTTP
-	assert.Equal(t, http.StatusOK, w.Code)
+	// Configura el enrutador de Gin para la prueba
+	router := gin.Default()
+	router.GET("/cliente/:id", clienteController.GetClienteById)
 
-	// Verificación del cuerpo de la respuesta JSON
-	var responseDto dto.ClienteDto
-	err := json.Unmarshal(w.Body.Bytes(), &responseDto)
-	assert.NoError(t, err)
+	// Crea una solicitud HTTP GET al endpoint /cliente/{id}
+	request, _ := http.NewRequest("GET", "/cliente/"+strconv.Itoa(id), nil)
 
-	// Verificación de los datos del cliente devuelto
-	assert.Equal(t, clienteDto.ID, responseDto.ID)
-	assert.Equal(t, clienteDto.Username, responseDto.Username)
+	// Crea un registrador de respuestas HTTP para capturar la respuesta
+	response := httptest.NewRecorder()
 
-	// Verificación de que se llamó al método del servicio esperado
-	mockClienteService.AssertCalled(t, "GetClienteByUsername", username)
+	// Envía la solicitud HTTP al enrutador
+	router.ServeHTTP(response, request)
+
+	// Verifica el código de estado de la respuesta
+	assert.Equal(t, http.StatusOK, response.Code, "El código de respuesta no es el esperado")
+
+	// Decodifica la respuesta JSON en un objeto ClienteDto
+	var result dto.ClienteDto
+	err := json.Unmarshal(response.Body.Bytes(), &result)
+	assert.NoError(t, err, "Error al decodificar la respuesta JSON")
+
+	// Verifica que los datos del cliente sean correctos
+	assert.Equal(t, expectedClient.ID, result.ID, "ID del cliente incorrecto")
+	assert.Equal(t, expectedClient.Username, result.Username, "Nombre de usuario del cliente incorrecto")
+	assert.Equal(t, expectedClient.Email, result.Email, "Correo electrónico del cliente incorrecto")
+	// Verifica los demás campos del cliente según tu estructura
+}
+
+// Implementa los demás tests unitarios para los otros métodos del controlador
+
+// Ejemplo de test para GetClienteByUsername
+func TestGetClienteByUsername(t *testing.T) {
+	// Configura los datos de prueba
+	username := "testuser"
+	expectedClient := dto.ClienteDto{
+		ID:       1,
+		Username: username,
+		Email:    "test@example.com",
+		// Completa los demás campos del cliente según tu estructura
+	}
+
+	// Configura el servicio de prueba
+	mockService := &TestClienteService{
+		GetClienteByUsernameFunc: func(username string) (dto.ClienteDto, errors.APIError) {
+			if username == expectedClient.Username {
+				return expectedClient, nil
+			}
+			return dto.ClienteDto{}, errors.NewNotFoundAPIError("Cliente no encontrado")
+		},
+	}
+
+	// Configura el controlador con el servicio de prueba
+	clienteController.ClienteService = mockService
+
+	// Configura el enrutador de Gin para la prueba
+	router := gin.Default()
+	router.GET("/cliente/username/:username", clienteController.GetClienteByUsername)
+
+	// Crea una solicitud HTTP GET al endpoint /cliente/username/{username}
+	request, _ := http.NewRequest("GET", "/cliente/username/"+username, nil)
+
+	// Crea un registrador de respuestas HTTP para capturar la respuesta
+	response := httptest.NewRecorder()
+
+	// Envía la solicitud HTTP al enrutador
+	router.ServeHTTP(response, request)
+
+	// Verifica el código de estado de la respuesta
+	assert.Equal(t, http.StatusOK, response.Code, "El código de respuesta no es el esperado")
+
+	// Decodifica la respuesta JSON en un objeto ClienteDto
+	var result dto.ClienteDto
+	err := json.Unmarshal(response.Body.Bytes(), &result)
+	assert.NoError(t, err, "Error al decodificar la respuesta JSON")
+
+	// Verifica que los datos del cliente sean correctos
+	assert.Equal(t, expectedClient.ID, result.ID, "ID del cliente incorrecto")
+	assert.Equal(t, expectedClient.Username, result.Username, "Nombre de usuario del cliente incorrecto")
+	assert.Equal(t, expectedClient.Email, result.Email, "Correo electrónico del cliente incorrecto")
+	// Verifica los demás campos del cliente según tu estructura
 }
 
 func TestGetClienteByEmail(t *testing.T) {
-	// Configuración del router Gin
-	router := gin.Default()
-
-	// Configuración de la ruta y el controlador
-	router.GET("/clientes/email/:email", cliente_controller.GetClienteByEmail)
-
-	// Configuración del servicio simulado
-	mockClienteService := &services.MockClienteService{}
-	cliente_controller.SetClienteService(mockClienteService)
-
-	// Datos de prueba
-	email := "john.doe@example.com"
-	clienteDto := dto.ClienteDto{
-		ID:    1,
-		Email: email,
+	// Configura los datos de prueba
+	email := "test@example.com"
+	expectedClient := dto.ClienteDto{
+		ID:       1,
+		Username: "testuser",
+		Email:    email,
+		// Completa los demás campos del cliente según tu estructura
 	}
 
-	// Configuración del comportamiento simulado del servicio
-	mockClienteService.On("GetClienteByEmail", email).Return(clienteDto, nil)
-
-	// Ejecución de la solicitud HTTP de prueba
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/clientes/email/"+email, nil)
-	router.ServeHTTP(w, req)
-
-	// Verificación del estado de la respuesta HTTP
-	assert.Equal(t, http.StatusOK, w.Code)
-
-	// Verificación del cuerpo de la respuesta JSON
-	var responseDto dto.ClienteDto
-	err := json.Unmarshal(w.Body.Bytes(), &responseDto)
-	assert.NoError(t, err)
-
-	// Verificación de los datos del cliente devuelto
-	assert.Equal(t, clienteDto.ID, responseDto.ID)
-	assert.Equal(t, clienteDto.Email, responseDto.Email)
-
-	// Verificación de que se llamó al método del servicio esperado
-	mockClienteService.AssertCalled(t, "GetClienteByEmail", email)
-}
-
-
-func TestInsertCliente(t *testing.T) {
-	// Configuración del router Gin
-	router := gin.Default()
-
-	// Configuración de la ruta y el controlador
-	router.POST("/clientes", cliente_controller.InsertCliente)
-
-	// Configuración del servicio simulado
-	mockClienteService := &services.MockClienteService{}
-	cliente_controller.SetClienteService(mockClienteService)
-
-	// Datos de prueba
-	clienteDto := dto.ClienteDto{
-		Name:  "John Doe",
-		Email: "john.doe@example.com",
-		// Agrega otros campos necesarios para el DTO
-	}
-
-	// Configuración del comportamiento simulado del servicio
-	mockClienteService.On("InsertCliente", clienteDto).Return(clienteDto, nil)
-
-	// Conversión del objeto DTO a JSON
-	requestBody, err := json.Marshal(clienteDto)
-	assert.NoError(t, err)
-
-	// Ejecución de la solicitud HTTP de prueba
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("POST", "/clientes", bytes.NewBuffer(requestBody))
-	router.ServeHTTP(w, req)
-
-	// Verificación del estado de la respuesta HTTP
-	assert.Equal(t, http.StatusCreated, w.Code)
-
-	// Verificación del cuerpo de la respuesta JSON
-	var responseDto dto.ClienteDto
-	err = json.Unmarshal(w.Body.Bytes(), &responseDto)
-	assert.NoError(t, err)
-
-	// Verificación de los datos del cliente devuelto
-	assert.Equal(t, clienteDto.Name, responseDto.Name)
-	assert.Equal(t, clienteDto.Email, responseDto.Email)
-
-	// Verificación de que se llamó al método del servicio esperado
-	mockClienteService.AssertCalled(t, "InsertCliente", clienteDto)
-}
-
-func TestGetReservaById(t *testing.T) {
-	// Configuración del router Gin
-	router := gin.Default()
-
-	// Configuración de la ruta y el controlador
-	router.GET("/reservas/:id", cliente_controller.GetReservaById)
-
-	// Configuración del servicio simulado
-	mockClienteService := &services.MockClienteService{}
-	cliente_controller.SetClienteService(mockClienteService)
-
-	// Datos de prueba
-	reservaID := 1
-	reservaDto := dto.ReservaDto{
-		ID:       reservaID,
-		ClientID: 1,
-	}
-
-	// Configuración del comportamiento simulado del servicio
-	mockClienteService.On("GetReservaById", reservaID).Return(reservaDto, nil)
-
-	// Ejecución de la solicitud HTTP de prueba
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/reservas/"+strconv.Itoa(reservaID), nil)
-	router.ServeHTTP(w, req)
-
-	// Verificación del estado de la respuesta HTTP
-	assert.Equal(t, http.StatusOK, w.Code)
-
-	// Verificación del cuerpo de la respuesta JSON
-	var responseDto dto.ReservaDto
-	err := json.Unmarshal(w.Body.Bytes(), &responseDto)
-	assert.NoError(t, err)
-
-	// Verificación de los datos de la reserva devuelta
-	assert.Equal(t, reservaDto.ID, responseDto.ID)
-	assert.Equal(t, reservaDto.ClientID, responseDto.ClientID)
-
-	// Verificación de que se llamó al método del servicio esperado
-	mockClienteService.AssertCalled(t, "GetReservaById", reservaID)
-}
-
-
-func TestGetReservasById(t *testing.T) {
-	// Configuración del router Gin
-	router := gin.Default()
-
-	// Configuración de la ruta y el controlador
-	router.GET("/reservas/cliente/:id", cliente_controller.GetReservasById)
-
-	// Configuración del servicio simulado
-	mockClienteService := &services.MockClienteService{}
-	cliente_controller.SetClienteService(mockClienteService)
-
-	// Datos de prueba
-	clienteID := 1
-	reservasDto := dto.ReservasDto{
-		ClientID: clienteID,
-		Reservas: []dto.ReservaDto{
-			{
-				ID:       1,
-				ClientID: clienteID,
-			},
-			{
-				ID:       2,
-				ClientID: clienteID,
-			},
+	// Configura el servicio de prueba
+	mockService := &TestClienteService{
+		GetClienteByEmailFunc: func(email string) (dto.ClienteDto, errors.APIError) {
+			if email == expectedClient.Email {
+				return expectedClient, nil
+			}
+			return dto.ClienteDto{}, errors.NewNotFoundAPIError("Cliente no encontrado")
 		},
 	}
 
-	// Configuración del comportamiento simulado del servicio
-	mockClienteService.On("GetReservasById", clienteID).Return(reservasDto, nil)
+	// Configura el controlador con el servicio de prueba
+	clienteController.ClienteService = mockService
 
-	// Ejecución de la solicitud HTTP de prueba
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/reservas/cliente/"+strconv.Itoa(clienteID), nil)
-	router.ServeHTTP(w, req)
+	// Configura el enrutador de Gin para la prueba
+	router := gin.Default()
+	router.GET("/cliente/email/:email", clienteController.GetClienteByEmail)
 
-	// Verificación del estado de la respuesta HTTP
-	assert.Equal(t, http.StatusOK, w.Code)
+	// Crea una solicitud HTTP GET al endpoint /cliente/email/{email}
+	request, _ := http.NewRequest("GET", "/cliente/email/"+email, nil)
 
-	// Verificación del cuerpo de la respuesta JSON
-	var responseDto dto.ReservasDto
-	err := json.Unmarshal(w.Body.Bytes(), &responseDto)
-	assert.NoError(t, err)
+	// Crea un registrador de respuestas HTTP para capturar la respuesta
+	response := httptest.NewRecorder()
 
-	// Verificación de los datos de las reservas devueltas
-	assert.Equal(t, clienteID, responseDto.ClientID)
-	assert.Len(t, responseDto.Reservas, len(reservasDto.Reservas))
+	// Envía la solicitud HTTP al enrutador
+	router.ServeHTTP(response, request)
 
-	// Verificación de que se llamó al método del servicio esperado
-	mockClienteService.AssertCalled(t, "GetReservasById", clienteID)
+	// Verifica el código de estado de la respuesta
+	assert.Equal(t, http.StatusOK, response.Code, "El código de respuesta no es el esperado")
+
+	// Decodifica la respuesta JSON en un objeto ClienteDto
+	var result dto.ClienteDto
+	err := json.Unmarshal(response.Body.Bytes(), &result)
+	assert.NoError(t, err, "Error al decodificar la respuesta JSON")
+
+	// Verifica que los datos del cliente sean correctos
+	assert.Equal(t, expectedClient.ID, result.ID, "ID del cliente incorrecto")
+	assert.Equal(t, expectedClient.Username, result.Username, "Nombre de usuario del cliente incorrecto")
+	assert.Equal(t, expectedClient.Email, result.Email, "Correo electrónico del cliente incorrecto")
+	// Verifica los demás campos del cliente según tu estructura
+}
+
+func TestInsertCliente(t *testing.T) {
+	// Configura los datos de prueba
+	cliente := dto.ClienteDto{
+		ID:       1,
+		Username: "testuser",
+		Email:    "test@example.com",
+		// Completa los demás campos del cliente según tu estructura
+	}
+
+	// Configura el servicio de prueba
+	mockService := &TestClienteService{
+		InsertClienteFunc: func(clienteDto dto.ClienteDto) (dto.ClienteDto, errors.APIError) {
+			// Simula la inserción exitosa del cliente
+			return clienteDto, nil
+		},
+	}
+
+	// Configura el controlador con el servicio de prueba
+	clienteController.ClienteService = mockService
+
+	// Configura el enrutador de Gin para la prueba
+	router := gin.Default()
+	router.POST("/cliente", clienteController.InsertCliente)
+
+	// Convierte el objeto cliente en formato JSON
+	jsonData, _ := json.Marshal(cliente)
+
+	// Crea una solicitud HTTP POST al endpoint /cliente
+	request, _ := http.NewRequest("POST", "/cliente", strings.NewReader(string(jsonData)))
+
+	// Crea un registrador de respuestas HTTP para capturar la respuesta
+	response := httptest.NewRecorder()
+
+	// Envía la solicitud HTTP al enrutador
+	router.ServeHTTP(response, request)
+
+	// Verifica el código de estado de la respuesta
+	assert.Equal(t, http.StatusCreated, response.Code, "El código de respuesta no es el esperado")
+
+	// Decodifica la respuesta JSON en un objeto ClienteDto
+	var result dto.ClienteDto
+	err := json.Unmarshal(response.Body.Bytes(), &result)
+	assert.NoError(t, err, "Error al decodificar la respuesta JSON")
+
+	// Verifica que los datos del cliente sean correctos
+	assert.Equal(t, cliente.ID, result.ID, "ID del cliente incorrecto")
+	assert.Equal(t, cliente.Username, result.Username, "Nombre de usuario del cliente incorrecto")
+	assert.Equal(t, cliente.Email, result.Email, "Correo electrónico del cliente incorrecto")
+	// Verifica los demás campos del cliente según tu estructura
+}
+
+// Implementa los demás tests unitarios para las demás funciones del controlador
+
+// Ejemplo de test para GetReservaById
+func TestGetReservaById(t *testing.T) {
+	// Configura los datos de prueba
+	id := 1
+	expectedReserva := dto.ReservaDto{
+		ID:       id,
+		ClientID: 1,
+		// Completa los demás campos de la reserva según tu estructura
+	}
+
+	// Configura el servicio de prueba
+	mockService := &TestClienteService{
+		GetReservaByIdFunc: func(id int) (dto.ReservaDto, errors.APIError) {
+			if id == expectedReserva.ID {
+				return expectedReserva, nil
+			}
+			return dto.ReservaDto{}, errors.NewNotFoundAPIError("Reserva no encontrada")
+		},
+	}
+
+	// Configura el controlador con el servicio de prueba
+	clienteController.ClienteService = mockService
+
+	// Configura el enrutador de Gin para la prueba
+	router := gin.Default()
+	router.GET("/reserva/:id", clienteController.GetReservaById)
+
+	// Crea una solicitud HTTP GET al endpoint /reserva/{id}
+	request, _ := http.NewRequest("GET", "/reserva/"+strconv.Itoa(id), nil)
+
+	// Crea un registrador de respuestas HTTP para capturar la respuesta
+	response := httptest.NewRecorder()
+
+	// Envía la solicitud HTTP al enrutador
+	router.ServeHTTP(response, request)
+
+	// Verifica el código de estado de la respuesta
+	assert.Equal(t, http.StatusOK, response.Code, "El código de respuesta no es el esperado")
+
+	// Decodifica la respuesta JSON en un objeto ReservaDto
+	var result dto.ReservaDto
+	err := json.Unmarshal(response.Body.Bytes(), &result)
+	assert.NoError(t, err, "Error al decodificar la respuesta JSON")
+
+	// Verifica que los datos de la reserva sean correctos
+	assert.Equal(t, expectedReserva.ID, result.ID, "ID de la reserva incorrecto")
+	assert.Equal(t, expectedReserva.ClientID, result.ClientID, "ID de cliente de la reserva incorrecto")
 }
 
 func TestInsertReserva(t *testing.T) {
-	// Configuración del router Gin
-	router := gin.Default()
-
-	// Configuración de la ruta y el controlador
-	router.POST("/reservas", cliente_controller.InsertReserva)
-
-	// Configuración del servicio simulado
-	mockClienteService := &services.MockClienteService{}
-	cliente_controller.SetClienteService(mockClienteService)
-
-	// Datos de prueba
-	reservaDto := dto.ReservaDto{
+	// Configura los datos de prueba
+	reserva := dto.ReservaDto{
+		ID:       1,
 		ClientID: 1,
+		// Completa los demás campos de la reserva según tu estructura
 	}
 
-	// Configuración del comportamiento simulado del servicio
-	mockClienteService.On("InsertReserva", reservaDto).Return(reservaDto, nil)
+	// Configura el servicio de prueba
+	mockService := &TestClienteService{
+		InsertReservaFunc: func(reservaDto dto.ReservaDto) (dto.ReservaDto, errors.APIError) {
+			// Simula la inserción exitosa de la reserva
+			return reservaDto, nil
+		},
+	}
 
-	// Conversión del objeto DTO a JSON
-	requestBody, err := json.Marshal(reservaDto)
-	assert.NoError(t, err)
+	// Configura el controlador con el servicio de prueba
+	clienteController.ClienteService = mockService
 
-	// Ejecución de la solicitud HTTP de prueba
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("POST", "/reservas", bytes.NewBuffer(requestBody))
-	router.ServeHTTP(w, req)
+	// Configura el enrutador de Gin para la prueba
+	router := gin.Default()
+	router.POST("/reserva", clienteController.InsertReserva)
 
-	// Verificación del estado de la respuesta HTTP
-	assert.Equal(t, http.StatusCreated, w.Code)
+	// Convierte el objeto reserva en formato JSON
+	jsonData, _ := json.Marshal(reserva)
 
-	// Verificación del cuerpo de la respuesta JSON
-	var responseDto dto.ReservaDto
-	err = json.Unmarshal(w.Body.Bytes(), &responseDto)
-	assert.NoError(t, err)
+	// Crea una solicitud HTTP POST al endpoint /reserva
+	request, _ := http.NewRequest("POST", "/reserva", strings.NewReader(string(jsonData)))
 
-	// Verificación de los datos de la reserva devuelta
-	assert.Equal(t, reservaDto.ClientID, responseDto.ClientID)
-	// Realiza otras verificaciones necesarias para los campos relevantes
+	// Crea un registrador de respuestas HTTP para capturar la respuesta
+	response := httptest.NewRecorder()
 
-	// Verificación de que se llamó al método del servicio esperado
-	mockClienteService.AssertCalled(t, "InsertReserva", reservaDto)
+	// Envía la solicitud HTTP al enrutador
+	router.ServeHTTP(response, request)
+
+	// Verifica el código de estado de la respuesta
+	assert.Equal(t, http.StatusCreated, response.Code, "El código de respuesta no es el esperado")
+
+	// Decodifica la respuesta JSON en un objeto ReservaDto
+	var result dto.ReservaDto
+	err := json.Unmarshal(response.Body.Bytes(), &result)
+	assert.NoError(t, err, "Error al decodificar la respuesta JSON")
+
+	// Verifica que los datos de la reserva sean correctos
+	assert.Equal(t, reserva.ID, result.ID, "ID de la reserva incorrecto")
+	assert.Equal(t, reserva.ClientID, result.ClientID, "ID de cliente de la reserva incorrecto")
+	// Verifica los demás campos de la reserva según tu estructura
 }
 
 func TestGetHoteles(t *testing.T) {
-	// Configuración del router Gin
-	router := gin.Default()
+	// Configura los datos de prueba
+	expectedHoteles := dto.HotelesDto{
+		// Completa los datos de los hoteles según tu estructura
+	}
 
-	// Configuración de la ruta y el controlador
-	router.GET("/hoteles", cliente_controller.GetHoteles)
-
-	// Configuración del servicio simulado
-	mockClienteService := &services.MockClienteService{}
-	cliente_controller.SetClienteService(mockClienteService)
-
-	// Datos de prueba
-	hotelesDto := dto.HotelesDto{
-		Hoteles: []dto.HotelDto{
-			{
-				ID:   1,
-				Name: "Hotel A",
-			},
-			{
-				ID:   2,
-				Name: "Hotel B",
-			},
+	// Configura el servicio de prueba
+	mockService := &TestClienteService{
+		GetHotelesFunc: func() (dto.HotelesDto, errors.APIError) {
+			return expectedHoteles, nil
 		},
 	}
 
-	// Configuración del comportamiento simulado del servicio
-	mockClienteService.On("GetHoteles").Return(hotelesDto, nil)
+	// Configura el controlador con el servicio de prueba
+	clienteController.ClienteService = mockService
 
-	// Ejecución de la solicitud HTTP de prueba
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/hoteles", nil)
-	router.ServeHTTP(w, req)
+	// Configura el enrutador de Gin para la prueba
+	router := gin.Default()
+	router.GET("/hoteles", clienteController.GetHoteles)
 
-	// Verificación del estado de la respuesta HTTP
-	assert.Equal(t, http.StatusOK, w.Code)
+	// Crea una solicitud HTTP GET al endpoint /hoteles
+	request, _ := http.NewRequest("GET", "/hoteles", nil)
 
-	// Verificación del cuerpo de la respuesta JSON
-	var responseDto dto.HotelesDto
-	err := json.Unmarshal(w.Body.Bytes(), &responseDto)
-	assert.NoError(t, err)
+	// Crea un registrador de respuestas HTTP para capturar la respuesta
+	response := httptest.NewRecorder()
 
-	// Verificación de los datos de los hoteles devueltos
-	assert.Len(t, responseDto.Hoteles, len(hotelesDto.Hoteles))
-	// Realiza otras verificaciones necesarias para los campos relevantes
+	// Envía la solicitud HTTP al enrutador
+	router.ServeHTTP(response, request)
 
-	// Verificación de que se llamó al método del servicio esperado
-	mockClienteService.AssertCalled(t, "GetHoteles")
+	// Verifica el código de estado de la respuesta
+	assert.Equal(t, http.StatusOK, response.Code, "El código de respuesta no es el esperado")
+
+	// Decodifica la respuesta JSON en un objeto HotelesDto
+	var result dto.HotelesDto
+	err := json.Unmarshal(response.Body.Bytes(), &result)
+	assert.NoError(t, err, "Error al decodificar la respuesta JSON")
+
+	// Verifica los datos de los hoteles
+	assert.Equal(t, expectedHoteles, result, "Los datos de los hoteles no son los esperados")
 }
 
 func TestGetImagenesByHotelId(t *testing.T) {
-	// Configuración del router Gin
-	router := gin.Default()
-
-	// Configuración de la ruta y el controlador
-	router.GET("/Imagenes/hotel/:id", cliente_controller.GetImagenesByHotelId)
-
-	// Configuración del servicio simulado
-	mockClienteService := &services.MockClienteService{}
-	cliente_controller.SetClienteService(mockClienteService)
-
-	// Datos de prueba
+	// Configura los datos de prueba
 	hotelID := 1
-	imagenesDto := dto.ImagenesDto{
-		Imagenes: []dto.ImagenDto{
-			{
-				ID:     1,
-				URL:    "https://res.cloudinary.com/simpleview/image/upload/v1642787126/clients/loscabosmx/Copia_de_Copia_de_Esperanza_0010x_8dcb97e1-1c39-4cd8-8e36-326ec39d65b3.jpg",
-			},
-			{
-				ID:     2,
-				URL:    "https://res.cloudinary.com/simpleview/image/upload/v1642787126/clients/loscabosmx/Copia_de_Copia_de_Esperanza_0010x_8dcb97e1-1c39-4cd8-8e36-326ec39d65b3.jpg",
-			},
+	expectedImagenes := dto.ImagenesDto{
+		HotelID: hotelID,
+		// Completa los demás campos de las imágenes según tu estructura
+	}
+
+	// Configura el servicio de prueba
+	mockService := &TestClienteService{
+		GetImagenesByHotelIdFunc: func(id int) (dto.ImagenesDto, errors.APIError) {
+			if id == hotelID {
+				return expectedImagenes, nil
+			}
+			return dto.ImagenesDto{}, errors.NewNotFoundAPIError("Imágenes no encontradas")
 		},
 	}
 
-	// Configuración del comportamiento simulado del servicio
-	mockClienteService.On("GetImagenesByHotelId", hotelID).Return(imagenesDto, nil)
+	// Configura el controlador con el servicio de prueba
+	clienteController.ClienteService = mockService
 
-	// Ejecución de la solicitud HTTP de prueba
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/imagenes/hotel/"+strconv.Itoa(hotelID), nil)
-	router.ServeHTTP(w, req)
+	// Configura el enrutador de Gin para la prueba
+	router := gin.Default()
+	router.GET("/imagenes/:id", clienteController.GetImagenesByHotelId)
 
-	// Verificación del estado de la respuesta HTTP
-	assert.Equal(t, http.StatusOK, w.Code)
+	// Crea una solicitud HTTP GET al endpoint /imagenes/{id}
+	request, _ := http.NewRequest("GET", "/imagenes/"+strconv.Itoa(hotelID), nil)
 
-	// Verificación del cuerpo de la respuesta JSON
-	var responseDto dto.ImagenesDto
-	err := json.Unmarshal(w.Body.Bytes(), &responseDto)
-	assert.NoError(t, err)
+	// Crea un registrador de respuestas HTTP para capturar la respuesta
+	response := httptest.NewRecorder()
 
-	// Verificación de los datos de las imágenes devueltas
-	assert.Len(t, responseDto.Imagenes, len(imagenesDto.Imagenes))
+	// Envía la solicitud HTTP al enrutador
+	router.ServeHTTP(response, request)
 
-	// Verificación de que se llamó al método del servicio esperado
-	mockClienteService.AssertCalled(t, "GetImagenesByHotelId", hotelID)
+	// Verifica el código de estado de la respuesta
+	assert.Equal(t, http.StatusOK, response.Code, "El código de respuesta no es el esperado")
+
+	// Decodifica la respuesta JSON en un objeto ImagenesDto
+	var result dto.ImagenesDto
+	err := json.Unmarshal(response.Body.Bytes(), &result)
+	assert.NoError(t, err, "Error al decodificar la respuesta JSON")
+
+	// Verifica que los datos de las imágenes sean correctos
+	assert.Equal(t, expectedImagenes.HotelID, result.HotelID, "ID de hotel de las imágenes incorrecto")
+	// Verifica los demás campos de las imágenes según tu estructura
 }
 
 func TestGetHotelById(t *testing.T) {
-	// Configuración del router Gin
-	router := gin.Default()
-
-	// Configuración de la ruta y el controlador
-	router.GET("/hoteles/:id", cliente_controller.GetHotelById)
-
-	// Configuración del servicio simulado
-	mockAdminService := &services.MockAdminService{}
-	cliente_controller.SetAdminService(mockAdminService)
-
-	// Datos de prueba
+	// Configura los datos de prueba
 	hotelID := 1
-	hotelDto := dto.HotelDto{
-		ID:   hotelID,
-		Name: "Hotel A",
+	expectedHotel := dto.HotelDto{
+		ID: hotelID,
+		// Completa los demás campos del hotel según tu estructura
 	}
 
-	// Configuración del comportamiento simulado del servicio
-	mockAdminService.On("GetHotelById", hotelID).Return(hotelDto, nil)
-
-	// Ejecución de la solicitud HTTP de prueba
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/hoteles/"+strconv.Itoa(hotelID), nil)
-	router.ServeHTTP(w, req)
-
-	// Verificación del estado de la respuesta HTTP
-	assert.Equal(t, http.StatusOK, w.Code)
-
-	// Verificación del cuerpo de la respuesta JSON
-	var responseDto dto.HotelDto
-	err := json.Unmarshal(w.Body.Bytes(), &responseDto)
-	assert.NoError(t, err)
-
-	// Verificación de los datos del hotel devuelto
-	assert.Equal(t, hotelDto.ID, responseDto.ID)
-	assert.Equal(t, hotelDto.Name, responseDto.Name)
-
-	// Verificación de que se llamó al método del servicio esperado
-	mockAdminService.AssertCalled(t, "GetHotelById", hotelID)
-}
-
-func TestGetDisponibilidad(t *testing.T) {
-	// Configuración del router Gin
-	router := gin.Default()
-
-	// Configuración de la ruta y el controlador
-	router.GET("/disponibilidad/:id/:AnioInicio/:MesInicio/:DiaInicio/:AnioFinal/:MesFinal/:DiaFinal", cliente_controller.GetDisponibilidad)
-
-	// Configuración del servicio simulado
-	mockClienteService := &services.MockClienteService{}
-	cliente_controller.SetClienteService(mockClienteService)
-
-	// Datos de prueba
-	hotelID := 1
-	anioInicio := 2023
-	mesInicio := 7
-	diaInicio := 1
-	anioFinal := 2023
-	mesFinal := 7
-	diaFinal := 31
-
-	// Configuración del comportamiento simulado del servicio
-	mockClienteService.On("GetDisponibilidad", hotelID, anioInicio, anioFinal, mesInicio, mesFinal, diaInicio, diaFinal).Return(true)
-
-	// Ejecución de la solicitud HTTP de prueba
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/disponibilidad/"+strconv.Itoa(hotelID)+"/"+strconv.Itoa(anioInicio)+"/"+strconv.Itoa(mesInicio)+"/"+strconv.Itoa(diaInicio)+"/"+strconv.Itoa(anioFinal)+"/"+strconv.Itoa(mesFinal)+"/"+strconv.Itoa(diaFinal), nil)
-	router.ServeHTTP(w, req)
-
-	// Verificación del estado de la respuesta HTTP
-	assert.Equal(t, http.StatusOK, w.Code)
-
-	// Verificación del cuerpo de la respuesta JSON
-	var responseDto bool
-	err := json.Unmarshal(w.Body.Bytes(), &responseDto)
-	assert.NoError(t, err)
-
-	// Verificación del resultado de disponibilidad
-	assert.True(t, responseDto)
-
-	// Verificación de que se llamó al método del servicio esperado
-	mockClienteService.AssertCalled(t, "GetDisponibilidad", hotelID, anioInicio, anioFinal, mesInicio, mesFinal, diaInicio, diaFinal)
-}
-
-func TestGetReservasByDate(t *testing.T) {
-	// Configuración del router Gin
-	router := gin.Default()
-
-	// Configuración de la ruta y el controlador
-	router.GET("/reservas/:AnioInicio/:MesInicio/:DiaInicio/:AnioFinal/:MesFinal/:DiaFinal", cliente_controller.GetReservasByDate)
-
-	// Configuración del servicio simulado
-	mockClienteService := &services.MockClienteService{}
-	cliente_controller.SetClienteService(mockClienteService)
-
-	// Datos de prueba
-	anioInicio := 2023
-	mesInicio := 7
-	diaInicio := 1
-	anioFinal := 2023
-	mesFinal := 7
-	diaFinal := 31
-
-	// Reservas de ejemplo
-	reservasDto := dto.ReservasDto{
-		Reservas: []dto.ReservaDto{
-			{
-				ID:       1,
-				ClientID: 1,
-			},
-			{
-				ID:       2,
-				ClientID: 2,
-			},
+	// Configura el servicio de prueba
+	mockService := &TestClienteService{
+		GetHotelByIdFunc: func(id int) (dto.HotelDto, errors.APIError) {
+			if id == hotelID {
+				return expectedHotel, nil
+			}
+			return dto.HotelDto{}, errors.NewNotFoundAPIError("Hotel no encontrado")
 		},
 	}
 
-	// Configuración del comportamiento simulado del servicio
-	mockClienteService.On("GetReservasByDate", anioInicio, anioFinal, mesInicio, mesFinal, diaInicio, diaFinal).Return(reservasDto, nil)
+	// Configura el controlador con el servicio de prueba
+	clienteController.ClienteService = mockService
 
-	// Ejecución de la solicitud HTTP de prueba
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/reservas/"+strconv.Itoa(anioInicio)+"/"+strconv.Itoa(mesInicio)+"/"+strconv.Itoa(diaInicio)+"/"+strconv.Itoa(anioFinal)+"/"+strconv.Itoa(mesFinal)+"/"+strconv.Itoa(diaFinal), nil)
-	router.ServeHTTP(w, req)
+	// Configura el enrutador de Gin para la prueba
+	router := gin.Default()
+	router.GET("/hotel/:id", clienteController.GetHotelById)
 
-	// Verificación del estado de la respuesta HTTP
-	assert.Equal(t, http.StatusOK, w.Code)
+	// Crea una solicitud HTTP GET al endpoint /hotel/{id}
+	request, _ := http.NewRequest("GET", "/hotel/"+strconv.Itoa(hotelID), nil)
 
-	// Verificación del cuerpo de la respuesta JSON
-	var responseDto dto.ReservasDto
-	err := json.Unmarshal(w.Body.Bytes(), &responseDto)
-	assert.NoError(t, err)
+	// Crea un registrador de respuestas HTTP para capturar la respuesta
+	response := httptest.NewRecorder()
 
-	// Verificación del número de reservas devueltas
-	assert.Len(t, responseDto.Reservas, len(reservasDto.Reservas))
-	// Realiza otras verificaciones necesarias para los campos relevantes
+	// Envía la solicitud HTTP al enrutador
+	router.ServeHTTP(response, request)
 
-	// Verificación de que se llamó al método del servicio esperado
-	mockClienteService.AssertCalled(t, "GetReservasByDate", anioInicio, anioFinal, mesInicio, mesFinal, diaInicio, diaFinal)
+	// Verifica el código de estado de la respuesta
+	assert.Equal(t, http.StatusOK, response.Code, "El código de respuesta no es el esperado")
+
+	// Decodifica la respuesta JSON en un objeto HotelDto
+	var result dto.HotelDto
+	err := json.Unmarshal(response.Body.Bytes(), &result)
+	assert.NoError(t, err, "Error al decodificar la respuesta JSON")
+
+	// Verifica que los datos del hotel sean correctos
+	assert.Equal(t, expectedHotel.ID, result.ID, "ID del hotel incorrecto")
+	// Verifica los demás campos del hotel según tu estructura
+}
+
+func TestGetDisponibilidad(t *testing.T) {
+	// Configura los datos de prueba
+	hotelID := 1
+	AnioInicio := 2023
+	AnioFinal := 2023
+	MesInicio := 6
+	MesFinal := 6
+	DiaInicio := 1
+	DiaFinal := 5
+	expectedDisponibilidad := true
+
+	// Configura el servicio de prueba
+	mockService := &TestClienteService{
+		GetDisponibilidadFunc: func(id, AnioInicio, AnioFinal, MesInicio, MesFinal, DiaInicio, DiaFinal int) bool {
+			if id == hotelID && AnioInicio == 2023 && AnioFinal == 2023 && MesInicio == 6 && MesFinal == 6 && DiaInicio == 1 && DiaFinal == 5 {
+				return expectedDisponibilidad
+			}
+			return false
+		},
+	}
+
+	// Configura el controlador con el servicio de prueba
+	clienteController.ClienteService = mockService
+
+	// Configura el enrutador de Gin para la prueba
+	router := gin.Default()
+	router.GET("/disponibilidad/:id/:AnioInicio/:AnioFinal/:MesInicio/:MesFinal/:DiaInicio/:DiaFinal", clienteController.GetDisponibilidad)
+
+	// Crea una solicitud HTTP GET al endpoint /disponibilidad/{id}/{AnioInicio}/{AnioFinal}/{MesInicio}/{MesFinal}/{DiaInicio}/{DiaFinal}
+	request, _ := http.NewRequest("GET", "/disponibilidad/"+strconv.Itoa(hotelID)+"/"+strconv.Itoa(AnioInicio)+"/"+strconv.Itoa(AnioFinal)+"/"+strconv.Itoa(MesInicio)+"/"+strconv.Itoa(MesFinal)+"/"+strconv.Itoa(DiaInicio)+"/"+strconv.Itoa(DiaFinal), nil)
+
+	// Crea un registrador de respuestas HTTP para capturar la respuesta
+	response := httptest.NewRecorder()
+
+	// Envía la solicitud HTTP al enrutador
+	router.ServeHTTP(response, request)
+
+	// Verifica el código de estado de la respuesta
+	assert.Equal(t, http.StatusOK, response.Code, "El código de respuesta no es el esperado")
+
+	// Decodifica la respuesta JSON en un objeto bool
+	var result bool
+	err := json.Unmarshal(response.Body.Bytes(), &result)
+	assert.NoError(t, err, "Error al decodificar la respuesta JSON")
+
+	// Verifica que la disponibilidad sea correcta
+	assert.Equal(t, expectedDisponibilidad, result, "La disponibilidad es incorrecta")
+}
+
+func TestGetReservasByDate(t *testing.T) {
+	// Configura los datos de prueba
+	AnioInicio := 2023
+	AnioFinal := 2023
+	MesInicio := 6
+	MesFinal := 6
+	DiaInicio := 1
+	DiaFinal := 5
+	expectedReservas := dto.ReservasDto{
+		// Completa los datos de las reservas según tu estructura
+	}
+
+	// Configura el servicio de prueba
+	mockService := &TestClienteService{
+		GetReservasByDateFunc: func(AnioInicio, AnioFinal, MesInicio, MesFinal, DiaInicio, DiaFinal int) (dto.ReservasDto, errors.APIError) {
+			return expectedReservas, nil
+		},
+	}
+
+	// Configura el controlador con el servicio de prueba
+	clienteController.ClienteService = mockService
+
+	// Configura el enrutador de Gin para la prueba
+	router := gin.Default()
+	router.GET("/reservas/:AnioInicio/:AnioFinal/:MesInicio/:MesFinal/:DiaInicio/:DiaFinal", clienteController.GetReservasByDate)
+
+	// Crea una solicitud HTTP GET al endpoint /reservas/{AnioInicio}/{AnioFinal}/{MesInicio}/{MesFinal}/{DiaInicio}/{DiaFinal}
+	request, _ := http.NewRequest("GET", "/reservas/"+strconv.Itoa(AnioInicio)+"/"+strconv.Itoa(AnioFinal)+"/"+strconv.Itoa(MesInicio)+"/"+strconv.Itoa(MesFinal)+"/"+strconv.Itoa(DiaInicio)+"/"+strconv.Itoa(DiaFinal), nil)
+
+	// Crea un registrador de respuestas HTTP para capturar la respuesta
+	response := httptest.NewRecorder()
+
+	// Envía la solicitud HTTP al enrutador
+	router.ServeHTTP(response, request)
+
+	// Verifica el código de estado de la respuesta
+	assert.Equal(t, http.StatusOK, response.Code, "El código de respuesta no es el esperado")
+
+	// Decodifica la respuesta JSON en un objeto ReservasDto
+	var result dto.ReservasDto
+	err := json.Unmarshal(response.Body.Bytes(), &result)
+	assert.NoError(t, err, "Error al decodificar la respuesta JSON")
+
+	// Verifica los datos de las reservas
+	assert.Equal(t, expectedReservas, result, "Los datos de las reservas no son los esperados")
 }
 
 func TestGenerateToken(t *testing.T) {
-	// Datos de prueba
+	// Configura los datos de prueba
 	loginDto := dto.ClienteDto{
-		ID: 123,
+		ID: 1,
+		// Completa los demás campos del cliente según tu estructura
+	}
+	expectedToken := "test-token"
+
+	// Configura el servicio de prueba
+	mockService := &TestClienteService{
+		GenerateTokenFunc: func(loginDto dto.ClienteDto) string {
+			return expectedToken
+		},
 	}
 
-	// Llamada a la función para generar el token
-	token := cliente_controller.GenerateToken(loginDto)
+	// Configura el controlador con el servicio de prueba
+	clienteController.ClienteService = mockService
 
-	// Verificación de que se haya generado un token no vacío
-	assert.NotEmpty(t, token)
+	// Configura el enrutador de Gin para la prueba
+	router := gin.Default()
+	router.GET("/token", clienteController.GenerateToken)
 
-	// Verificación de los claims del token
-	parsedToken, err := cliente_controller.ParseToken(token)
-	assert.NoError(t, err)
+	// Crea una solicitud HTTP GET al endpoint /token
+	request, _ := http.NewRequest("GET", "/token", nil)
 
-	claims, ok := parsedToken.Claims.(jwt.MapClaims)
-	assert.True(t, ok)
+	// Crea un registrador de respuestas HTTP para capturar la respuesta
+	response := httptest.NewRecorder()
 
-	// Verificación del ID en los claims
-	id, ok := claims["id"].(float64)
-	assert.True(t, ok)
-	assert.Equal(t, float64(loginDto.ID), id)
+	// Envía la solicitud HTTP al enrutador
+	router.ServeHTTP(response, request)
 
-	// Verificación de la expiración en los claims
-	expiration, ok := claims["expiration"].(float64)
-	assert.True(t, ok)
-	expirationTime := time.Unix(int64(expiration), 0)
-	assert.WithinDuration(t, time.Now().Add(time.Hour*24), expirationTime, time.Second)
+	// Verifica el código de estado de la respuesta
+	assert.Equal(t, http.StatusOK, response.Code, "El código de respuesta no es el esperado")
+
+	// Decodifica la respuesta JSON en un objeto con el token
+	var result struct {
+		Token string `json:"token"`
+	}
+	err := json.Unmarshal(response.Body.Bytes(), &result)
+	assert.NoError(t, err, "Error al decodificar la respuesta JSON")
+
+	// Verifica que el token sea correcto
+	assert.Equal(t, expectedToken, result.Token, "El token generado no es el esperado")
 }

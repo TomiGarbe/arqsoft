@@ -33,7 +33,7 @@ type adminServiceInterface interface {
 	GetHotelByNombre(nombre string) (dto.HotelDto, e.ApiError)
 	GetHoteles() (dto.HotelesDto, e.ApiError)
 	InsertHotel(hotelDto dto.HotelDto) (dto.HotelDto, e.ApiError)
-	InsertImageByHotelId(hotelID int, imagenFile *multipart.FileHeader) (dto.ImagenDto, e.ApiError)
+	InsertImagenByHotelId(hotelID int, imagenFile *multipart.FileHeader) (dto.ImagenDto, e.ApiError)
 	GetImagenesByHotelId(hotelID int) (dto.ImagenesDto, e.ApiError)
 	DeleteImagenById(id int) e.ApiError
 	GetImagenById(id int) (dto.ImagenDto, e.ApiError)
@@ -278,7 +278,7 @@ func (s *adminService) InsertHotel(hotelDto dto.HotelDto) (dto.HotelDto, e.ApiEr
 	return hotelDto, nil
 }
 
-func (i *adminService) InsertImageByHotelId(hotelID int, imagenFile *multipart.FileHeader) (dto.ImagenDto, e.ApiError) {
+func (i *adminService) InsertImagenByHotelId(hotelID int, imagenFile *multipart.FileHeader) (dto.ImagenDto, e.ApiError) {
 	// Crear imageDto para el retorno
 	var imagenDto dto.ImagenDto
 
@@ -302,7 +302,7 @@ func (i *adminService) InsertImageByHotelId(hotelID int, imagenFile *multipart.F
 	}*/
 	
 	// Llamar al DAO de imágenes para insertar la imagen
-	imagen = imagenClient.InsertImageByHotelId(imagen)
+	imagen = imagenClient.InsertImagenByHotelId(imagen)
 
 	// Guardar el archivo en el directorio correspondiente
 	err := saveFile(imagenFile, filePath)

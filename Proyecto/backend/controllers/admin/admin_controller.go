@@ -207,13 +207,46 @@ func InsertImagenByHotelId(c *gin.Context) {
 	}
 	log.Debug("2")
 	// Guardar la imagen y manejar la lógica de relación con el hotel
-	imagenDto, er := service.AdminService.InsertImageByHotelId(hotelID, imagen)
+	imagenDto, er := service.AdminService.InsertImagenByHotelId(hotelID, imagen)
 	if er != nil {
 		c.JSON(er.Status(), er)
 		return
 	}
 	log.Debug("3")
 	c.JSON(http.StatusCreated, imagenDto)
+}
+
+func InsertImagenesByHotelId(c *gin.Context) {
+	log.Debug("Hotel id to insert imagen: " + c.Param("id"))
+	hotelID, erint := strconv.Atoi(c.Param("id"))
+	if erint != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": erint.Error()})
+		return
+	}
+	
+	form, err := c.MultipartForm()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	imagenes := form.File["imagen"]
+	if len(imagenes) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No se encontraron imágenes"})
+		return
+	}
+
+	var imagenesDto dto.ImagenesDto
+	for _, imagen := range imagenes {
+		imagenDto, er := service.AdminService.InsertImagenByHotelId(hotelID, imagen)
+		if er != nil {
+			c.JSON(er.Status(), er)
+			return
+		}
+		imagenesDto = append(imagenesDto, imagenDto)
+	}
+
+	c.JSON(http.StatusCreated, imagenesDto)
 }
 
 func GetImagenesByHotelId(c *gin.Context) {
