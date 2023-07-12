@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { AuthContext } from './login/auth';
-import './estilo/ver_hoteles.css';
+import './estilo/editar_hoteles.css';
 
 const HomePage = () => {
   const [hotels, setHotels] = useState([]);
@@ -22,7 +22,7 @@ const HomePage = () => {
       const imagenesArray = [];
       for (let i = 0; i < hotels.length; i++) {
         const hotel = hotels[i];
-        const request = await fetch(`http://localhost:8090/cliente/imagenes/hotel/${hotel.id}`);
+        const request = await fetch(`http://localhost:8090/admin/imagenes/hotel/${hotel.id}`);
         const response = await request.json();
         if (response.length > 0) {
           imagenesArray.push({url: response[0].url, hotel_id: response[0].hotel_id});

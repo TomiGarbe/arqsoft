@@ -26,7 +26,7 @@ function RegistrationHotel() {
 
   useEffect(() => {
     if (hotelId) {
-      fetch(`http://localhost:8090/cliente/hotel/${hotelId}`)
+      fetch(`http://localhost:8090/admin/hotel/${hotelId}`)
         .then(response => response.json())
         .then(data => {
           setFormData({nombre: data.nombre, descripcion: data.descripcion, email: data.email, cant_hab: data.cant_hab, amenities: data.amenities});
@@ -108,6 +108,7 @@ function RegistrationHotel() {
 
       if (request.ok) {
         if (imagen !== '') {
+          alert("Hola")
           const formDataWithImage = new FormData();
           formDataWithImage.append("imagen", imagen);
           console.log(formDataWithImage)

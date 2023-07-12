@@ -23,7 +23,7 @@
 		router.GET("/admin/reservas", adminController.GetReservas)
 		router.GET("/admin/reservas-por-fecha/:AnioInicio/:MesInicio/:DiaInicio/:AnioFinal/:MesFinal/:DiaFinal", adminController.GetReservasByDate)
 		router.POST("/admin/hotel/:id/add-imagen", adminController.InsertImagenByHotelId)
-		router.POST("/admin/hotel/:id/add-imagenes", adminController.InsertImagenByHotelId)
+		router.POST("/admin/hotel/:id/add-imagenes", adminController.InsertImagenesByHotelId)
 		router.GET("/admin/imagenes/hotel/:id", adminController.GetImagenesByHotelId)
 		router.DELETE("/admin/imagen/delete/:id", adminController.DeleteImagenById)
 		router.PUT("/admin/hotel/:id", adminController.UpdateHotel)

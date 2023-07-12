@@ -14,6 +14,8 @@ import VerReservas from './pages/ver_reservas'
 import VerClientes from './pages/ver_clientes'
 import EditarHoteles from './pages/editar_hoteles'
 import EditarHotel from './pages/editar_hotel'
+import AgregarImagenes from './pages/imagenes_hoteles'
+import AgregarImagenesHotel from './pages/imagenes_hotel'
 import './App.css';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import { AuthProvider } from './pages/login/auth';
@@ -41,6 +43,8 @@ function App() {
                         <Route path='/ver-clientes' element={<VerClientes />}></Route>
                         <Route path='/editar-hoteles' element={<EditarHoteles />}></Route>
                         <Route path='/editar-hotel/:hotelId' element={<EditarHotel />}></Route>
+                        <Route path='/agregar-imagenes' element={<AgregarImagenes />}></Route>
+                        <Route path='/agregar-imagenes/hotel/:hotelId' element={<AgregarImagenesHotel />}></Route>
                     </Routes>
                 </AuthProvider>
             </Router>
