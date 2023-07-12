@@ -6,7 +6,6 @@ function RegistrationHotel() {
   const [Email, setEmail] = useState({});
   const [Nombre, setNombre] = useState({});
   const { isLoggedAdmin } = useContext(AuthContext);
-  const [amenities, setAmenities] = useState([]);
   const [imagen, setImagen] = useState('');
   
   const Verificacion = () => {
@@ -35,8 +34,6 @@ function RegistrationHotel() {
         ...prevFormData,
         [name]: intValue,
       }));
-    } else if (name === "amenities") {
-      setAmenities(value.split(","));
     } else {
       setFormData((prevFormData) => ({
         ...prevFormData,
@@ -210,9 +207,9 @@ function RegistrationHotel() {
           <input
             type="text"
             name="amenities"
-            value={amenities}
+            value={formData.amenities}
             onChange={handleChange}
-            placeholder="Ingrese las Amenities separadas por comas"
+            placeholder="Ingrese las Amenities"
           />
         </label>
         <br />

@@ -26,6 +26,7 @@
 		router.GET("/admin/imagenes/hotel/:id", adminController.GetImagenesByHotelId)
 		router.DELETE("/admin/imagen/delete/:id", adminController.DeleteImagenById)
 		router.PUT("/admin/hotel/:id", adminController.UpdateHotel)
+		router.PUT("/admin/hotel/imagen/:id", adminController.UpdateImagenByHotelId)
 
 		log.Info("Terminando configuraciones de mapeos")
 	}

@@ -159,7 +159,7 @@ const ReservaPage = () => {
     const startDateObj = new Date(event.target.value);
     const endDateObj = new Date(endDate);
     if (startDateObj >= endDateObj) {
-      alert("Fechas no válidas");
+      alert("Fechas no validas");
       setEndDate('');
     } else {
       filterHotel();
@@ -171,11 +171,44 @@ const ReservaPage = () => {
     const startDateObj = new Date(startDate);
     const endDateObj = new Date(event.target.value);
     if (startDateObj >= endDateObj) {
-      alert("Fechas no válidas");
+      alert("Fechas no validas");
       setEndDate('');
     } else {
       filterHotel();
     }
+  };
+
+  const amenities = (amenities) => {
+    if (!amenities) return null;
+  
+    const amenityList = amenities.split(" ");
+  
+    return (
+      <div className="amenities">
+        <h6>Amenities:</h6>
+        {amenityList.map((amenity, index) => (
+          <span key={index} className="amenity">
+            {amenity}
+            <br />
+          </span>
+        ))}
+      </div>
+    );
+  };
+
+  const renderHotelImages = (images, nombre) => {
+    return (
+      <div className="cuadroImag">
+        {images.map((imagen, index) => (
+          <img
+            key={index}
+            src={`http://localhost:8090/${imagen}`}
+            alt={nombre}
+            className="tamanoImag"
+          />
+        ))}
+      </div>
+    );
   };
 
   const handleVolver = () => {
@@ -194,26 +227,11 @@ const ReservaPage = () => {
         ) : (
           <div className="container45" onLoad={Verificacion}>
             <div className="informacion">
-              <div className="cuadroImag">
-                {imagenHotel.map((imagen, index) => (
-                  <img
-                    key={index}
-                    src={`http://localhost:8090/${imagen}`}
-                    alt={hotelData.nombre}
-                    className="tamanoImag"
-                  />
-                ))}
-              </div>
+            <h4 className="nombre">{hotelData["nombre"]}</h4>
+            {renderHotelImages(imagenHotel, hotelData.nombre)}
               <div className="descripcion">{hotelData["descripcion"]}</div>
               <div className="amenities">
-                <h6>Amenities:</h6>
-                {Array.isArray(hotelData.amenities) && hotelData.amenities.length > 0 ? (
-                  hotelData.amenities.map((amenity, index) => (
-                    <span key={index} className="amenity">{amenity}</span>
-                  ))
-                ) : (
-                  <span>No hay amenities disponibles</span>
-                )}
+                {amenities(hotelData.amenities)}
               </div>
               <div className='other-hotels-title'><h6>Otras opciones:</h6></div>
               <div className="other-hotels">

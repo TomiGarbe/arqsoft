@@ -319,68 +319,21 @@ func UpdateHotel(c *gin.Context) {
 	c.JSON(http.StatusOK, updatedHotel)
 }
 
-
-/*func InsertAmenidades(c *gin.Context) {
-	// Obtener el ID del hotel desde los parámetros de la solicitud
+func UpdateImagenByHotelId(c *gin.Context) {
+	// Obtener el ID del hotel a editar
 	hotelID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid hotel ID"})
 		return
 	}
 
-	// Obtener los datos de las amenidades desde el cuerpo de la solicitud
-	var hotelDto dto.HotelDto
-	err = c.BindJSON(&hotelDto)
+	imagen, err := c.FormFile("imagen")
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid data"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Llamar al servicio para actualizar las amenidades del hotel
-	updatedHotelDto, err := service.AdminService.UpdateHotel(hotelID, HotelDto)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
+	updatedImagen, err := service.AdminService.UpdateImagenByHotelId(hotelID, imagen)
 
-	c.JSON(http.StatusOK, updatedHotelDto)
+	c.JSON(http.StatusOK, updatedImagen)
 }
-
-func GetAmenidades(c *gin.Context) {
-	// Obtener el ID del hotel desde los parámetros de la solicitud
-	hotelID, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid hotel ID"})
-		return
-	}
-
-	// Llamar al servicio para obtener las amenidades del hotel
-	hotelDto, err := service.AdminService.GetHotelById(hotelID)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	amenidades := hotelDto.Amenities
-
-	c.JSON(http.StatusOK, gin.H{"amenidades": amenidades})
-}
-
-func DeleteAmenidades(c *gin.Context) {
-	// Obtener el ID del hotel desde los parámetros de la solicitud
-	hotelID, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid hotel ID"})
-		return
-	}
-
-	// Llamar al servicio para eliminar las amenidades del hotel
-	updatedHotelDto, err := service.AdminService.DeleteAmenidades(hotelID)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, updatedHotelDto)
-}*/
-

@@ -16,7 +16,16 @@ func GetImagenById(id int) model.Imagen {
 	var imagen model.Imagen
 
 	Db.Where("id = ?", id).Preload("Hotel").First(&imagen)
-	log.Debug("Image: ", imagen)
+	log.Debug("Imagen: ", imagen)
+
+	return imagen
+}
+
+func GetImagenByHotelId(hotelID int) model.Imagen {
+	var imagen model.Imagen
+
+	Db.Where("hotel_id = ?", hotelID).Preload("Hotel").First(&imagen)
+	log.Debug("Imagen: ", imagen)
 
 	return imagen
 }
@@ -51,4 +60,15 @@ func DeleteImagenById(imagenID int) e.ApiError {
 	}
 
 	return nil
+}
+
+func UpdateImagen(imagen model.Imagen) model.Imagen {
+	result := Db.Save(&imagen)
+
+	if result.Error != nil {
+		log.Error(result.Error)
+	}
+
+	log.Debug("Imagen actualizado: ", imagen.ID)
+	return imagen
 }

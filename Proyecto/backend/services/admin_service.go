@@ -37,12 +37,11 @@ type adminServiceInterface interface {
 	GetImagenesByHotelId(hotelID int) (dto.ImagenesDto, e.ApiError)
 	DeleteImagenById(id int) e.ApiError
 	GetImagenById(id int) (dto.ImagenDto, e.ApiError)
+	GetImagenByHotelId(hotelID int) (dto.ImagenDto, e.ApiError)
 	GetReservas() (dto.ReservasDto, e.ApiError)
 	GetReservasByDate(AnioInicio, AnioFinal, MesInicio, MesFinal, DiaInicio, DiaFinal int) (dto.ReservasDto, e.ApiError)
 	UpdateHotel(hotelID int, updatedHotelDto dto.HotelDto) (dto.HotelDto, e.ApiError)
-	InsertAmenidades(hotelID int, amenidades string) e.ApiError 
-	GetAmenidades(hotelID int) (string, e.ApiError)
-	DeleteAmenidades(hotelID int) e.ApiError
+	UpdateImagenByHotelId(hotelID int, imagenFile *multipart.FileHeader) (dto.ImagenDto, e.ApiError)
 }
 
 var (
@@ -375,6 +374,20 @@ func (i *adminService) GetImagenById(id int) (dto.ImagenDto, e.ApiError) {
 	return imageDto, nil
 }
 
+func (i *adminService) GetImagenByHotelId(hotelID int) (dto.ImagenDto, e.ApiError) {
+	imagen := imagenClient.GetImagenByHotelId(hotelID)
+
+	if imagen.ID == 0 {
+		return dto.ImagenDto{}, e.NewNotFoundApiError("Image not found")
+	}
+
+	var imageDto dto.ImagenDto
+	imageDto.ID =  imagen.ID
+	imageDto.Url = imagen.Url
+
+	return imageDto, nil
+}
+
 func (i *adminService) GetImagenesByHotelId(hotelID int) (dto.ImagenesDto, e.ApiError) {
 	var imagenes model.Imagenes = imagenClient.GetImagenesByHotelId(hotelID)
 	var imagenesDto dto.ImagenesDto
@@ -470,45 +483,36 @@ func (s *adminService) UpdateHotel(hotelID int, updatedHotelDto dto.HotelDto) (d
 	return updatedHotelDto, nil
 }
 
-func (s *adminService) InsertAmenidades(hotelID int, amenidades string) e.ApiError {
-    hotel := hotelClient.GetHotelById(hotelID)
+func (i *adminService) UpdateImagenByHotelId(hotelID int, imagenFile *multipart.FileHeader) (dto.ImagenDto, e.ApiError) {
+	var imagenDto dto.ImagenDto
 
-    if hotel.ID == 0 {
-        return e.NewNotFoundApiError("Hotel no encontrado")
-    }
+	fileName := uuid.New().String()
+	fileExt := filepath.Ext(imagenFile.Filename)
+	filePath := "Imagenes" + "/" + fileName + fileExt
 
-    // Agregar las nuevas amenidades al hotel
-    hotel.Amenities = amenidades
+	imagen := imagenClient.GetImagenByHotelId(hotelID)
 
-    // Guardar los cambios en la base de datos
-    hotelClient.UpdateHotel(hotel)
+	if imagen.ID == 0 {
+		return dto.ImagenDto{}, e.NewNotFoundApiError("Hotel not found")
+	}
 
-    return nil
-}
+	// Actualizar los valores del hotel con los datos proporcionados
+	imagen.Url = filePath
 
-func (s *adminService) GetAmenidades(hotelID int) (string, e.ApiError) {
-    hotel := hotelClient.GetHotelById(hotelID)
+	err := saveFile(imagenFile, filePath)
+	if err != nil {
+		// Manejar el error en caso de fallo al guardar la imagen
+		_ = i.DeleteImagenById(imagen.ID) // Eliminar la imagen insertada anteriormente
+		return imagenDto, e.NewInternalServerApiError("Failed to save image", err)
+	}
 
-    if hotel.ID == 0 {
-        return "", e.NewNotFoundApiError("Hotel no encontrado")
-    }
+	// Guardar los cambios en la base de datos
+	imagen = imagenClient.UpdateImagen(imagen)
 
-    // Devolver las amenidades del hotel
-    return hotel.Amenities, nil
-}
+	// Construir el DTO del hotel actualizado para devolverlo como respuesta
+	imagenDto.ID = imagen.ID
+	imagenDto.Url = imagen.Url
+	imagenDto.HotelID = imagen.HotelID
 
-func (s *adminService) DeleteAmenidades(hotelID int) e.ApiError {
-    hotel := hotelClient.GetHotelById(hotelID)
-
-    if hotel.ID == 0 {
-        return e.NewNotFoundApiError("Hotel no encontrado")
-    }
-
-    // Borrar las amenidades del hotel
-    hotel.Amenities = ""
-
-    // Guardar los cambios en la base de datos
-    hotelClient.UpdateHotel(hotel)
-
-    return nil
+	return imagenDto, nil
 }

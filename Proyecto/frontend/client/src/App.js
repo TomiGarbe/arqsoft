@@ -40,7 +40,7 @@ function App() {
                         <Route path='/ver-reservas' element={<VerReservas />}></Route>
                         <Route path='/ver-clientes' element={<VerClientes />}></Route>
                         <Route path='/editar-hoteles' element={<EditarHoteles />}></Route>
-                        <Route path='/editar-hotel' element={<EditarHotel />}></Route>
+                        <Route path='/editar-hotel/:hotelId' element={<EditarHotel />}></Route>
                     </Routes>
                 </AuthProvider>
             </Router>
