@@ -2,6 +2,10 @@ import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { AuthContext } from './login/auth';
 import './estilo/reservas_cliente.css';
 
+const handleVolver = () => {
+  window.history.back();
+};
+
 const HomePage = () => {
   const [reservations, setReservations] = useState([]);
   const [reservasFiltradas, setReservasFiltradas] = useState([]);
@@ -107,9 +111,8 @@ const HomePage = () => {
       <div className="reservations-container2">
         <div className="filters-container">
           <div>
-            <label htmlFor="hotelFilter">Hotel:</label>
             <ul id="hotelFilter">
-              <li value="0" onClick={handleHotelFilterChange}>Todos los hoteles</li>
+              <h6 value="0" onClick={handleHotelFilterChange}>Tiene reserva en los siguientes hoteles:</h6>
               {hoteles.map((hotel) => (
                 <li key={hotel.id} value={hotel.id} onClick={handleHotelFilterChange}>
                   {hotel.nombre}
@@ -127,23 +130,28 @@ const HomePage = () => {
           </div>
         </div>
         <h4>Datos de tus reservas:</h4>
-        {reservasFiltradas.length ? (
-          reservasFiltradas.map((reservation) => {
-            const hotel = hoteles.find((hotel) => hotel.id === reservation.hotel_id);
-            const fechaInicio = `${reservation.dia_inicio}/${reservation.mes_inicio}/${reservation.anio_inicio}`;
-            const fechaFin = `${reservation.dia_final}/${reservation.mes_final}/${reservation.anio_final}`;
-            return (
-              <div className="reservation-card" key={reservation.ID}>
-                <p>Hotel: {hotel ? hotel.nombre : 'Hotel desconocido'}</p>
-                <p>Fecha de llegada: {fechaInicio}</p>
-                <p>Fecha de fin: {fechaFin}</p>
-                <p>Gracias por elegirnos!</p>
-              </div>
-            );
-          })
-        ) : (
-          <p>No tienes reservas</p>
-        )}
+        <div className="scroll-container">
+          {reservasFiltradas.length ? (
+            reservasFiltradas.map((reservation) => {
+              const hotel = hoteles.find((hotel) => hotel.id === reservation.hotel_id);
+              const fechaInicio = `${reservation.dia_inicio}/${reservation.mes_inicio}/${reservation.anio_inicio}`;
+              const fechaFin = `${reservation.dia_final}/${reservation.mes_final}/${reservation.anio_final}`;
+              return (
+                <div className="reservation-card" key={reservation.ID}>
+                  <p>Hotel: {hotel ? hotel.nombre : 'Hotel desconocido'}</p>
+                  <p>Fecha de llegada: {fechaInicio}</p>
+                  <p>Fecha de fin: {fechaFin}</p>
+                  <p>Gracias por elegirnos!</p>
+                </div>
+              );
+            })
+          ) : (
+            <p>No tienes reservas</p>
+          )}
+        </div>
+        <button className="botonBack" onClick={handleVolver}>
+          🔙
+        </button>
       </div>
     </div>
   );
