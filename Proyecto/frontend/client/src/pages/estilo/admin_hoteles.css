@@ -38,3 +38,21 @@
 .botonAH:hover {
   background-color: rgb(38, 57, 161);
 }
+
+
+.botonBack {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  background-color: #247fbb;
+  color: white;
+  cursor: pointer;
+}
+
+.botonBack:hover {
+  background-color: #112f49;
+}

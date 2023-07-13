@@ -3,6 +3,10 @@ import { AuthContext } from './login/auth';
 import { Link } from 'react-router-dom';
 import './estilo/admin_hoteles.css';
 
+const handleVolver = () => {
+  window.history.back();
+};
+
 const AdminHotelesPage = () => {
   const { isLoggedAdmin } = useContext(AuthContext);
   
@@ -30,6 +34,9 @@ const AdminHotelesPage = () => {
             Agregar Imágenes
           </Link>
         </div>
+        <button className="botonBack" onClick={handleVolver}>
+        🔙
+      </button>
       </div>
     </div>
   );

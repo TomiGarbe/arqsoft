@@ -24,6 +24,10 @@ const ClienteLogin = () => {
     });
   };
 
+  const handleVolver = () => {
+    window.location.href = 'http://localhost:3000/';
+  };
+
   return (
  <body className="bodylogclient">
     <div className="contLogClie1">
@@ -51,6 +55,11 @@ const ClienteLogin = () => {
           <Link to="/register" className="buttonClient">
             Registrarse
           </Link>
+          <div className="home-container">
+            <button className="home" onClick={handleVolver}>
+              Home
+            </button>
+          </div>
         </div>
       </div>
     </div>

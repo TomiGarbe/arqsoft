@@ -2,6 +2,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from './login/auth';
 import './estilo/insert_hoteles.css'
 
+const handleVolver = () => {
+  window.history.back();
+};
+
 function RegistrationHotel() {
   const [Email, setEmail] = useState({});
   const [Nombre, setNombre] = useState({});
@@ -215,6 +219,9 @@ function RegistrationHotel() {
         <br />
         <button type="submit">Registrar Hotel</button>
       </form>
+      <button className="botonBack" onClick={handleVolver}>
+        🔙
+      </button>
     </div>
   );
 }

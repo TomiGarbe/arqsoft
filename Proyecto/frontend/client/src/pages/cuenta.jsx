@@ -62,15 +62,24 @@ function AccountDetails() {
   const cerrarSesion = () => {
     logout();
   };
-
+  
   const reservas = () => {
     window.location.href = '/reservas-cliente';
+  };
+
+  const handleVolver = () => {
+    window.location.href = 'http://localhost:3000/';
   };
 
   return (
     <body className="bodyCuenta">
     <div className="containerCU">
       <div className="account-form">
+      <div className="home-button-container">
+          <button className="home-button" onClick={handleVolver}>
+           🏠
+          </button>
+        </div>
         <h2>Detalles de la cuenta</h2>
         <div className="account-field">
           <p>Nombre: {accountDetails.nombre}</p>

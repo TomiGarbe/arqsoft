@@ -3,6 +3,10 @@ import { AuthContext } from './login/auth';
 import { Link } from 'react-router-dom';
 import './estilo/opciones_admin.css';
 
+const handleVolver = () => {
+  window.location.href = 'http://localhost:3000/';
+};
+
 const OpcionesAdminPage = () => {
   const { isLoggedAdmin } = useContext(AuthContext);
   
@@ -27,6 +31,9 @@ const OpcionesAdminPage = () => {
         </Link>
         </div>
       </div>
+      <button className="homeAdmin" onClick={handleVolver}>
+        🏠
+      </button>
       </div>
     </body>
   );

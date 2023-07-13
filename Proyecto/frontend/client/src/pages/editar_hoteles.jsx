@@ -2,6 +2,10 @@ import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { AuthContext } from './login/auth';
 import './estilo/editar_hoteles.css';
 
+const handleVolver = () => {
+  window.history.back();
+};
+
 const HomePage = () => {
   const [hotels, setHotels] = useState([]);
   const [imagenes, setImagenes] = useState([]);
@@ -84,6 +88,9 @@ const HomePage = () => {
           )}
         </div>
       </div>
+      <button className="botonBack" onClick={handleVolver}>
+        🔙
+      </button>
     </body>
   );
 };

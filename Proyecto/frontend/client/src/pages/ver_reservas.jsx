@@ -2,6 +2,10 @@ import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { AuthContext } from './login/auth';
 import './estilo/ver_reservas.css';
 
+const handleVolver = () => {
+  window.history.back();
+};
+
 const VerReservas = () => {
   const [reservations, setReservations] = useState([]);
   const [reservasFiltradas, setReservasFiltradas] = useState([]);
@@ -14,6 +18,10 @@ const VerReservas = () => {
 
   const getHoteles = useCallback(async () => {
     try {
+      if (!reservations?.length) {
+        return;
+      }
+
       const hotelesArray = [];
       for (let i = 0; i < reservations.length; i++) {
         const reserva = reservations[i];
@@ -32,6 +40,10 @@ const VerReservas = () => {
 
   const getClientes = useCallback(async () => {
     try {
+      if (!reservations?.length) {
+        return;
+      }
+
       const clientesArray = [];
       for (let i = 0; i < reservations.length; i++) {
         const reserva = reservations[i];
@@ -62,10 +74,14 @@ const VerReservas = () => {
 
   const getReservasFiltradas = useCallback(async () => {
     try {
+      if (!reservations?.length) {
+        return;
+      }
+
       const startDateObj = new Date(startDateFilter);
       const endDateObj = new Date(endDateFilter);
       let reservasArray = [];
-  
+
       if (startDateFilter && endDateFilter) {
         const request = await fetch(`http://localhost:8090/cliente/reservas-por-fecha/${startDateObj.getFullYear()}/${startDateObj.getMonth() + 1}/${startDateObj.getDate() + 1}/${endDateObj.getFullYear()}/${endDateObj.getMonth() + 1}/${endDateObj.getDate() + 1}`);
         const response = await request.json();
@@ -74,7 +90,7 @@ const VerReservas = () => {
       } else {
         reservasArray = reservations.filter((reserva) => hotelFiltrado === '' || hotelFiltrado === 0 || hotelFiltrado === reserva.hotel_id);
       }
-  
+
       setReservasFiltradas(reservasArray);
     } catch (error) {
       console.log("No se pudieron obtener las reservas:", error);
@@ -107,7 +123,7 @@ const VerReservas = () => {
     const endDateObj = new Date(endDateFilter);
     if (selectedStartDateObj > endDateObj) {
       setEndDateFilter('');
-      alert("Fechas no validas");
+      alert("Fechas no válidas");
     }
   };
 
@@ -117,7 +133,7 @@ const VerReservas = () => {
     const selectedEndDateObj = new Date(event.target.value);
     if (startDateObj > selectedEndDateObj) {
       setEndDateFilter('');
-      alert("Fechas no validas");
+      alert("Fechas no válidas");
     }
   };
 
@@ -146,7 +162,7 @@ const VerReservas = () => {
           </div>
         </div>
         <h4>Datos de tus reservas:</h4>
-        {reservasFiltradas.length ? (
+        {reservasFiltradas?.length ? (
           reservasFiltradas.map((reservation) => {
             const hotel = hoteles.find((hotel) => hotel.id === reservation.hotel_id);
             const cliente = clientes.find((cliente) => cliente.id === reservation.cliente_id);
@@ -155,17 +171,20 @@ const VerReservas = () => {
             return (
               <div className="reservation-card" key={reservation.ID}>
                 <p>Hotel: {hotel ? hotel.nombre : 'Hotel desconocido'}</p>
-                <p>Cliente: {cliente ? cliente.name + " " + cliente.last_name  : 'Cliente desconocido'}</p>
+                <p>Cliente: {cliente ? cliente.name + " " + cliente.last_name : 'Cliente desconocido'}</p>
                 <p>Fecha de llegada: {fechaInicio}</p>
                 <p>Fecha de fin: {fechaFin}</p>
-                <p>Gracias por elegirnos!</p>
+                <p>¡Gracias por elegirnos!</p>
               </div>
             );
           })
         ) : (
-          <p>No tienes reservas</p>
+          <p>No hay reservas</p>
         )}
       </div>
+      <button className="botonBack" onClick={handleVolver}>
+        🔙
+      </button>
     </div>
   );
 };

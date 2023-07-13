@@ -24,6 +24,10 @@ const AdminLogin = () => {
     });
   };
 
+  const handleVolver = () => {
+    window.location.href = 'http://localhost:3000/';
+  };
+
   return (
   <body className= "bodyAdmin"> 
     <div className="container">
@@ -47,6 +51,9 @@ const AdminLogin = () => {
         <div className="button-container">
           <button className="button" onClick={handleLoginAdmin}>
             Iniciar Sesión
+          </button>
+          <button className="button" onClick={handleVolver}>
+              Home
           </button>
         </div>
       </div>

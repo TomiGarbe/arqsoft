@@ -2,6 +2,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from './login/auth';
 import './estilo/ver_clientes.css';
 
+const handleVolver = () => {
+  window.history.back();
+};
+
 const HomePage = () => {
   const [clientes, setClientes] = useState([]);
   const { isLoggedAdmin } = useContext(AuthContext);
@@ -48,6 +52,9 @@ const HomePage = () => {
           )}
         </div>
       </div>
+      <button className="botonBack" onClick={handleVolver}>
+        🔙
+      </button>
     </body>
   );
 };

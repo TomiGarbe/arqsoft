@@ -75,6 +75,10 @@ function RegistrationPage() {
     }
   };
 
+  const handleVolver = () => {
+    window.history.back();
+  };
+
   return (
     <div className="registration-container">
       <h2>Registro</h2>
@@ -134,7 +138,10 @@ function RegistrationPage() {
           />
         </label>
         <br />
-        <button type="submit">Registrarse</button>
+        <div className="button-container">
+          <button type="submit" className="register-button">Registrarse</button>
+          <button className="back-button" onClick={handleVolver}>Volver</button>
+        </div>
       </form>
     </div>
   );

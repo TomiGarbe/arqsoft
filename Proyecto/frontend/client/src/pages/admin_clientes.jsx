@@ -3,6 +3,10 @@ import { AuthContext } from './login/auth';
 import { Link } from 'react-router-dom';
 import './estilo/admin_clientes.css';
 
+const handleVolver = () => {
+  window.history.back();
+};
+
 const AdminClientesPage = () => {
   const { isLoggedAdmin } = useContext(AuthContext);
   
@@ -24,6 +28,9 @@ const AdminClientesPage = () => {
           Ver Clientes
         </Link>
         </div>
+        <button className="botonBack" onClick={handleVolver}>
+        🔙
+      </button>
       </div>
     </div>
   );

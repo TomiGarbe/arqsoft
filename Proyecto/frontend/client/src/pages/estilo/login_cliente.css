@@ -73,6 +73,12 @@ box-shadow: 0 0 30px rgb(94, 76, 76);
   margin-top: 20px;
 }
 
+.home-container {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
 .buttonClient {
   margin: 0 10px;
   padding: 10px 20px;
@@ -92,3 +98,19 @@ box-shadow: 0 0 30px rgb(94, 76, 76);
   text-decoration: none;
   color: white;
 }
+
+.home {
+  margin: 0 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  background-color: #29537a;
+  color: #fff;
+  cursor: pointer;
+}
+
+.home:hover {
+  background-color: #112f49;
+}
+

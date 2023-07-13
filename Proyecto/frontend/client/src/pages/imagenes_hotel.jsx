@@ -3,6 +3,10 @@ import { AuthContext } from './login/auth';
 import { useParams } from 'react-router-dom';
 import './estilo/imagenes_hotel.css';
 
+const handleVolver = () => {
+  window.history.back();
+};
+
 function RegistrationHotel() {
   const { hotelId } = useParams();
   const [hotelData, setHotelData] = useState('');
@@ -129,6 +133,9 @@ function RegistrationHotel() {
         </div>
         <button type="submit">Guardar Imágenes</button>
       </form>
+      <button className="botonBack" onClick={handleVolver}>
+        🔙
+      </button>
     </div>
   );
 }
