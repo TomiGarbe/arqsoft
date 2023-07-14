@@ -84,70 +84,42 @@ function RegistrationHotel() {
     }
     else
     {
-      try {
-        const request = await fetch('http://localhost:8090/admin/hotel', {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-        })
+      const request = await fetch('http://localhost:8090/admin/hotel', {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+      })
 
-        const response = await request.json()
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      const response = await request.json();
 
-        if (request.ok) {
-          try {
-            var imagenRegistered = await Registerimagen(response.id);
-            //alert('hola');
-            if (imagenRegistered) {
-              //alert('hola');
-              window.location.href = '/ver-hoteles';
-            }
-            else {
-              alert('Imagen no registrada');
-            }
-          } catch (error) {
-            console.error('Error en la carga de la imagen:', error);
-            alert('Error al registrar la imagen');
-          }
+      if (request.ok) {
+        const formDataWithImagen = new FormData();
+        formDataWithImagen.append("imagen", imagen);
+        console.log(formDataWithImagen);
+        
+        const req = await fetch(`http://localhost:8090/admin/hotel/${response.id}/add-imagen`, {
+          method: 'POST',
+          body: formDataWithImagen
+        });
+        
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        const res = await req.json();
+
+        if (req.ok) {
+          window.location.href = '/ver-hoteles';
+        } else {
+          console.error('Error en el registro:', res);
+          alert('Error en el registro de la imagen');
         }
-        else {
-          console.error('Error en el registro:', response);
-          alert('Hotel no registrado');
-        }
-      } catch (error) {
-        console.error('Error en la solicitud:', error);
-        alert('Error en la solicitud');
-      }
-    }
-  };
-
-  const Registerimagen = async (hotelId) => {
-    try {
-      const formDataWithImagen = new FormData();
-      formDataWithImagen.append("imagen", imagen);
-      console.log(formDataWithImagen);
-  
-      const req = await fetch(`http://localhost:8090/admin/hotel/${hotelId}/add-imagen`, {
-        method: 'POST',
-        body: formDataWithImagen
-      });
-  
-      const res = await req.json();
-  
-      if (req.ok) {
-        return true;
       } else {
-        console.error('Error en el registro:', res);
-        alert('Error en el registro de la imagen');
-        return false;
+        console.error('Error en el registro:', response);
+        alert('Error en el registro del hotel');
       }
-    } catch (error) {
-      console.error('Error en la solicitud:', error);
-      throw error;
     }
   };
-  
 
   return (
     <div className="registration-container" onLoad={Verificacion}>

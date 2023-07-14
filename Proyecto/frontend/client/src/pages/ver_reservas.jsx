@@ -113,8 +113,8 @@ const VerReservas = () => {
     getClientes();
   }, [getClientes]);
 
-  const handleHotelFilterChange = (event) => {
-    setHotelFiltrado(event.target.value);
+  const handleHotelFilterChange = (hotelId) => {
+    setHotelFiltrado(hotelId);
   };
 
   const handleStartDateFilterChange = (event) => {
@@ -140,28 +140,38 @@ const VerReservas = () => {
   return (
     <div className="reservations-container1">
       <div className="reservations-container2">
-        <div className="filters-container">
-          <div>
-            <label htmlFor="hotelFilter">Hotel:</label>
-            <ul id="hotelFilter">
-              <li value="0" onClick={handleHotelFilterChange}>Todos los hoteles</li>
-              {hoteles.map((hotel) => (
-                <li key={hotel.id} value={hotel.id} onClick={handleHotelFilterChange}>
-                  {hotel.nombre}
-                </li>
-              ))}
-            </ul>
+      <div className="filters-container">
+        <div>
+          <h6 htmlFor="hotelFilter">Filtro Reservas:</h6>
+          <div id="hotelFilter" className="hotel-filter-container">
+            <button className="hotel-filter-button" value="0" onClick={() => handleHotelFilterChange(0)}>
+              Todos los hoteles
+            </button>
+            {hoteles.map((hotel) => (
+              <button
+                className="hotel-filter-button"
+                key={hotel.id}
+                value={hotel.id}
+                onClick={() => handleHotelFilterChange(hotel.id)}
+              >
+                {hotel.nombre}
+              </button>
+            ))}
           </div>
-          <div>
-            <label htmlFor="startDateFilter">Fecha de inicio:</label>
-            <input type="date" id="startDateFilter" value={startDateFilter} onChange={handleStartDateFilterChange} />
-          </div>
-          <div>
-            <label htmlFor="endDateFilter">Fecha de fin:</label>
-            <input type="date" id="endDateFilter" value={endDateFilter} onChange={handleEndDateFilterChange} />
+        </div>
+          <div className="contdeFechas">
+            <div className="date-picker">
+              <label htmlFor="startDateFilter">Fecha de inicio:</label>
+              <input type="date" id="startDateFilter" value={startDateFilter} onChange={handleStartDateFilterChange} />
+            </div>
+            <div className="date-picker">
+              <label htmlFor="endDateFilter">Fecha de fin:</label>
+              <input type="date" id="endDateFilter" value={endDateFilter} onChange={handleEndDateFilterChange} />
+            </div>
           </div>
         </div>
         <h4>Datos de tus reservas:</h4>
+        <div className="scroll-container">
         {reservasFiltradas?.length ? (
           reservasFiltradas.map((reservation) => {
             const hotel = hoteles.find((hotel) => hotel.id === reservation.hotel_id);
@@ -181,6 +191,7 @@ const VerReservas = () => {
         ) : (
           <p>No hay reservas</p>
         )}
+      </div>
       </div>
       <button className="botonBack" onClick={handleVolver}>
         🔙

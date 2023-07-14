@@ -15,6 +15,7 @@ const ReservaPage = () => {
   const [Hoteles, setHoteles] = useState([]);
   const [Imagenes, setImagenes] = useState([]);
   const [confirmarReserva, setConfirmarReserva] = useState(false);
+  const [disponibilidad, setDisponibilidad] = useState('');
 
   const Verificacion = () => {
     if (!isLoggedCliente) {
@@ -139,6 +140,7 @@ const ReservaPage = () => {
     const endDateObj = new Date(endDate);
     const request = await fetch(`http://localhost:8090/cliente/disponibilidad/${hotelId}/${startDateObj.getFullYear()}/${startDateObj.getMonth() + 1}/${startDateObj.getDate() + 1}/${endDateObj.getFullYear()}/${endDateObj.getMonth() + 1}/${endDateObj.getDate() + 1}`);
     const response = await request.json();
+    setDisponibilidad(response);
     if (response === 0) {
       setConfirmarReserva(false);
     }
@@ -153,6 +155,10 @@ const ReservaPage = () => {
       }
     }
   }, [startDate, endDate, hotelId, Hoteles]);
+
+  useEffect(() => {
+    filterHotel();
+  }, [filterHotel]);
 
   const handleStartDateChange = (event) => {
     setStartDate(event.target.value);
@@ -277,6 +283,9 @@ const ReservaPage = () => {
                     onChange={handleEndDateChange}
                     required
                   />
+                </div>
+                <div>
+                  <label htmlFor="disponibilidad">disponibilidad: {disponibilidad}</label>
                 </div>
                 <div>
                   <button type="submit" className="confReserva">Confirmar</button>

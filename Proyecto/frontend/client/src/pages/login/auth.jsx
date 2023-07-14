@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect, useCallback } from 'react';
 
 export const AuthContext = createContext();
 
@@ -20,14 +20,22 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('auth', true);
   };
 
-  const logout = () => {
+  const logout = useCallback(async () => {
     setIsLoggedCliente(false);
     setIsLoggedAdmin(false);
     localStorage.removeItem('token');
     localStorage.removeItem('id_admin');
     localStorage.removeItem('id_cliente');
     localStorage.setItem('auth', false);
-  };
+  }, []);
+
+  //localStorage.getItem('id_cliente') === null || localStorage.getItem('id_admin') === null
+
+  useEffect(() => {
+    if (localStorage.getItem('auth') === false) {
+      logout();
+    }
+  }, [logout]);
 
   const propiedades = {
     isLoggedCliente,
