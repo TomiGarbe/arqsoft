@@ -6,7 +6,7 @@ const handleVolver = () => {
   window.history.back();
 };
 
-const HomePage = () => {
+const ReservasCliente = () => {
   const [reservations, setReservations] = useState(null);
   const [reservasFiltradas, setReservasFiltradas] = useState([]);
   const [hoteles, setHoteles] = useState([]);
@@ -172,7 +172,7 @@ const HomePage = () => {
     </div>
   );
 };
-export default HomePage;
+export default ReservasCliente;
 
 
 

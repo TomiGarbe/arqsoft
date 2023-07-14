@@ -6,7 +6,7 @@ const handleVolver = () => {
   window.history.back();
 };
 
-function RegistrationHotel() {
+function InsertHotel() {
   const [Email, setEmail] = useState({});
   const [Nombre, setNombre] = useState({});
   const { isLoggedAdmin } = useContext(AuthContext);
@@ -197,4 +197,4 @@ function RegistrationHotel() {
   );
 }
 
-export default RegistrationHotel;
+export default InsertHotel;

@@ -7,7 +7,7 @@ const handleVolver = () => {
   window.history.back();
 };
 
-function RegistrationHotel() {
+function EditarHotel() {
   const { hotelId } = useParams();
   const [hotelData, setHotelData] = useState('');
   const [Email, setEmail] = useState({});
@@ -219,4 +219,4 @@ function RegistrationHotel() {
   );
 }
 
-export default RegistrationHotel;
+export default EditarHotel;
