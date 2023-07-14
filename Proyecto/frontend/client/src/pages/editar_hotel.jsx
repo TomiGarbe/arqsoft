@@ -110,7 +110,7 @@ function RegistrationHotel() {
 
       const response = await request.json()
 
-      if (request.ok) {
+      if (response) {
         if (imagen !== '') {
           alert("Hola")
           const formDataWithImage = new FormData();

@@ -94,7 +94,7 @@ function RegistrationHotel() {
       
       const response = await request.json();
 
-      if (request.ok) {
+      if (response) {
         const formDataWithImagen = new FormData();
         formDataWithImagen.append("imagen", imagen);
         console.log(formDataWithImagen);
