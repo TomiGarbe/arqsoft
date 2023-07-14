@@ -124,7 +124,7 @@ function RegistrationHotel() {
   return (
     <div className="registration-container" onLoad={Verificacion}>
       <h2>Registro De Hoteles</h2>
-      <form onSubmit={RegisterHotel} className="registration-form">
+      <form onSubmit={RegisterHotel} className="registration-form" encType="multipart/form-data">
         <label>
           Nombre:
           <input
@@ -164,6 +164,7 @@ function RegistrationHotel() {
             type="file"
             name="imagen"
             onChange={handleChange}
+            required
           />
         </label>
         <br />
