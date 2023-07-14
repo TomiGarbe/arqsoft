@@ -7,7 +7,7 @@ const handleVolver = () => {
 };
 
 const HomePage = () => {
-  const [reservations, setReservations] = useState([]);
+  const [reservations, setReservations] = useState(null);
   const [reservasFiltradas, setReservasFiltradas] = useState([]);
   const [hoteles, setHoteles] = useState([]);
   const { isLoggedCliente } = useContext(AuthContext);
@@ -39,8 +39,13 @@ const HomePage = () => {
       try {
         const request = await fetch(`http://localhost:8090/cliente/reservas/${accountId}`);
         const response = await request.json();
-        setReservations(response);
-        setReservasFiltradas(response);
+        if (response) {
+          setReservations(response);
+          setReservasFiltradas(response);
+        } else {
+          setReservations([]);
+          setReservasFiltradas([]);
+        }
       } catch (error) {
         console.log("No se pudieron obtener las reservas:", error);
       }
@@ -48,6 +53,7 @@ const HomePage = () => {
       window.location.href = '/';
     }
   }, [isLoggedCliente]);
+  
 
   const getReservasFiltradas = useCallback(async () => {
     try {
