@@ -91,11 +91,12 @@ function RegistrationHotel() {
       },
       body: JSON.stringify(formData)
       })
-
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      
       const response = await request.json();
+      alert("hola");
 
       if (request.ok) {
+        alert("hola");
         const formDataWithImagen = new FormData();
         formDataWithImagen.append("imagen", imagen);
         console.log(formDataWithImagen);
@@ -105,7 +106,6 @@ function RegistrationHotel() {
           body: formDataWithImagen
         });
         
-        await new Promise(resolve => setTimeout(resolve, 2000));
         const res = await req.json();
 
         if (req.ok) {

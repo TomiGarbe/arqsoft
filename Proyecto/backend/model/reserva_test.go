@@ -37,30 +37,33 @@ func TestCreateBooking(t *testing.T) {
 
 		AnioInicio: 2023,
 		AnioFinal:	2023,
-		MesInicio:	7,
-		MesFinal:	7,
-		DiaInicio:	12,
-		DiaFinal:	14,
-		Dias:		2,
+		MesInicio:	1,
+		MesFinal:	1,
+		DiaInicio:	10,
+		DiaFinal:	13,
+		Dias:		3,
 	}
 
 	expectedAnioInicio := 2023
 	assert.Equal(expectedAnioInicio, reserva.AnioInicio, "Se espero que el anio de inicio sea %v", expectedAnioInicio)
 
-	expectedMesInicio := 7
+	expectedMesInicio := 1
 	assert.Equal(expectedMesInicio, reserva.MesInicio, "Se espero que el anio de inicio sea %v", expectedMesInicio)
 
-	expectedDiaInicio := 12
+	expectedDiaInicio := 10
 	assert.Equal(expectedDiaInicio, reserva.DiaInicio, "Se espero que el anio de inicio sea %v", expectedDiaInicio)
 
 	expectedAnioFinal := 2023
 	assert.Equal(expectedAnioFinal, reserva.AnioFinal, "Se espero que el anio de inicio sea %v", expectedAnioFinal)
 
-	expectedMesFinal := 7
+	expectedMesFinal := 1
 	assert.Equal(expectedMesFinal, reserva.MesFinal, "Se espero que el anio de inicio sea %v", expectedMesFinal)
 
-	expectedDiaFinal := 14
+	expectedDiaFinal := 13
 	assert.Equal(expectedDiaFinal, reserva.DiaFinal, "Se espero que el anio de inicio sea %v", expectedDiaFinal)
+
+	expectedDias := 3
+	assert.Equal(expectedDias, reserva.Dias, "Se espero que la cantidad de dias sea %v", expectedDias)
 
 	// Verificar que Id de Reserva
 	assert.Equal(1, reserva.ID, "El ID de la reserva no coincide")
