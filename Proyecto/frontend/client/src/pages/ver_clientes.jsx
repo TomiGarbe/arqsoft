@@ -6,7 +6,7 @@ const handleVolver = () => {
   window.history.back();
 };
 
-const verClientes = () => {
+const VerClientes = () => {
   const [clientes, setClientes] = useState([]);
   const { isLoggedAdmin } = useContext(AuthContext);
 
@@ -59,4 +59,4 @@ const verClientes = () => {
   );
 };
 
-export default verClientes;
+export default VerClientes;

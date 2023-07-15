@@ -95,7 +95,7 @@ function ImagenesHotel() {
       );
       const res = await req.json();
 
-      if (req.ok) {
+      if (res) {
         window.location.href = '/agregar-imagenes';
       } else {
         console.error('Error en el registro:', res);

@@ -28,7 +28,6 @@ function InsertHotel() {
 
   const handleChange = (event) => {
     const { name, value, files } = event.target;
-    //alert(imagen);
     if (name === "imagen") {
       setImagen(files[0]);
       console.log(imagen)
@@ -84,38 +83,43 @@ function InsertHotel() {
     }
     else
     {
-      const request = await fetch('http://localhost:8090/admin/hotel', {
-      method: 'POST',
-      headers: {
-      'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-      })
-      
-      const response = await request.json();
-
-      if (response) {
-        const formDataWithImagen = new FormData();
-        formDataWithImagen.append("imagen", imagen);
-        console.log(formDataWithImagen);
+      try {
+        const request = await fetch('http://localhost:8090/admin/hotel', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+        })
         
-        const req = await fetch(`http://localhost:8090/admin/hotel/${response.id}/add-imagen`, {
-          method: 'POST',
-          body: formDataWithImagen
-        });
-        
-        const res = await req.json();
+        const response = await request.json();
+        const hotelId = response.id;
 
-        if (req.ok) {
-          window.location.href = '/ver-hoteles';
-        } else {
-          console.error('Error en el registro:', res);
-          alert('Error en el registro de la imagen');
+        if (response) {
+          insertImagen(hotelId);
         }
-      } else {
-        console.error('Error en el registro:', response);
+      } catch (error) {
+        console.error('Error en el registro:', error);
         alert('Error en el registro del hotel');
       }
+    }
+  };
+
+  const insertImagen = async (hotelId) => {
+    const formDataWithImagen = new FormData();
+    formDataWithImagen.append("imagen", imagen);
+    
+    const req = await fetch(`http://localhost:8090/admin/hotel/${hotelId}/add-imagen`, {
+      method: 'POST',
+      body: formDataWithImagen
+    });
+
+    const res = await req.json()
+    if (res) {
+      window.location.href = '/ver-hoteles';
+    } else {
+      console.error('Error en el registro:', res);
+      alert('Error en el registro de la imagen');
     }
   };
 

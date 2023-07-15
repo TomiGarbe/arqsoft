@@ -6,7 +6,7 @@ const handleVolver = () => {
   window.history.back();
 };
 
-const verHoteles = () => {
+const VerHoteles = () => {
   const [hotels, setHotels] = useState([]);
   const [imagenes, setImagenes] = useState([]);
   const { isLoggedAdmin } = useContext(AuthContext);
@@ -88,4 +88,4 @@ const verHoteles = () => {
   );
 };
 
-export default verHoteles;
+export default VerHoteles;

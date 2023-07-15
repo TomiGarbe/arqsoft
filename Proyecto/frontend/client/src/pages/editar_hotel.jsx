@@ -123,7 +123,7 @@ function EditarHotel() {
           })
           const res = await req.json();
 
-          if (req.ok) {
+          if (res) {
             window.location.href = '/editar-hoteles';
           }
           else {

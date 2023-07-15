@@ -223,20 +223,20 @@ func InsertImagenesByHotelId(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": erint.Error()})
 		return
 	}
-	log.Debug("1")
+	
 	form, err := c.MultipartForm()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	log.Debug("2")
+	
 	imagenes := form.File["imagen"]
 	if len(imagenes) == 0 {
 		log.Debug("No se encontraron imágenes")
 		c.JSON(http.StatusBadRequest, gin.H{"error": "No se encontraron imágenes"})
 		return
 	}
-	log.Debug("3")
+	
 	var imagenesDto dto.ImagenesDto
 	for _, imagen := range imagenes {
 		imagenDto, er := service.AdminService.InsertImagenByHotelId(hotelID, imagen)
@@ -246,7 +246,7 @@ func InsertImagenesByHotelId(c *gin.Context) {
 		}
 		imagenesDto = append(imagenesDto, imagenDto)
 	}
-	log.Debug("4")
+	
 	c.JSON(http.StatusCreated, imagenesDto)
 }
 

@@ -29,13 +29,39 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('auth', false);
   }, []);
 
-  //localStorage.getItem('id_cliente') === null || localStorage.getItem('id_admin') === null
+  const comprobarLogin = useCallback(async () => {
+    if (isLoggedCliente) {
+      const accountId = localStorage.getItem("id_cliente");
+      try {
+        const request = await fetch(`http://localhost:8090/cliente/${accountId}`);
+        const response = await request.json();
+        if (!response) {
+          logout();
+        }
+      } catch (error) {
+        console.log("No se pudieron obtener los datos del cliente:", error);
+        logout();
+      }
+    }
+    
+    if (isLoggedAdmin) {
+      const accountId = localStorage.getItem("id_admin");
+      try {
+        const request = await fetch(`http://localhost:8090/admin/${accountId}`);
+        const response = await request.json();
+        if (!response) {
+          logout();
+        }
+      } catch (error) {
+        console.log("No se pudieron obtener los datos del admin:", error);
+        logout();
+      }
+    }
+  }, [logout, isLoggedAdmin, isLoggedCliente]);
 
   useEffect(() => {
-    if (localStorage.getItem('auth') === false) {
-      logout();
-    }
-  }, [logout]);
+    comprobarLogin();
+  }, [comprobarLogin]);
 
   const propiedades = {
     isLoggedCliente,
