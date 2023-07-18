@@ -5,11 +5,11 @@ services:
     build: ./Database
     environment:
       MYSQL_DATABASE: arqsoft
-      MYSQL_ROOT_PASSWORD: 
+      MYSQL_ROOT_PASSWORD: "yes"
     ports:
       - "3306:3306"
     volumes:
-      - ./Database/docker-entrypoint-initdb.d
+      - /docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root"]
       timeout: 20s
